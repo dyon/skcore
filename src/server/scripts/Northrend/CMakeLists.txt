@@ -162,6 +162,7 @@ set(scripts_STAT_SRCS
   Northrend/IcecrownCitadel/instance_icecrown_citadel.cpp
   Northrend/IcecrownCitadel/icecrown_citadel.cpp
   Northrend/IcecrownCitadel/icecrown_citadel.h
+  Northrend/IcecrownCitadel/icc_trash.cpp
   Northrend/IcecrownCitadel/icecrown_citadel_teleport.cpp
   Northrend/IcecrownCitadel/boss_lord_marrowgar.cpp
   Northrend/IcecrownCitadel/boss_lady_deathwhisper.cpp
