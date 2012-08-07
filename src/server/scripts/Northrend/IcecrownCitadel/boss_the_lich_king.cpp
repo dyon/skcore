@@ -1528,6 +1528,12 @@ class npc_valkyr_shadowguard : public CreatureScript
                 // schedule siphon life event (heroic only)
                 DoZoneInCombat();
                 _events.Reset();
+                me->SetCanFly(true);
+                me->SetDisableGravity(true);
+                Position pos;
+                pos.Relocate(me);
+                pos.m_positionZ += 15.0f;
+                me->GetMotionMaster()->MoveTakeoff(1, pos, 8.30078125f);
                 _events.ScheduleEvent(EVENT_LIFE_SIPHON, 2000);
             }
 
@@ -1543,6 +1549,12 @@ class npc_valkyr_shadowguard : public CreatureScript
                 switch (id)
                 {
                     case POINT_DROP_PLAYER:
+                        me->GetPosition(&_current);
+                        if (_current.GetExactDist(&_dropPoint) != 0)
+                        {
+                            _events.ScheduleEvent(EVENT_MOVE_TO_DROP_POS, 0);
+                            break;
+                        }
                         DoCastAOE(SPELL_EJECT_ALL_PASSENGERS);
                         me->DespawnOrUnsummon(1000);
                         break;
@@ -1618,6 +1630,7 @@ class npc_valkyr_shadowguard : public CreatureScript
         private:
             EventMap _events;
             Position _dropPoint;
+            Position _current;
             uint64 _grabbedPlayer;
             InstanceScript* _instance;
         };
@@ -1960,10 +1973,14 @@ class npc_spirit_bomb : public CreatureScript
 
             void IsSummonedBy(Unit* /*summoner*/)
             {
-                float destX, destY, destZ;
-                me->GetPosition(destX, destY);
+                float destX, destY, destZ, Z;
+                me->GetPosition(destX, destY, Z);
+                me->NearTeleportTo(destX, destY, Z+30.0f, me->GetOrientation());
+                me->Relocate(destX, destY, Z+30.0f);
+                me->SendMovementFlagUpdate();
                 destZ = 1055.0f;    // approximation, gets more precise later
                 me->UpdateGroundPositionZ(destX, destY, destZ);
+                me->SetSpeed(MOVE_FLIGHT, 0.5f, true);
                 me->GetMotionMaster()->MovePoint(POINT_GROUND, destX, destY, destZ);
             }
 
