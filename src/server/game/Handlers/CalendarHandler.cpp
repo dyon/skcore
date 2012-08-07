@@ -885,7 +885,6 @@ void WorldSession::SendCalendarRaidLockout(InstanceSave const* save, bool add)
     data << uint32(save->GetResetTime() - currTime);
     data << uint64(save->GetInstanceId());
     SendPacket(&data);
-<<<<<<< HEAD
 }
 
 void WorldSession::SendCalendarRaidLockoutUpdated(InstanceSave const* save)
@@ -907,6 +906,3 @@ void WorldSession::SendCalendarRaidLockoutUpdated(InstanceSave const* save)
     data << uint32(save->GetResetTime() - cur_time);
     SendPacket(&data);
 }
-=======
-}
->>>>>>> parent of 1f373c0... Scripts/Icecrown Citadel: Removed obsolete workaround for Ice Tomb LoS
