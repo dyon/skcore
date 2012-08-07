@@ -616,7 +616,7 @@ class boss_prince_taldaram_icc : public CreatureScript
             void EnterCombat(Unit* /*who*/)
             {
                 if (Creature* controller = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_BLOOD_PRINCES_CONTROL)))
-                    DoZoneInCombat(controller 100.0f);
+                    DoZoneInCombat(controller, 100.0f);
 
                 events.ScheduleEvent(EVENT_BERSERK, 600000);
                 events.ScheduleEvent(EVENT_GLITTERING_SPARKS, urand(12000, 15000));
@@ -839,7 +839,7 @@ class boss_prince_valanar_icc : public CreatureScript
             void EnterCombat(Unit* /*who*/)
             {
                 if (Creature* controller = ObjectAccessor::GetCreature(*me, instance->GetData64(DATA_BLOOD_PRINCES_CONTROL)))
-                    DoZoneInCombat(controller 100.0f);
+                    DoZoneInCombat(controller, 100.0f);
 
                 events.ScheduleEvent(EVENT_BERSERK, 600000);
                 events.ScheduleEvent(EVENT_KINETIC_BOMB, urand(18000, 24000));

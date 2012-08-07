@@ -39,8 +39,7 @@ enum TimedEvents
     EVENT_CHECK_HERO_ACHIEVEMENT = 4,
 };
 
- 	 44	
-+enum RequiredAchievementsForHeroic
+enum RequiredAchievementsForHeroic
 {
     ACHIEVEMENT_FROZEN_THRONE_10 = 4530,
     ACHIEVEMENT_FROZEN_THRONE_25 = 4597,

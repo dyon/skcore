@@ -1291,13 +1291,13 @@ class FrostBombTargetSelector
     public:
         FrostBombTargetSelector(Unit* caster, std::list<Creature*> const& collisionList) : _caster(caster), _collisionList(collisionList) { }
 
-        bool operator()(Unit* unit)
+        bool operator()(WorldObject* object) const
         {
-            if (unit->HasAura(SPELL_ICE_TOMB_DAMAGE))
+            if (object->ToUnit() && object->ToUnit()->HasAura(SPELL_ICE_TOMB_DAMAGE))
                 return true;
 
             for (std::list<Creature*>::const_iterator itr = _collisionList.begin(); itr != _collisionList.end(); ++itr)
-                if ((*itr)->IsInBetween(_caster, unit, 1.0f))
+                if ((*itr)->IsInBetween(_caster, object, 1.0f))
                     return true;
 
             return false;
@@ -1324,16 +1324,16 @@ class spell_sindragosa_collision_filter : public SpellScriptLoader
                 return true;
             }
 
-            void FilterTargets(std::list<Unit*>& unitList)
+            void FilterTargets(std::list<WorldObject*>& targets)
             {
                 std::list<Creature*> tombs;
                 GetCreatureListWithEntryInGrid(tombs, GetCaster(), NPC_ICE_TOMB, 200.0f);
-                unitList.remove_if (FrostBombTargetSelector(GetCaster(), tombs));
+                targets.remove_if (FrostBombTargetSelector(GetCaster(), tombs));
             }
 
             void Register()
             {
-                OnUnitTargetSelect += SpellUnitTargetFn(spell_sindragosa_collision_filter_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_SRC_AREA_ENEMY);
+                OnObjectAreaTargetSelect += SpellObjectAreaTargetSelectFn(spell_sindragosa_collision_filter_SpellScript::FilterTargets, EFFECT_0, TARGET_UNIT_SRC_AREA_ENEMY);
             }
         };
 
