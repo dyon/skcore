@@ -107,7 +107,8 @@ enum Spells
     SPELL_DEATH_PLAGUE_AURA         = 72865,
     SPELL_RECENTLY_INFECTED         = 72884,
     SPELL_DEATH_PLAGUE_KILL         = 72867,
-    SPELL_STOMP                     = 64652,
+    SPELL_STOMP                     = 64639,
+    SPELL_STOMP_H                   = 64652,
     SPELL_ARCTIC_BREATH             = 72848,
 
     // Frost Freeze Trap
@@ -658,7 +659,7 @@ class npc_rotting_frost_giant : public CreatureScript
                             _events.ScheduleEvent(EVENT_DEATH_PLAGUE, 15000);
                             break;
                         case EVENT_STOMP:
-                            DoCastVictim(SPELL_STOMP);
+							DoCast(me, RAID_MODE(SPELL_STOMP, SPELL_STOMP_H, SPELL_STOMP, SPELL_STOMP_H), false);
                             _events.ScheduleEvent(EVENT_STOMP, urand(15000, 18000));
                             break;
                         case EVENT_ARCTIC_BREATH:
