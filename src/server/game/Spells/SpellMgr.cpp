@@ -3086,6 +3086,9 @@ void SpellMgr::LoadDbcDataCorrections()
             case 54171: // Divine Storm
                 spellInfo->MaxAffectedTargets = 3;
                 break;
+			case 24259: // Spell Lock silence
+				spellInfo->speed = 80;
+				break;
             case 71464: // Divine Surge
                 spellInfo->EffectRadiusIndex[0] = EFFECT_RADIUS_100_YARDS;
                 spellInfo->DurationIndex = 28;          // 5 seconds
