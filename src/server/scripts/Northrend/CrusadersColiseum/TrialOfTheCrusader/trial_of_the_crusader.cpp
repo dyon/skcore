@@ -97,6 +97,15 @@ enum
 {
     NUM_MESSAGES = 6,
 };
+ 
+static char* EncounterNames[] =
+{
+    "Bestias de Rasganorte",
+    "Lord Jaraxxus",
+    "Campeones de facción",
+    "Gemelas Val'kyr",
+    "Anub'arak"
+};
 
 class npc_announcer_toc10 : public CreatureScript
 {
@@ -137,13 +146,24 @@ class npc_announcer_toc10 : public CreatureScript
                 return true;
 
             uint8 i = 0;
-            for (; i < NUM_MESSAGES; ++i)
+
+            if(player->isGameMaster())
             {
-                if ((!_GossipMessage[i].state && instanceScript->GetData(_GossipMessage[i].encounter) != DONE)
-                    || (_GossipMessage[i].state && instanceScript->GetData(_GossipMessage[i].encounter) == DONE))
+                for (; i < NUM_MESSAGES - 1; ++i)
                 {
-                    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, _message, GOSSIP_SENDER_MAIN, _GossipMessage[i].id);
-                    break;
+                    player->ADD_GOSSIP_ITEM(GOSSIP_ICON_INTERACT_1, EncounterNames[i], GOSSIP_SENDER_MAIN, _GossipMessage[i].id);
+                }
+            }
+            else
+            {
+                for (; i < NUM_MESSAGES; ++i)
+                {
+                    if ((!_GossipMessage[i].state && instanceScript->GetData(_GossipMessage[i].encounter) != DONE)
+                        || (_GossipMessage[i].state && instanceScript->GetData(_GossipMessage[i].encounter) == DONE))
+                    {
+                        player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, _message, GOSSIP_SENDER_MAIN, _GossipMessage[i].id);
+                        break;
+                    }
                 }
             }
 
