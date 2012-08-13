@@ -15,8 +15,7 @@
  * with this program. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "ScriptMgr.h"
-#include "InstanceScript.h"
+#include "ScriptPCH.h"
 #include "azjol_nerub.h"
 
 #define MAX_ENCOUNTER     3
@@ -43,10 +42,16 @@ public:
         uint64 uiWatcherSilthik;
         uint64 uiWatcherNarjil;
         uint64 uiAnubarakDoor[3];
+        uint64 uiAnubarCrusher;
 
         uint64 uiKrikthirDoor;
 
         uint32 auiEncounter[MAX_ENCOUNTER];
+
+        bool bDoorSwitch;
+
+        uint32 uiDoorTimer;
+        uint32 uiEngageTimer;
 
        void Initialize()
        {
@@ -60,6 +65,10 @@ public:
             uiWatcherSilthik = 0;
             uiWatcherNarjil = 0;
             uiKrikthirDoor = 0;
+            uiAnubarCrusher = 0;
+
+            uiDoorTimer = 5*IN_MILLISECONDS;
+            uiEngageTimer = 45*IN_MILLISECONDS;
         }
 
         bool IsEncounterInProgress() const
@@ -81,8 +90,9 @@ public:
                 case 28730:    uiWatcherGashra = creature->GetGUID();   break;
                 case 28731:    uiWatcherSilthik = creature->GetGUID();  break;
                 case 28729:    uiWatcherNarjil = creature->GetGUID();   break;
+                case 28922:    uiAnubarCrusher = creature->GetGUID();   break;
             }
-        }
+		}
 
         void OnGameObjectCreate(GameObject* go)
         {
@@ -130,7 +140,16 @@ public:
                     HandleGameObject(uiKrikthirDoor, true);
                 break;
             case DATA_HADRONOX_EVENT:
+                // if encounter already done ignore event
+                if (auiEncounter[1] == DONE)
+                    break;
+
                 auiEncounter[1] = data;
+
+                if (data == NOT_STARTED)
+                    HandleHadronox(true);
+                else if (data == IN_PROGRESS)
+                    HandleHadronox(false);
                 break;
             case DATA_ANUBARAK_EVENT:
                 auiEncounter[2] = data;
@@ -203,8 +222,38 @@ public:
 
             OUT_LOAD_INST_DATA_COMPLETE;
         }
-    };
 
+        void HandleHadronox(bool reset)
+        {
+            Creature *pCrusher = instance->GetCreature(uiAnubarCrusher);
+            Creature *pHadronox = instance->GetCreature(uiHadronox);
+
+            if (pCrusher && pHadronox)
+            {
+                if (reset)
+                {
+                    if (pHadronox->isAlive())
+                    {
+                        pHadronox->AI()->EnterEvadeMode();
+                        pHadronox->setFaction(35);
+                        pHadronox->SetVisible(false);
+                    }
+                    if (pCrusher->isAlive())
+                        pCrusher->AI()->EnterEvadeMode();
+                    else
+                        pCrusher->Respawn();
+                }
+                else
+                {
+                    if (pHadronox->isAlive())
+                    {
+                        pHadronox->RestoreFaction();
+                        pHadronox->SetVisible(true);
+                    }
+                }
+            }
+        }
+    };
     InstanceScript* GetInstanceScript(InstanceMap* map) const
     {
         return new instance_azjol_nerub_InstanceScript(map);
