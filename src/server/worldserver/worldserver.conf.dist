@@ -2756,7 +2756,8 @@ Appenders=Console Server
 #        Default:     "root"
 
 Loggers=Root
-=======
+
+###################################################################################################
 # WINTERGRASP OPTIONS
 #
 #   OutdoorPvP.Wintergrasp.Enabled
@@ -2869,4 +2870,56 @@ OutdoorPvP.Wintergrasp.Antifarm.Def = 5
 
 #
 ###################################################################################################
->>>>>>> Full Wintergrasp patch by ChaosUA & TCRU community for TC b0985b4d5f98186a28b82fb9d92380de1fadafd1 + removed temporary huckfor towers
+
+###################################################################################################
+# ARENA WATCHER
+#
+#   On/Off arena watcher
+#        Default:     1 - (Enabled)
+#                     0 - (Disabled)
+
+ArenaWatcher.Enable = 0
+
+#   Gossip menu only for game master
+#        Default:     0 - (Disabled)
+#                     1 - (Enabled)
+
+ArenaWatcher.OnlyGM = 0
+
+#   Show gossip menu with 0 games
+#        Default:     0 - (Disabled)
+#                     1 - (Enabled)
+
+ArenaWatcher.ShowNoGames = 0
+
+#   Can watch only if battle is rated
+#        Default:     0 - (Disabled)
+#                     1 - (Enabled)
+
+ArenaWatcher.OnlyRated = 0
+
+#   Can teleport to players
+#        Default:     0 - (Disabled)
+#                     1 - (Enabled)
+
+ArenaWatcher.ToPlayers = 0
+
+#   Need description
+#        Default:     0 - (Disabled)
+#                     1 - (Enabled)
+
+ArenaWatcher.Silence = 0
+
+#   Need description
+#        Default:     0 - (Disabled)
+#                     1 - (Enabled)
+
+ArenaWatcher.Fly = 0
+
+#   Need description
+#        Default:     3.0
+
+ArenaWatcher.Speed = 3.0
+
+#
+###################################################################################################

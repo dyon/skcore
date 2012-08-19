@@ -720,6 +720,9 @@ class PlayerScript : public ScriptObject
         // Called in Spell::Cast.
         virtual void OnSpellCast(Player* /*player*/, Spell* /*spell*/, bool /*skipCheck*/) { }
 
+        // Called when a player remove from battle
+        virtual void OnPlayerRemoveFromBattleground(Player* /*player*/, Battleground* /*bg*/) { }
+
         // Called when a player logs in.
         virtual void OnLogin(Player* /*player*/) { }
 
@@ -1004,6 +1007,7 @@ class ScriptMgr
         void OnPlayerEmote(Player* player, uint32 emote);
         void OnPlayerTextEmote(Player* player, uint32 textEmote, uint32 emoteNum, uint64 guid);
         void OnPlayerSpellCast(Player* player, Spell* spell, bool skipCheck);
+        void OnPlayerRemoveFromBattleground(Player* player, Battleground* bg);
         void OnPlayerLogin(Player* player);
         void OnPlayerLogout(Player* player);
         void OnPlayerCreate(Player* player);

@@ -17300,6 +17300,8 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
     m_achievementMgr.CheckAllAchievementCriteria();
 
     _LoadEquipmentSets(holder->GetPreparedResult(PLAYER_LOGIN_QUERY_LOADEQUIPMENTSETS));
+    
+    SetSpectator(false);
 
     return true;
 }
@@ -25483,6 +25485,24 @@ void Player::_SaveInstanceTimeRestrictions(SQLTransaction& trans)
         stmt->setUInt64(2, itr->second);
         trans->Append(stmt);
     }
+}
+
+void Player::SetSpectator(bool bSpectator)
+{
+    if (bSpectator)
+    {
+        if (IsSpectator())
+        {
+            sLog->outError(LOG_FILTER_PLAYER, "Player::SetSpectator: trying to set spectator state for player (GUID: %u) but he already has this state.", GetGUIDLow());
+            return;
+        }
+        if (SpellInfo const* spellInfo = sSpellMgr->GetSpellInfo(8326))
+            Aura::TryCreate(spellInfo, MAX_EFFECT_MASK, this, this);
+    }
+    else
+        RemoveAurasDueToSpell(8326);
+
+    m_spectator = bSpectator;
 }
 
 bool Player::IsInWhisperWhiteList(uint64 guid)

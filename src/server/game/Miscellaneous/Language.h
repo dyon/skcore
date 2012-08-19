@@ -1093,6 +1093,13 @@ enum TrinityStrings
     // Use for custom patches             11000-11999
     LANG_AUTO_BROADCAST                 = 11000,
     LANG_INVALID_REALMID                = 11001,
+    LANG_SPEC_FORBID                    = 11610,
+    LANG_SPEC_NOT_ON_ARENA              = 11611,
+    LANG_SPEC_ON_ARENA_OR_BG            = 11612,
+    LANG_SPEC_ALREADY_SPECTATOR         = 11613,
+    LANG_SPEC_DISABLED                  = 11614,
+    LANG_SPEC_CAN_NOT_CHAT              = 11615,
+    LANG_SPEC_NO_PET                    = 11616,
 
     // NOT RESERVED IDS                   12000-1999999999
     // `db_script_string` table index     2000000000-2000009999 (MIN_DB_SCRIPT_STRING_ID-MAX_DB_SCRIPT_STRING_ID)
