@@ -1608,27 +1608,6 @@ bool OutdoorPvPWG::Update(uint32 diff)
                 }
                 m_ResurrectQueue.clear();
             }
-
-            // Teletransportamos los personajes ausentes a Dalaran
-            for (PlayerSet::iterator itr = m_players[TEAM_ALLIANCE].begin(); itr != m_players[TEAM_ALLIANCE].end(); ++itr)
-            {
-                Player* player = *itr;
-
-                if (player && player->isAFK())
-                {
-                    player->CastSpell(player, SPELL_TELEPORT_DALARAN, true);
-                }
-            }
-
-            for (PlayerSet::iterator itr = m_players[TEAM_HORDE].begin(); itr != m_players[TEAM_HORDE].end(); ++itr)
-            {
-                Player* player = *itr;
-
-                if (player && player->isAFK())
-                {
-                    player->CastSpell(player, SPELL_TELEPORT_DALARAN, true);
-                }
-            }
         }
         UpdateClock();
     } else {
