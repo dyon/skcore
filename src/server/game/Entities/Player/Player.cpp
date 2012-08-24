@@ -74,6 +74,8 @@
 #include "InstanceScript.h"
 #include <cmath>
 #include "AccountMgr.h"
+#include "Battlefield.h"
+#include "BattlefieldMgr.h"
 
 #define ZONE_UPDATE_INTERVAL (1*IN_MILLISECONDS)
 
@@ -726,7 +728,6 @@ Player::Player(WorldSession* session): Unit(true), m_achievementMgr(this), m_rep
     m_MirrorTimerFlagsLast = UNDERWATER_NONE;
     m_isInWater = false;
     m_drunkTimer = 0;
-    m_drunk = 0;
     m_restTime = 0;
     m_deathTimer = 0;
     m_deathExpireTime = 0;
@@ -1458,48 +1459,50 @@ void Player::HandleDrowning(uint32 time_diff)
     m_MirrorTimerFlagsLast = m_MirrorTimerFlags;
 }
 
-///The player sobers by 256 every 10 seconds
+///The player sobers by 1% every 9 seconds
 void Player::HandleSobering()
 {
     m_drunkTimer = 0;
 
-    uint32 drunk = (m_drunk <= 256) ? 0 : (m_drunk - 256);
+    uint8 currentDrunkValue = GetDrunkValue();
+    uint8 drunk = currentDrunkValue ? --currentDrunkValue : 0;
     SetDrunkValue(drunk);
 }
 
-DrunkenState Player::GetDrunkenstateByValue(uint16 value)
+DrunkenState Player::GetDrunkenstateByValue(uint8 value)
 {
-    if (value >= 23000)
+    if (value >= 90)
         return DRUNKEN_SMASHED;
-    if (value >= 12800)
+    if (value >= 50)
         return DRUNKEN_DRUNK;
-    if (value & 0xFFFE)
+    if (value)
         return DRUNKEN_TIPSY;
     return DRUNKEN_SOBER;
 }
 
-void Player::SetDrunkValue(uint16 newDrunkenValue, uint32 itemId)
+void Player::SetDrunkValue(uint8 newDrunkValue, uint32 itemId /*= 0*/)
 {
-    uint32 oldDrunkenState = Player::GetDrunkenstateByValue(m_drunk);
+    bool isSobering = newDrunkValue < GetDrunkValue();
+    uint32 oldDrunkenState = Player::GetDrunkenstateByValue(GetDrunkValue());
+    if (newDrunkValue > 100)
+        newDrunkValue = 100;
 
     // select drunk percent or total SPELL_AURA_MOD_FAKE_INEBRIATE amount, whichever is higher for visibility updates
-    int32 drunkPercent = newDrunkenValue * 100 / 0xFFFF;
-    drunkPercent = std::max(drunkPercent, GetTotalAuraModifier(SPELL_AURA_MOD_FAKE_INEBRIATE));
-
+    int32 drunkPercent = std::max<int32>(newDrunkValue, GetTotalAuraModifier(SPELL_AURA_MOD_FAKE_INEBRIATE));
     if (drunkPercent)
     {
         m_invisibilityDetect.AddFlag(INVISIBILITY_DRUNK);
         m_invisibilityDetect.SetValue(INVISIBILITY_DRUNK, drunkPercent);
     }
-    else if (!HasAuraType(SPELL_AURA_MOD_FAKE_INEBRIATE) && !newDrunkenValue)
+    else if (!HasAuraType(SPELL_AURA_MOD_FAKE_INEBRIATE) && !newDrunkValue)
         m_invisibilityDetect.DelFlag(INVISIBILITY_DRUNK);
 
-    m_drunk = newDrunkenValue;
-    SetUInt32Value(PLAYER_BYTES_3, (GetUInt32Value(PLAYER_BYTES_3) & 0xFFFF0001) | (m_drunk & 0xFFFE));
-
-    uint32 newDrunkenState = Player::GetDrunkenstateByValue(m_drunk);
-
+    uint32 newDrunkenState = Player::GetDrunkenstateByValue(newDrunkValue);
+    SetByteValue(PLAYER_BYTES_3, 1, newDrunkValue);
     UpdateObjectVisibility();
+
+    if (!isSobering)
+        m_drunkTimer = 0;   // reset sobering timer
 
     if (newDrunkenState == oldDrunkenState)
         return;
@@ -1508,7 +1511,6 @@ void Player::SetDrunkValue(uint16 newDrunkenValue, uint32 itemId)
     data << uint64(GetGUID());
     data << uint32(newDrunkenState);
     data << uint32(itemId);
-
     SendMessageToSet(&data, true);
 }
 
@@ -1749,11 +1751,10 @@ void Player::Update(uint32 p_time)
         m_Last_tick = now;
     }
 
-    if (m_drunk)
+    if (GetDrunkValue())
     {
         m_drunkTimer += p_time;
-
-        if (m_drunkTimer > 10*IN_MILLISECONDS)
+        if (m_drunkTimer > 9 * IN_MILLISECONDS)
             HandleSobering();
     }
 
@@ -2406,6 +2407,7 @@ void Player::RemoveFromWorld()
         StopCastingBindSight();
         UnsummonPetTemporaryIfAny();
         sOutdoorPvPMgr->HandlePlayerLeaveZone(this, m_zoneUpdateId);
+        sBattlefieldMgr->HandlePlayerLeaveZone(this, m_zoneUpdateId);
     }
 
     ///- Do not add/remove the player from the object storage
@@ -5494,7 +5496,17 @@ void Player::RepopAtGraveyard()
     if (Battleground* bg = GetBattleground())
         ClosestGrave = bg->GetClosestGraveYard(this);
     else
-        ClosestGrave = sObjectMgr->GetClosestGraveYard(GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId(), GetTeam());
+    {
+        if (sBattlefieldMgr->GetBattlefieldToZoneId(GetZoneId()))
+            ClosestGrave = sBattlefieldMgr->GetBattlefieldToZoneId(GetZoneId())->GetClosestGraveYard(this);
+        else
+        {
+            if (sBattlefieldMgr->GetBattlefieldToZoneId(GetZoneId()))
+                ClosestGrave = sBattlefieldMgr->GetBattlefieldToZoneId(GetZoneId())->GetClosestGraveYard(this);
+            else
+                ClosestGrave = sObjectMgr->GetClosestGraveYard(GetPositionX(), GetPositionY(), GetPositionZ(), GetMapId(), GetTeam());
+        }
+    }
 
     // stop countdown until repop
     m_deathTimer = 0;
@@ -7419,6 +7431,8 @@ void Player::UpdateZone(uint32 newZone, uint32 newArea)
     {
         sOutdoorPvPMgr->HandlePlayerLeaveZone(this, m_zoneUpdateId);
         sOutdoorPvPMgr->HandlePlayerEnterZone(this, newZone);
+        sBattlefieldMgr->HandlePlayerLeaveZone(this, m_zoneUpdateId);
+        sBattlefieldMgr->HandlePlayerEnterZone(this, newZone);
         SendInitWorldStates(newZone, newArea);              // only if really enters to new zone, not just area change, works strange...
     }
 
@@ -7566,7 +7580,7 @@ void Player::CheckDuelDistance(time_t currTime)
 
 bool Player::IsOutdoorPvPActive()
 {
-    return isAlive() && !HasInvisibilityAura() && !HasStealthAura() && (IsPvP() || sWorld->IsPvPRealm())  && !HasUnitMovementFlag(MOVEMENTFLAG_FLYING) && !isInFlight();
+    return isAlive() && !HasInvisibilityAura() && !HasStealthAura() && IsPvP() && !HasUnitMovementFlag(MOVEMENTFLAG_FLYING) && !isInFlight();
 }
 
 void Player::DuelComplete(DuelCompleteType type)
@@ -16753,7 +16767,8 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
 
     SetUInt32Value(PLAYER_BYTES, fields[9].GetUInt32());
     SetUInt32Value(PLAYER_BYTES_2, fields[10].GetUInt32());
-    SetUInt32Value(PLAYER_BYTES_3, (fields[49].GetUInt16() & 0xFFFE) | fields[5].GetUInt8());
+    SetByteValue(PLAYER_BYTES_3, 0, fields[5].GetUInt8());
+    SetByteValue(PLAYER_BYTES_3, 1, fields[49].GetUInt8());
     SetUInt32Value(PLAYER_FLAGS, fields[11].GetUInt32());
     SetInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX, fields[48].GetUInt32());
 
@@ -17063,13 +17078,11 @@ bool Player::LoadFromDB(uint32 guid, SQLQueryHolder *holder)
 
     // set value, including drunk invisibility detection
     // calculate sobering. after 15 minutes logged out, the player will be sober again
-    float soberFactor;
-    if (time_diff > 15*MINUTE)
-        soberFactor = 0;
-    else
-        soberFactor = 1-time_diff/(15.0f*MINUTE);
-    uint16 newDrunkenValue = uint16(soberFactor*(GetUInt32Value(PLAYER_BYTES_3) & 0xFFFE));
-    SetDrunkValue(newDrunkenValue);
+    uint8 newDrunkValue = 0;
+    if (time_diff < uint32(GetDrunkValue()) * 9)
+        newDrunkValue = GetDrunkValue() - time_diff / 9;
+
+    SetDrunkValue(newDrunkValue);
 
     m_cinematic = fields[18].GetUInt8();
     m_Played_time[PLAYED_TIME_TOTAL]= fields[19].GetUInt32();
@@ -18665,7 +18678,7 @@ void Player::SaveToDB(bool create /*=false*/)
         stmt->setUInt32(index++, GetUInt32Value(PLAYER_CHOSEN_TITLE));
         stmt->setUInt64(index++, GetUInt64Value(PLAYER_FIELD_KNOWN_CURRENCIES));
         stmt->setUInt32(index++, GetUInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX));
-        stmt->setUInt16(index++, (uint16)(GetUInt32Value(PLAYER_BYTES_3) & 0xFFFE));
+        stmt->setUInt8(index++, GetDrunkValue());
         stmt->setUInt32(index++, GetHealth());
 
         for (uint32 i = 0; i < MAX_POWERS; ++i)
@@ -18776,7 +18789,7 @@ void Player::SaveToDB(bool create /*=false*/)
         stmt->setUInt32(index++, GetUInt32Value(PLAYER_CHOSEN_TITLE));
         stmt->setUInt64(index++, GetUInt64Value(PLAYER_FIELD_KNOWN_CURRENCIES));
         stmt->setUInt32(index++, GetUInt32Value(PLAYER_FIELD_WATCHED_FACTION_INDEX));
-        stmt->setUInt16(index++, (uint16)(GetUInt32Value(PLAYER_BYTES_3) & 0xFFFE));
+        stmt->setUInt8(index++, GetDrunkValue());
         stmt->setUInt32(index++, GetHealth());
 
         for (uint32 i = 0; i < MAX_POWERS; ++i)
@@ -23309,7 +23322,7 @@ bool Player::isUsingLfg()
     return sLFGMgr->GetState(guid) != LFG_STATE_NONE;
 }
 
-void Player::SetBattlegroundRaid(Group* group, int8 subgroup)
+void Player::SetBattlegroundOrBattlefieldRaid(Group* group, int8 subgroup)
 {
     //we must move references from m_group to m_originalGroup
     SetOriginalGroup(GetGroup(), GetSubGroup());
@@ -23319,7 +23332,7 @@ void Player::SetBattlegroundRaid(Group* group, int8 subgroup)
     m_group.setSubGroup((uint8)subgroup);
 }
 
-void Player::RemoveFromBattlegroundRaid()
+void Player::RemoveFromBattlegroundOrBattlefieldRaid()
 {
     //remove existing reference
     m_group.unlink();

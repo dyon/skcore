@@ -36,8 +36,7 @@ void MapManager::LoadTransports()
 
     if (!result)
     {
-        sLog->outInfo(LOG_FILTER_TRANSPORTS, ">> Loaded 0 transports. DB table `transports` is empty!");
-
+        sLog->outInfo(LOG_FILTER_SERVER_LOADING, ">> Loaded 0 transports. DB table `transports` is empty!");
         return;
     }
 
@@ -67,7 +66,7 @@ void MapManager::LoadTransports()
             continue;
         }
 
-        // sLog->outInfo(LOG_FILTER_TRANSPORTS, "Loading transport %d between %s, %s", entry, name.c_str(), goinfo->name);
+        // sLog->outInfo(LOG_FILTER_SERVER_LOADING, "Loading transport %d between %s, %s", entry, name.c_str(), goinfo->name);
 
         std::set<uint32> mapsUsed;
 
@@ -122,8 +121,7 @@ void MapManager::LoadTransports()
         while (result->NextRow());
     }
 
-    sLog->outInfo(LOG_FILTER_TRANSPORTS, ">> Loaded %u transports in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-
+    sLog->outInfo(LOG_FILTER_SERVER_LOADING, ">> Loaded %u transports in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
 }
 
 Transport* MapManager::LoadTransportInMap(Map* instance, uint32 goEntry, uint32 period)
@@ -210,8 +208,7 @@ void MapManager::LoadTransportNPCs()
 
     if (!result)
     {
-        sLog->outInfo(LOG_FILTER_TRANSPORTS, ">> Loaded 0 transport NPCs. DB table `creature_transport` is empty!");
-
+        sLog->outInfo(LOG_FILTER_SERVER_LOADING, ">> Loaded 0 transport NPCs. DB table `creature_transport` is empty!");
         return;
     }
 
@@ -242,8 +239,7 @@ void MapManager::LoadTransportNPCs()
     }
     while (result->NextRow());
 
-    sLog->outInfo(LOG_FILTER_TRANSPORTS, ">> Loaded %u transport npcs in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
-
+    sLog->outInfo(LOG_FILTER_SERVER_LOADING, ">> Loaded %u transport npcs in %u ms", count, GetMSTimeDiffToNow(oldMSTime));
 }
 
 Transport::Transport(uint32 period, uint32 script) : GameObject(), m_pathTime(0), m_timer(0),

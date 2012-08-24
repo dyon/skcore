@@ -4772,16 +4772,18 @@ void Spell::EffectInebriate(SpellEffIndex /*effIndex*/)
     if (!unitTarget || unitTarget->GetTypeId() != TYPEID_PLAYER)
         return;
 
-    Player* player = (Player*)unitTarget;
-    uint16 currentDrunk = player->GetDrunkValue();
-    uint16 drunkMod = damage * 256;
-    if (currentDrunk + drunkMod > 0xFFFF)
+    Player* player = unitTarget->ToPlayer();
+    uint8 currentDrunk = player->GetDrunkValue();
+    uint8 drunkMod = damage;
+    if (currentDrunk + drunkMod > 100)
     {
-        currentDrunk = 0xFFFF;
-        player->CastSpell(player, 67468, false);
+        currentDrunk = 100;
+        if (rand_chance() < 25.0f)
+            player->CastSpell(player, 67468, false);    // Drunken Vomit
     }
     else
         currentDrunk += drunkMod;
+
     player->SetDrunkValue(currentDrunk, m_CastItem ? m_CastItem->GetEntry() : 0);
 }
 
@@ -6194,6 +6196,7 @@ void Spell::EffectPlayerNotification(SpellEffIndex effIndex)
         case 58730: // Restricted Flight Area
         case 58600: // Restricted Flight Area
             unitTarget->ToPlayer()->GetSession()->SendNotification(LANG_ZONE_NOFLYZONE);
+            unitTarget->PlayDirectSound(9417); // Fel Reaver sound
             break;
     }
 
