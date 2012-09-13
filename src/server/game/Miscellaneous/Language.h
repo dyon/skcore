@@ -86,8 +86,7 @@ enum TrinityStrings
     LANG_CONNECTED_PLAYERS              = 60,
     LANG_ACCOUNT_ADDON                  = 61,
     LANG_IMPROPER_VALUE                 = 62,
-    LANG_CANT_DO_NOW                    = 63,
-    // Room for more level 0              64-99 not used
+    // Room for more level 0              63-99 not used
 
     // level 1 chat
     LANG_GLOBAL_NOTIFY                  = 100,
@@ -1083,8 +1082,7 @@ enum TrinityStrings
     LANG_SPEC_ALREADY_SPECTATOR         = 11613,
     LANG_SPEC_DISABLED                  = 11614,
     LANG_SPEC_CAN_NOT_CHAT              = 11615,
-    LANG_SPEC_NO_PET                    = 11616,
-    LANG_INVALID_REALMID                = 11001
+    LANG_SPEC_NO_PET                    = 11616
 
     // NOT RESERVED IDS                   12000-1999999999
     // `db_script_string` table index     2000000000-2000009999 (MIN_DB_SCRIPT_STRING_ID-MAX_DB_SCRIPT_STRING_ID)
