@@ -339,6 +339,8 @@ public:
             // used to despawn corpse immediately
             me->DespawnOrUnsummon();
         }
+
+        void UpdateAI(uint32 const /*diff*/) {}
     };
 
 };
@@ -448,6 +450,8 @@ public:
             // used to despawn corpse immediately
             me->DespawnOrUnsummon();
         }
+
+        void UpdateAI(uint32 const /*diff*/) {}
     };
 
 };

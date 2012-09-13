@@ -1194,6 +1194,11 @@ void World::LoadConfigSettings(bool reload)
     m_bool_configs[CONFIG_AUTOBROADCAST] = ConfigMgr::GetBoolDefault("AutoBroadcast.On", false);
     m_int_configs[CONFIG_AUTOBROADCAST_CENTER] = ConfigMgr::GetIntDefault("AutoBroadcast.Center", 0);
     m_int_configs[CONFIG_AUTOBROADCAST_INTERVAL] = ConfigMgr::GetIntDefault("AutoBroadcast.Timer", 60000);
+    if (reload)
+    {
+        m_timers[WUPDATE_AUTOBROADCAST].SetInterval(m_int_configs[CONFIG_AUTOBROADCAST_INTERVAL]);
+        m_timers[WUPDATE_AUTOBROADCAST].Reset();
+    }
 
     // MySQL ping time interval
     m_int_configs[CONFIG_DB_PING_INTERVAL] = ConfigMgr::GetIntDefault("MaxPingTime", 30);
@@ -1210,7 +1215,7 @@ void World::LoadConfigSettings(bool reload)
     m_int_configs[CONFIG_WINTERGRASP_BATTLETIME] = ConfigMgr::GetIntDefault("Wintergrasp.BattleTimer", 30);
     m_int_configs[CONFIG_WINTERGRASP_NOBATTLETIME] = ConfigMgr::GetIntDefault("Wintergrasp.NoBattleTimer", 150);
     m_int_configs[CONFIG_WINTERGRASP_RESTART_AFTER_CRASH] = ConfigMgr::GetIntDefault("Wintergrasp.CrashRestartTimer", 10);
-    
+
     if (reload)
         sScriptMgr->OnConfigLoad(reload);
 }
@@ -1734,7 +1739,7 @@ void World::SetInitialWorldSettings()
     ///- Initialize Battlefield
     sLog->outInfo(LOG_FILTER_SERVER_LOADING, "Starting Battlefield System");
     sBattlefieldMgr->InitBattlefield();
-    
+
     sLog->outInfo(LOG_FILTER_SERVER_LOADING, "Loading Transports...");
     sMapMgr->LoadTransports();
 
@@ -2929,7 +2934,7 @@ void World::LoadCharacterNameData()
     QueryResult result = CharacterDatabase.Query("SELECT guid, name, race, gender, class FROM characters WHERE deleteDate IS NULL");
     if (!result)
     {
-        sLog->outError(LOG_FILTER_SQL, "No character name data loaded, empty query");
+        sLog->outInfo(LOG_FILTER_SERVER_LOADING, "No character name data loaded, empty query");
         return;
     }
 
