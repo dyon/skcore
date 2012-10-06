@@ -1266,13 +1266,13 @@ void AddBattlegroundScripts()
 
 #ifdef SCRIPTS
 /* This is where custom scripts' loading functions should be declared. */
-void AddSC_Mod_ArenaWatcher();
+//void AddSC_Mod_ArenaWatcher();
 #endif
 
 void AddCustomScripts()
 {
 #ifdef SCRIPTS
     /* This is where custom scripts should be added. */
-    AddSC_Mod_ArenaWatcher();
+    //AddSC_Mod_ArenaWatcher();
 #endif
 }

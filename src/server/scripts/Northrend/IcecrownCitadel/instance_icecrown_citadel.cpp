@@ -1182,7 +1182,7 @@ class instance_icecrown_citadel : public InstanceMapScript
                     if (player->isGameMaster())
                         continue;
 
-                    if (player->GetAchievementMgr().HasAchieved(mode == 25 ? ACHIEVEMENT_FROZEN_THRONE_25 : ACHIEVEMENT_FROZEN_THRONE_10))
+                    if (player->HasAchieved(mode == 25 ? ACHIEVEMENT_FROZEN_THRONE_25 : ACHIEVEMENT_FROZEN_THRONE_10))
                         return true;
                 }
                 return false;

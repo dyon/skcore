@@ -1,7 +1,7 @@
 /*######
 ## Arena Watcher by FrozenSouL
 ######*/
-
+/*
 #include "CreatureTextMgr.h"
 #include "Player.h"
 #include "BattlegroundMgr.h"
@@ -145,7 +145,7 @@ class mod_ArenaWatcher_PlayerScript : public PlayerScript
     public:
         mod_ArenaWatcher_PlayerScript() : PlayerScript("mod_ArenaWatcher_PlayerScript") { }
 
-    void OnPlayerRemoveFromBattleground(Player* player, Battleground* /*bg*/)
+    void OnPlayerRemoveFromBattleground(Player* player, Battleground* /*bg*//*)
     {
         if (!ArenaWatcherEnable)
             return;
@@ -175,15 +175,15 @@ class npc_arena_watcher : public CreatureScript
 
             for (uint32 bgTypeId = 0; bgTypeId < MAX_BATTLEGROUND_TYPE_ID; ++bgTypeId)
             {
-                if (!BattlegroundMgr::IsArenaType(BattlegroundTypeId(bgTypeId)))
-                    continue;
+                //if (!BattlegroundMgr::IsArenaType(BattlegroundTypeId(bgTypeId)))
+                    //continue;
                 
-                BattlegroundSet arenas = sBattlegroundMgr->GetAllBattlegroundsWithTypeId(BattlegroundTypeId(bgTypeId));
+                BattlegroundContainer arenas = sBattlegroundMgr->GetAllBattlegroundsWithTypeId(BattlegroundTypeId(bgTypeId));
 
                 if (arenas.empty())
                     continue;
                     
-                for (BattlegroundSet::const_iterator itr = arenas.begin(); itr != arenas.end(); ++itr)
+                for (BattlegroundContainer::const_iterator itr = arenas.begin(); itr != arenas.end(); ++itr)
                 {
                     Battleground* bg = itr->second;
                     if (!bg)
@@ -244,15 +244,15 @@ uint8 playerCount = action - GOSSIP_ACTION_INFO_DEF;
             
             for (uint32 bgTypeId = 0; bgTypeId < MAX_BATTLEGROUND_TYPE_ID; ++bgTypeId)
             {
-                if (!BattlegroundMgr::IsArenaType(BattlegroundTypeId(bgTypeId)))
-                    continue;
+                //if (!BattlegroundMgr::IsArenaType(BattlegroundTypeId(bgTypeId)))
+                    //continue;
                 
-                BattlegroundSet arenas = sBattlegroundMgr->GetAllBattlegroundsWithTypeId(BattlegroundTypeId(bgTypeId));
+                BattlegroundContainer arenas = sBattlegroundMgr->GetAllBattlegroundsWithTypeId(BattlegroundTypeId(bgTypeId));
 
                 if (arenas.empty())
                     continue;
                     
-                for (BattlegroundSet::const_iterator itr = arenas.begin(); itr != arenas.end(); ++itr)
+                for (BattlegroundContainer::const_iterator itr = arenas.begin(); itr != arenas.end(); ++itr)
                 {
                     Battleground* bg = itr->second;
                     if (!bg)
@@ -307,7 +307,7 @@ uint8 playerCount = action - GOSSIP_ACTION_INFO_DEF;
         {
             uint32 arenaId = action - GOSSIP_OFFSET;
             uint32 bgTypeId = sender - GOSSIP_SENDER_MAIN;
-            BattlegroundSet arenas = sBattlegroundMgr->GetAllBattlegroundsWithTypeId(BattlegroundTypeId(bgTypeId));
+            BattlegroundContainer arenas = sBattlegroundMgr->GetAllBattlegroundsWithTypeId(BattlegroundTypeId(bgTypeId));
 
             if (arenas[arenaId])
             {
@@ -415,4 +415,4 @@ void AddSC_Mod_ArenaWatcher()
     new mod_ArenaWatcher_WorldScript();
     new mod_ArenaWatcher_PlayerScript();
     new npc_arena_watcher();
-}
+}*/
