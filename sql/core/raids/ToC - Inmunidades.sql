@@ -1,12 +1,40 @@
--- SELECT CONCAT('UPDATE creature_template SET mechanic_immune_mask = ', mechanic_immune_mask, ' WHERE entry IN (', entry, ', ', difficulty_entry_1, ', ', difficulty_entry_2, ', ', difficulty_entry_3, '); -- ', NAME) FROM creature_template WHERE entry IN (34780, 34497, 34496, 34564, 34797, 34799, 35144, 34796);
+-- adding ToC boss immunities
+UPDATE `creature_template` SET `mechanic_immune_mask`=`mechanic_immune_mask` | 1 | 2 | 4 | 8 | 16 | 32 | 64 | 128 | 256 | 512 | 1024 | 2048 | 4096 | 8192 | 65536 | 131072 | 524288 | 4194304 | 8388608 | 67108864 | 536870912 
+	WHERE `entry` IN (34796, 35438, 35439, 35440, 34799, 35514, 35515, 35516, 35144, 35511, 35512, 35513, 34797, 35447, 35448, 35449, 34780, 35216, 35268, 35269, 36066, 35347, 35348, 35349, 34497, 35350, 35351, 35352, 34564, 34566, 35615, 35616);
 
--- Trial of the Crusader
-UPDATE creature_template SET mechanic_immune_mask = 617299803 WHERE entry IN (35144, 35511, 35512, 35513); -- Acidmaw
-UPDATE creature_template SET mechanic_immune_mask = 617299803 WHERE entry IN (34799, 35514, 35515, 35516); -- Dreadscale
-UPDATE creature_template SET mechanic_immune_mask = 617299803 WHERE entry IN (34797, 35447, 35448, 35449); -- Icehowl
-UPDATE creature_template SET mechanic_immune_mask = 617299803 WHERE entry IN (34796, 35438, 35439, 35440); -- Gormok the Impaler
-UPDATE creature_template SET mechanic_immune_mask = 617299803 WHERE entry IN (34496, 35347, 35348, 35349); -- Eydis Darkbane
-UPDATE creature_template SET mechanic_immune_mask = 617299803 WHERE entry IN (34497, 35350, 35351, 35352); -- Fjola Lightbane
-UPDATE creature_template SET mechanic_immune_mask = 617299803 WHERE entry IN (34564, 34566, 35615, 35616); -- Anub'arak
--- UPDATE creature_template SET mechanic_immune_mask = 0 WHERE -- entry = 34660;  Anub'arak spike
-UPDATE creature_template SET mechanic_immune_mask = 617299803 WHERE entry IN (34780, 35216, 35268, 35269); -- Lord Jaraxxus
+-- adding Jaraxxus add immunities
+UPDATE `creature_template` SET `mechanic_immune_mask`=`mechanic_immune_mask` | 1024 | 2048 WHERE `entry` IN (34815, 35262, 35263, 35264, 34826, 35270, 35271, 35272);
+UPDATE `creature_template` SET `mechanic_immune_mask`=`mechanic_immune_mask` | 262144 WHERE `entry` IN (35263, 35264);
+-- adding Nether portal and Infernal volcano immunities to knockout/grip
+UPDATE `creature_template` SET `mechanic_immune_mask`=`mechanic_immune_mask` | 32 | 8192 WHERE `entry` IN (34825, 35278, 35279, 35280, 34813, 35265, 35266, 35267);
+
+-- add taunt immunity to toc10/25 faction champions
+UPDATE `creature_template` SET `flags_extra`=`flags_extra` | 256 WHERE `entry` IN
+(34445,35705,35706,35707,
+34459,35686,35687,35688,
+34447,35683,35684,35685,
+34455,35680,35681,35682,
+34453,35718,35719,35720,
+34458,35692,35693,35694,
+34454,35711,35712,35713,
+34448,35724,35725,35726,
+34441,34442,34443,35749,
+34450,35695,35696,35697,
+35610,35774,35775,35776,
+35465,36301,36302,36303,
+34451,35671,35672,35673,
+34449,35689,35690,35691,
+34444,35740,35741,35742,
+34456,35708,35709,35710,
+34460,35702,35703,35704,
+34461,35743,35744,35745,
+34463,35734,35735,35736,
+34465,35746,35747,35748,
+34466,35665,35666,35667,
+34467,35662,35663,35664,
+34468,35721,35722,35723,
+34469,35714,35715,35716,
+34470,35728,35729,35730,
+34473,35674,35675,35676,
+34474,35731,35732,35733,
+34475,35737,35738,35739);
