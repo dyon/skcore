@@ -93,7 +93,7 @@ class ScriptRegistry
                         sLog->outError(LOG_FILTER_TSCR, "Script '%s' already assigned with the same script name, so the script can't work.",
                             script->GetName().c_str());
 
-                        // ASSERT(false); // Error that should be fixed ASAP.
+                        ASSERT(false); // Error that should be fixed ASAP.
                     }
                 }
                 else
@@ -1296,11 +1296,6 @@ void ScriptMgr::OnPlayerSpellCast(Player* player, Spell* spell, bool skipCheck)
     FOREACH_SCRIPT(PlayerScript)->OnSpellCast(player, spell, skipCheck);
 }
 
-void ScriptMgr::OnPlayerRemoveFromBattleground(Player* player, Battleground* bg)
-{
-    FOREACH_SCRIPT(PlayerScript)->OnPlayerRemoveFromBattleground(player, bg);
-}
-
 void ScriptMgr::OnPlayerLogin(Player* player)
 {
     FOREACH_SCRIPT(PlayerScript)->OnLogin(player);
@@ -1610,4 +1605,3 @@ template class ScriptRegistry<GroupScript>;
 #undef FOR_SCRIPTS
 #undef SCR_REG_LST
 #undef SCR_REG_ITR
-#undef SCR_REG_MAP

@@ -75,7 +75,6 @@ void AddSC_tele_commandscript();
 void AddSC_ticket_commandscript();
 void AddSC_titles_commandscript();
 void AddSC_wp_commandscript();
-void AddSC_spectate_commandscript();
 
 #ifdef SCRIPTS
 //world
@@ -701,7 +700,6 @@ void AddCommandScripts()
     AddSC_ticket_commandscript();
     AddSC_titles_commandscript();
     AddSC_wp_commandscript();
-    AddSC_spectate_commandscript();
 }
 
 void AddWorldScripts()
@@ -1274,13 +1272,11 @@ void AddBattlegroundScripts()
 
 #ifdef SCRIPTS
 /* This is where custom scripts' loading functions should be declared. */
-//void AddSC_Mod_ArenaWatcher();
 #endif
 
 void AddCustomScripts()
 {
 #ifdef SCRIPTS
     /* This is where custom scripts should be added. */
-    //AddSC_Mod_ArenaWatcher();
 #endif
 }

@@ -581,7 +581,6 @@ inline void Battleground::_ProcessLeave(uint32 diff)
             RemovePlayerAtLeave(itr->first, true, true);// remove player from BG
             // do not change any battleground's private variables
         }
-        GetBgMap()->RemoveAllPlayers();
     }
 }
 
@@ -923,26 +922,6 @@ void Battleground::EndBattleground(uint32 winner)
 
     if (winmsg_id)
         SendMessageToAll(winmsg_id, CHAT_MSG_BG_SYSTEM_NEUTRAL);
-
-    // teleport spectators to recall position and remove spectator state
-    Map::PlayerList const &PlList = m_Map->GetPlayers();
-
-    if (!PlList.isEmpty())
-    {
-        for (Map::PlayerList::const_iterator i = PlList.begin(); i != PlList.end(); ++i)
-        {
-            if (Player* pPlayer = i->getSource())
-            {
-                if (pPlayer->IsSpectator())
-                {
-                    {
-                        pPlayer->SetSpectator(false);
-                        pPlayer->TeleportTo(pPlayer->m_recallMap, pPlayer->m_recallX, pPlayer->m_recallY, pPlayer->m_recallZ, pPlayer->m_recallO);
-                    }
-                }
-            }
-        }
-    }
 }
 
 uint32 Battleground::GetBonusHonorFromKill(uint32 kills) const
@@ -1079,8 +1058,6 @@ void Battleground::RemovePlayerAtLeave(uint64 guid, bool Transport, bool SendPac
 
         if (Transport)
             player->TeleportToBGEntryPoint();
-
-        sScriptMgr->OnPlayerRemoveFromBattleground(player, this);
 
         sLog->outInfo(LOG_FILTER_BATTLEGROUND, "BATTLEGROUND: Removed player %s from Battleground.", player->GetName());
     }
@@ -1262,9 +1239,6 @@ void Battleground::EventPlayerLoggedIn(Player* player)
 {
     uint64 guid = player->GetGUID();
 
-    if (!IsPlayerInBattleground(guid))
-      return;
-
     // player is correct pointer
     for (std::deque<uint64>::iterator itr = m_OfflineQueue.begin(); itr != m_OfflineQueue.end(); ++itr)
     {
@@ -1274,9 +1248,6 @@ void Battleground::EventPlayerLoggedIn(Player* player)
             break;
         }
     }
-
-    if (!IsPlayerInBattleground(guid))
-      return;
 
     m_Players[guid].OfflineRemoveTime = 0;
     PlayerAddedToBGCheckIfBGIsRunning(player);

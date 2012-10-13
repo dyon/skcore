@@ -77,12 +77,6 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
         recv_data.rfinish();
         return;
     }
-    
-    if (_player->IsSpectator())
-    {
-        SendNotification(LANG_SPEC_CAN_NOT_CHAT);
-        return;
-    }
 
     Player* sender = GetPlayer();
 
@@ -487,7 +481,7 @@ void WorldSession::HandleMessagechatOpcode(WorldPacket & recv_data)
 
 void WorldSession::HandleEmoteOpcode(WorldPacket & recv_data)
 {
-    if (!GetPlayer()->isAlive() || GetPlayer()->HasUnitState(UNIT_STATE_DIED) || GetPlayer()->IsSpectator())
+    if (!GetPlayer()->isAlive() || GetPlayer()->HasUnitState(UNIT_STATE_DIED))
         return;
 
     uint32 emote;
@@ -530,7 +524,7 @@ namespace Trinity
 
 void WorldSession::HandleTextEmoteOpcode(WorldPacket & recv_data)
 {
-    if (!GetPlayer()->isAlive() || GetPlayer()->IsSpectator())
+    if (!GetPlayer()->isAlive())
         return;
 
     if (!GetPlayer()->CanSpeak())

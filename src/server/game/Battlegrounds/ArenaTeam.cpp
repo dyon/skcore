@@ -1,4 +1,4 @@
-/*
+os cambios/*
  * Copyright (C) 2008-2012 TrinityCore <http://www.trinitycore.org/>
  * Copyright (C) 2005-2009 MaNGOS <http://getmangos.com/>
  *
@@ -524,20 +524,6 @@ uint8 ArenaTeam::GetSlotByType(uint32 type)
     }
     sLog->outError(LOG_FILTER_ARENAS, "FATAL: Unknown arena team type %u for some arena team", type);
     return 0xFF;
-}
-
-uint32 ArenaTeam::GetTypeBySlot(uint8 slot)
-{
-  switch (slot)
-  {
-    case 0: return ARENA_TEAM_2v2;
-    case 1: return ARENA_TEAM_3v3;
-    case 2: return ARENA_TEAM_5v5;
-    default:
-      break;
-  }
-  sLog->outError(LOG_FILTER_BATTLEGROUND, "FATAL: Unknown arena team slot %u for some arena team", slot);  
-  return 0xFFFFFFFF;
 }
 
 bool ArenaTeam::IsMember(uint64 guid) const
