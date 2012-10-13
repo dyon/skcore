@@ -67,16 +67,16 @@ INSERT INTO `spell_script_names` (`spell_id`, `ScriptName`) VALUES
 
 DELETE FROM `conditions` WHERE `SourceTypeOrReferenceId`=13 AND `SourceEntry` IN (69400, 70173, 69402, 70175, 70374, 70383, 69705, 72959);
 INSERT INTO `conditions` (`SourceTypeOrReferenceId`, `SourceGroup`, `SourceEntry`, `SourceId`, `ElseGroup`, `ConditionTypeOrReference`, `ConditionTarget`, `ConditionValue1`, `ConditionValue2`, `ConditionValue3`, `NegativeCondition`, `ErrorTextId`, `ScriptName`, `Comment`) VALUES
--- Alliance
-(13, 3, 69400, 0, 0, 31, 0, 3, 37540, 0, 0, 0, '', NULL),
-(13, 1, 70374, 0, 0, 31, 0, 3, 37540, 0, 0, 0, '', NULL),
-(13, 3, 69402, 0, 0, 31, 0, 3, 37215, 0, 0, 0, '', NULL),
-(13, 1, 69705, 0, 0, 31, 0, 3, 36838, 0, 0, 0, '', NULL),
 -- Horde
-(13, 3, 70175, 0, 1, 31, 0, 3, 37215, 0, 0, 0, '', NULL),
-(13, 1, 70383, 0, 1, 31, 0, 3, 37215, 0, 0, 0, '', NULL),
-(13, 3, 70173, 0, 1, 31, 0, 3, 37215, 0, 0, 0, '', NULL),
-(13, 1, 69705, 0, 1, 31, 0, 3, 36839, 0, 0, 0, '', NULL);
+(13, 3, 69400, 0, 0, 31, 0, 3, 37540, 0, 0, 0, 'Disparo de cañón - Alianza. Daño a Horda', NULL),
+(13, 1, 70374, 0, 0, 31, 0, 3, 37540, 0, 0, 0, 'Brea ardiente - Alianza. Daño a Horda', NULL),
+(13, 3, 69402, 0, 0, 31, 0, 3, 37540, 0, 0, 0, 'Explosión incineradora - Alianza. Daño a Horda', NULL),
+(13, 1, 69705, 0, 0, 31, 0, 3, 36838, 0, 0, 0, 'Bajo Cero - Alianza. Daño a Horda', NULL),
+-- Alliance
+(13, 3, 70175, 0, 1, 31, 0, 3, 37215, 0, 0, 0, 'Explosión incineradora - Horda. Daño a Alianza', NULL),
+(13, 1, 70383, 0, 1, 31, 0, 3, 37215, 0, 0, 0, 'Brea ardiente - Horda. Daño a Alianza', NULL),
+(13, 3, 70173, 0, 1, 31, 0, 3, 37215, 0, 0, 0, 'Disparo de cañón - Horda. Daño a Alianza', NULL),
+(13, 1, 69705, 0, 1, 31, 0, 3, 36839, 0, 0, 0, 'Bajo Cero - Horda. Daño a Alianza', NULL);
 
 INSERT INTO `conditions` (`SourceTypeOrReferenceId`, `SourceEntry`, `ConditionTypeOrReference`, `ConditionValue1`, `ConditionValue2`) VALUES
 -- logro
