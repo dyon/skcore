@@ -1367,7 +1367,7 @@ class npc_mimirons_inferno : public CreatureScript
                     {
                         if (Creature* trigger = DoSummonFlyer(NPC_MIMIRON_TARGET_BEACON, me, 30.0f, 0, 2*IN_MILLISECONDS, TEMPSUMMON_TIMED_DESPAWN))
                         {
-                            // TODO: Check if this works properly, the spell's target selection is somehow curious oÔ
+                            // TODO: Check if this works properly, the spell's target selection is somehow curious o?
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f))
                                 trigger->CastSpell(target, SPELL_MIMIRONS_INFERNO, true);
                             infernoTimer = 2*IN_MILLISECONDS;
