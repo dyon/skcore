@@ -1245,7 +1245,7 @@ class npc_thorims_hammer : public CreatureScript
 {
     enum ThorimsHammerEvents
     {
-        EVENT_LIGHTNING_SKYBEAM,        // urand(2, 10) *IN_MILLISECONDS
+        EVENT_LIGHTNING_SKYBEAM     = 1,        // urand(2, 10) *IN_MILLISECONDS
         EVENT_SUMMON_THORIMS_BEACON,    // 4*IN_MILLISECONDS after previous event
         EVENT_DROP_AURAS_AND_WAIT,      // same
         // 30 seconds of waiting
@@ -1288,9 +1288,10 @@ class npc_thorims_hammer : public CreatureScript
                     me->CastSpell(me, AURA_DUMMY_BLUE, true);
 
                 events.Update(diff);
-                while (uint32 event = events.ExecuteEvent())
+
+                while (uint32 eventId = events.ExecuteEvent())
                 {
-                    switch (event)
+                    switch (eventId)
                     {
                         case EVENT_LIGHTNING_SKYBEAM:
                             me->AddAura(SPELL_LIGHTNING_SKYBEAM, me);
@@ -1367,7 +1368,7 @@ class npc_mimirons_inferno : public CreatureScript
                     {
                         if (Creature* trigger = DoSummonFlyer(NPC_MIMIRON_TARGET_BEACON, me, 30.0f, 0, 2*IN_MILLISECONDS, TEMPSUMMON_TIMED_DESPAWN))
                         {
-                            // TODO: Check if this works properly, the spell's target selection is somehow curious o?
+                            // TODO: Check if this works properly, the spell's target selection is somehow curious oÔ
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f))
                                 trigger->CastSpell(target, SPELL_MIMIRONS_INFERNO, true);
                             infernoTimer = 2*IN_MILLISECONDS;
@@ -1381,8 +1382,9 @@ class npc_mimirons_inferno : public CreatureScript
                         me->CastSpell(me, AURA_DUMMY_YELLOW, true);
                 }
             }
-        private:
-            uint32 infernoTimer;
+
+            private:
+                uint32 infernoTimer;
         };
 
         CreatureAI* GetAI(Creature* creature) const
@@ -1395,7 +1397,7 @@ class npc_hodirs_fury : public CreatureScript
 {
     enum HodirsFuryEvents
     {
-        EVENT_SELECT_TARGET_AND_FOLLOW,
+        EVENT_SELECT_TARGET_AND_FOLLOW  = 1,
         EVENT_STOP_FOLLOWING,
         EVENT_SUMMON_HODIRS_BEACON
     };
@@ -2105,7 +2107,7 @@ struct FlameLeviathanPursuedTargetSelector
             if (creatureTarget->GetEntry() != VEHICLE_DEMOLISHER &&
                 creatureTarget->GetEntry() != VEHICLE_SIEGE &&
                 creatureTarget->GetEntry() != VEHICLE_CHOPPER)
-			{
+            {
                 sLog->outError(LOG_FILTER_SQL, "Levi true 3");
                 return true;
             }

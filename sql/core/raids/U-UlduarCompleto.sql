@@ -400,6 +400,9 @@ UPDATE `creature_template` SET `ScriptName`='boss_leviathan_mk_turret' WHERE `en
 DELETE FROM `vehicle_template_accessory` WHERE `entry`=33432;
 INSERT INTO `vehicle_template_accessory` VALUES
 (33432, 34071, 3, 1, 'Leviathan Mk II turret', 8, 0);
+DELETE FROM `npc_spellclick_spells` WHERE `npc_entry`=33432;
+INSERT INTO `npc_spellclick_spells` (`npc_entry`, `spell_id`, `cast_flags`, `user_type`) VALUES
+(33432, 46598, 1, 0);
 -- Leviathan skills and skill-helper
 UPDATE `creature_template` SET `ScriptName`='npc_proximity_mine' WHERE `entry`=34362;
 UPDATE `creature_model_info` SET `bounding_radius`=0.5, `combat_reach`=7 WHERE `modelid` IN (28831, 28841, 28979);
@@ -1149,3 +1152,41 @@ INSERT INTO `gameobject` (`id`, `map`, `spawnMask`, `phaseMask`, `position_x`, `
 
 -- Thorim (no need to add custom lootmode, hardmode cache is spawned only when it should)
 UPDATE `gameobject_loot_template` SET `lootmode`=1 WHERE `entry` IN (26955, 26956, 27074);
+
+-- Yogg-saron 10m loot
+DELETE FROM `creature_loot_template` WHERE `entry`=33288;
+INSERT INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`) VALUES
+(33288, 1, 100, 1, 0, -34375, 1),
+(33288, 47241, 100, 1, 0, 1, 1),
+(33288, 2, 100, 1, 0, -12034, 1),
+(33288, 3, 100, 2, 0, -34349, 1),
+(33288, 4, 100, 4, 0, -34350, 1),
+(33288, 5, 10, 4, 0, -34154, 1),
+(33288, 46097, 0, 8, 1, 1, 1),
+(33288, 46096, 0, 8, 1, 1, 1),
+(33288, 46095, 0, 8, 1, 1, 1),
+(33288, 46068, 0, 8, 1, 1, 1),
+(33288, 7, 100, 8, 0, -34154, 1),
+(33288, 6, 100, 8, 0, -34349, 1),
+(33288, 46067, 0, 8, 1, 1, 1),
+(33288, 46312, 100, 16, 0, 1, 1);
+
+-- Yogg-saron 25m loot
+DELETE FROM `creature_loot_template` WHERE `entry`=33955;
+INSERT INTO `creature_loot_template` (`entry`, `item`, `ChanceOrQuestChance`, `lootmode`, `groupid`, `mincountOrRef`, `maxcount`) VALUES
+(33955, 1, 100, 1, 0, -34376, 2),
+(33955, 45897, 100, 1, 0, 1, 1),
+(33955, 47241, 100, 1, 0, 1, 1),
+(33955, 4, 10, 1, 0, -34154, 1),
+(33955, 2, 100, 1, 0, -12035, 2),
+(33955, 3, 10, 1, 0, -34350, 1),
+(33955, 5, 100, 2, 0, -34349, 1),
+(33955, 6, 100, 4, 0, -34350, 1),
+(33955, 45537, 0, 8, 1, 1, 1),
+(33955, 45536, 0, 8, 1, 1, 1),
+(33955, 45535, 0, 8, 1, 1, 1),
+(33955, 45534, 0, 8, 1, 1, 1),
+(33955, 8, 100, 8, 0, -34154, 1),
+(33955, 7, 100, 8, 0, -34349, 1),
+(33955, 45533, 0, 8, 1, 1, 1),
+(33955, 45693, 100, 16, 0, 1, 1);
