@@ -487,7 +487,6 @@ class Map : public GridRefManager<NGridType>
 
         void SendInitTransports(Player* player);
         void SendRemoveTransports(Player* player);
-        void SendInitTransportsInInstance(Player* player);
 
         bool CreatureCellRelocation(Creature* creature, Cell new_cell);
 

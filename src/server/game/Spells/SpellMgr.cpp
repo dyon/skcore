@@ -3096,11 +3096,6 @@ void SpellMgr::LoadDbcDataCorrections()
                 spellInfo->EffectRadiusIndex[0] = EFFECT_RADIUS_100_YARDS;
                 spellInfo->DurationIndex = 28;          // 5 seconds
                 break;
-            case 68645: // Rocket Pack! Hack untill movejump will be implemented properly
-                spellInfo->Effect[0] = SPELL_EFFECT_KNOCK_BACK_DEST;
-                spellInfo->EffectMiscValue[0] = -250;
-                spellInfo->EffectBasePoints[0] = 150;
-                break;
             case 38310: // Multi-Shot
             case 53385: // Divine Storm (Damage)
                 spellInfo->MaxAffectedTargets = 4;

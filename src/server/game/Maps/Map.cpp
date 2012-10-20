@@ -382,33 +382,6 @@ void Map::LoadGrid(float x, float y)
     EnsureGridLoaded(Cell(x, y));
 }
 
-void Map::SendInitTransportsInInstance(Player* player)
-{
-    // Hack to send out transports
-    MapManager::TransportMap& tmap = sMapMgr->m_TransportsByInstanceIdMap;
- 
-    // no transports at map
-    if (tmap.find(player->GetInstanceId()) == tmap.end())
-        return;
- 
-    UpdateData transData;
- 
-    MapManager::TransportSet& tset = tmap[player->GetInstanceId()];
- 
-    for (MapManager::TransportSet::const_iterator i = tset.begin(); i != tset.end(); ++i)
-    {
-        // send data for current transport in other place
-        if ((*i) != player->GetTransport() && (*i)->GetInstanceId() == GetInstanceId())
-        {
-            (*i)->BuildCreateUpdateBlockForPlayer(&transData, player);
-        }
-    }
- 
-    WorldPacket packet;
-    transData.BuildPacket(&packet);
-    player->GetSession()->SendPacket(&packet);
-}
-
 bool Map::AddPlayerToMap(Player* player)
 {
     CellCoord cellCoord = Trinity::ComputeCellCoord(player->GetPositionX(), player->GetPositionY());
@@ -429,10 +402,6 @@ bool Map::AddPlayerToMap(Player* player)
 
     SendInitSelf(player);
     SendInitTransports(player);
-
-    // And send init transport in instance    
-    if (Instanceable())    
-        SendInitTransportsInInstance(player);    
 
     player->m_clientGUIDs.clear();
     player->UpdateObjectVisibility(false);
@@ -2499,8 +2468,8 @@ bool InstanceMap::AddPlayerToMap(Player* player)
 
             if (group && group->isLFGGroup())
                 if (uint32 dungeonId = sLFGMgr->GetDungeon(group->GetGUID(), true))
-                    if (LFGDungeonEntry const* dungeon = sLFGDungeonStore.LookupEntry(dungeonId))
-                        if (LFGDungeonEntry const* randomDungeon = sLFGDungeonStore.LookupEntry(*(sLFGMgr->GetSelectedDungeons(player->GetGUID()).begin())))
+                    if (LFGDungeonData const* dungeon = sLFGMgr->GetLFGDungeon(dungeonId))
+                        if (LFGDungeonData const* randomDungeon = sLFGMgr->GetLFGDungeon(*(sLFGMgr->GetSelectedDungeons(player->GetGUID()).begin())))
                             if (uint32(dungeon->map) == GetId() && dungeon->difficulty == uint32(GetDifficulty()) && randomDungeon->type == uint32(LFG_TYPE_RANDOM))
                                 player->CastSpell(player, LFG_SPELL_LUCK_OF_THE_DRAW, true);
         }
