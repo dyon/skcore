@@ -1,0 +1,1 @@
+UPDATE `creature_template` SET 	`ScriptName` = 'npc_argent_crusade_we_are_leaving' WHERE `entry`=28041;

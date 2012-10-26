@@ -1415,6 +1415,72 @@ public:
     }
 };
 
+/*######
+## Quest 12504: Argent Crusade, We Are Leaving!
+## npc_argent_crusade_we_are_leaving
+######*/
+ 
+enum Questdata
+{
+    QUEST_ARGENT_CRUSADE_WE_ARE_LEAVING            = 12504,
+    NPC_ARGENT_DUMMY                               = 28041,
+    GOSSIP_MENU_ARGENT                             = 100502
+};
+ 
+static char* Phrases[] =
+{
+    "I wonder where we're headed to. And who's going to deal with these guys?",
+    "Right, I'd better get back to the sergeant then.",
+    "These Drakkari are just bad news. We need to leave and head to Justice Keep!",
+    "Watch your back. These Drakkari are a nasty lot.",
+    "Careful here, $N. These trolls killed their own snake god!",
+    "Don't stay out here too long.",
+    "See you around.",
+    "Thanks, $N."
+};
+ 
+#define GOSSIP_ARGENT  "Soldier, you have new orders. you're to pull back and report to Sergeant."
+ 
+class npc_argent_crusade_we_are_leaving : public CreatureScript
+{
+public:
+    npc_argent_crusade_we_are_leaving() : CreatureScript("npc_argent_crusade_we_are_leaving") { }
+ 
+    struct npc_argent_crusade_we_are_leavingAI : public ScriptedAI
+    {
+        npc_argent_crusade_we_are_leavingAI(Creature* creature) : ScriptedAI(creature) { }
+    };
+ 
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_argent_crusade_we_are_leavingAI(creature);
+    }
+ 
+ 
+    bool OnGossipHello(Player* player, Creature* creature)
+    {
+        if (player->GetQuestStatus(QUEST_ARGENT_CRUSADE_WE_ARE_LEAVING) == QUEST_STATUS_INCOMPLETE)
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ARGENT, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+ 
+                player->SEND_GOSSIP_MENU(GOSSIP_MENU_ARGENT, creature->GetGUID());
+ 
+        return true;
+    }
+ 
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 action)
+    {
+        player->PlayerTalkClass->ClearMenus();
+        if (action == GOSSIP_ACTION_INFO_DEF+1)
+        {
+            creature->MonsterSay(Phrases[rand() % 8], LANG_UNIVERSAL, 0);
+            player->CLOSE_GOSSIP_MENU();
+            player->KilledMonsterCredit(NPC_ARGENT_DUMMY,0);
+            creature->DespawnOrUnsummon(3000);
+        }
+        return true;
+    }
+};
+
 void AddSC_zuldrak()
 {
     new npc_drakuru_shackles;
@@ -1430,4 +1496,5 @@ void AddSC_zuldrak()
     new npc_elemental_lord;
     new npc_fiend_elemental;
     new go_scourge_enclosure;
+    new npc_argent_crusade_we_are_leaving;
 }
