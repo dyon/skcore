@@ -4255,6 +4255,19 @@ void Spell::EffectScriptEffect(SpellEffIndex effIndex)
                     unitTarget->CastSpell(unitTarget, spellTarget[urand(0, 4)], true);
                     break;
                 }
+                case 52542:
+                case 52544:
+                case 52545:
+                {
+                    Player* player = unitTarget->ToPlayer();
+                    if (player->HasItemCount(38619,1))
+                        player->DestroyItemCount(38619,1,true);
+                    if (player->HasItemCount(38621,1))
+                        player->DestroyItemCount(38621,1,true);
+                    if (player->HasItemCount(38512,1))
+                        player->DestroyItemCount(38512,1,true);
+                    break;
+                }
             }
             break;
         }
