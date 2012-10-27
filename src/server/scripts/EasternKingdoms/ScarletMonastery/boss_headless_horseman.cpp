@@ -47,13 +47,6 @@ enum Entries
     NPC_PUMPKIN_FIEND           = 23545,
     NPC_SIR_THOMAS              = 23904,
     GO_PUMPKIN_SHRINE           = 186267
-    HH_MOUNTED                  = 23682,
-    HH_DISMOUNTED               = 23800,
-    HEAD                        = 23775,
-    PULSING_PUMPKIN             = 23694,
-    PUMPKIN_FIEND               = 23545,
-    HELPER                      = 23686,
-    WISP_INVIS                  = 24034
 };
 
 enum Spells
@@ -89,7 +82,7 @@ static Position flightPos[]=
     {1772.743f, 1354.941f, 18.4f, 5.841f}
 };
 
-static char const* Text[]=
+static const char* Text[]=
 {
     "Horseman rise...",
     "Your time is nigh...",
