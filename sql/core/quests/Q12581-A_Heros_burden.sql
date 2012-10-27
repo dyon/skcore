@@ -18,7 +18,7 @@ DELETE FROM `creature_text` WHERE `entry` IN (28659, 28668, 28667);
 INSERT INTO `creature_text` (`entry`, `groupid`, `id`, `text`, `type`, `language`, `probability`, `emote`, `duration`, `sound`, `comment`) VALUES 
 -- Artruis
 (28659, 0, 0, 'Ah, the heroes. Your little friends said you would come. This certainly saves me the trouble of hunting you down myself.', 14, 0, 100, 0, 0, 0, ''),
-(28659, 1, 0, 'I've weathered a hundred years of war and suffering. Do you truly think it wise to pit your mortal bodies against a being that cannot die I'd venture you have more to loose.', 14, 0, 100, 0, 0, 0, ''),
+(28659, 1, 0, 'I ve weathered a hundred years of war and suffering. Do you truly think it wise to pit your mortal bodies against a being that cannot die I d venture you have more to loose.', 14, 0, 100, 0, 0, 0, ''),
 (28659, 2, 0, 'Even shattered in countless pieces, the crystals all around weaken me... perhaps I should not have underestimated the titans so...', 14, 0, 100, 0, 0, 0, ''),
 (28659, 3, 0, 'These two brave, ignorant fools despise each other, yet somehow they both spoke of you as heroes. Perhaps you just lack the will to choose a side... let me extend you that opportunity.', 14, 0, 100, 0, 0, 0, ''),
 (28659, 4, 0, 'Artruis is shielded. You must choose your side quickly to break his spell.', 41, 0, 100, 0, 0, 0, ''),
