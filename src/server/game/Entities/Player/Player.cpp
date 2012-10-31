@@ -1578,7 +1578,7 @@ void Player::Update(uint32 p_time)
     // check every second
     if (now > m_Last_tick + 1)
         UpdateSoulboundTradeItems();
-        
+
     // If mute expired, remove it from the DB
     if (GetSession()->m_muteTime && GetSession()->m_muteTime < now)
     {
@@ -15724,7 +15724,7 @@ void Player::SetQuestStatus(uint32 quest_id, QuestStatus status)
     }
 
     uint32 zone = 0, area = 0;
-    
+
     SpellAreaForQuestMapBounds saBounds = sSpellMgr->GetSpellAreaForQuestMapBounds(quest_id);
     if (saBounds.first != saBounds.second)
     {
@@ -15735,7 +15735,7 @@ void Player::SetQuestStatus(uint32 quest_id, QuestStatus status)
                 if (!HasAura(itr->second->spellId))
                     CastSpell(this, itr->second->spellId, true);
     }
-    
+
     saBounds = sSpellMgr->GetSpellAreaForQuestEndMapBounds(quest_id);
     if (saBounds.first != saBounds.second)
     {
@@ -23517,11 +23517,15 @@ WorldObject* Player::GetViewpoint() const
 
 bool Player::CanUseBattlegroundObject(GameObject* gameobject)
 {
-    FactionTemplateEntry const* playerFaction = getFactionTemplateEntry();
-    FactionTemplateEntry const* faction = sFactionTemplateStore.LookupEntry(gameobject->GetUInt32Value(GAMEOBJECT_FACTION));
+    // It is possible to call this method will a null pointer, only skipping faction check.
+    if (gameobject)
+    {
+        FactionTemplateEntry const* playerFaction = getFactionTemplateEntry();
+        FactionTemplateEntry const* faction = sFactionTemplateStore.LookupEntry(gameobject->GetUInt32Value(GAMEOBJECT_FACTION));
 
-    if (playerFaction && faction && !playerFaction->IsFriendlyTo(*faction))
-        return false;
+        if (playerFaction && faction && !playerFaction->IsFriendlyTo(*faction))
+            return false;
+    }
 
     // BUG: sometimes when player clicks on flag in AB - client won't send gameobject_use, only gameobject_report_use packet
     // Note: Mount, stealth and invisibility will be removed when used
