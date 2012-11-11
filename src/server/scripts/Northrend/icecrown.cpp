@@ -150,6 +150,7 @@ enum eArgentSquire
 
 #define GOSSIP_SQUIRE_ITEM_1 "I am ready to fight!"
 #define GOSSIP_SQUIRE_ITEM_2 "How do the Argent Crusader raiders fight?"
+#define GOSSIP_SQUIRE_ITEM_3 "Estoy listo para enfrentarme al Caballero Negro!"
 
 class npc_argent_squire : public CreatureScript
 {
@@ -193,7 +194,7 @@ public:
         {
             if (player->GetQuestStatus(QUEST_THE_BLACK_KNGIHT_S_FALL) == QUEST_STATUS_INCOMPLETE)
             {
-                // placeholder
+                player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_SQUIRE_ITEM_3, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+3);
             }
         }
 
@@ -211,7 +212,8 @@ public:
                 creature->SummonCreature(NPC_ARGENT_VALIANT, 8575.451f, 952.472f, 547.554f, 0.38f);
             else if (creature->GetEntry() == NPC_SQUIRE_DANNY)
                 creature->SummonCreature(NPC_ARGENT_CHAMPION, 8534.675781f, 1069.993042f, 552.022827f, 1.274804f);
-
+            else if (creature->GetEntry() == NPC_SQUIRE_CAVIN)
+                creature->SummonCreature(NPC_BLACK_KNIGHT, 8430.082031f, 912.130127f, 544.674500f, 1.635092f);
         }
         return true;
     }
