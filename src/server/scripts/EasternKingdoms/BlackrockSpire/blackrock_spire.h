@@ -35,6 +35,7 @@ enum Data
     DATA_THE_BEAST,
     DATA_GENERAL_DRAKKISATH,
     DATA_DRAGONSPIRE_ROOM,
+    DATA_LEROY,
 };
 enum Npc
 {
@@ -55,6 +56,7 @@ enum Npc
     NPC_BLACKHAND_DREADWEAVER       = 9817,
     NPC_BLACKHAND_SUMMONER          = 9818,
     NPC_BLACKHAND_VETERAN           = 9819,
+    NPC_CRIA                        = 10161,
 };
 
 enum AdditionalData
@@ -65,11 +67,12 @@ enum AdditionalData
     EVENT_PYROGUARD_EMBERSEER       = 4884,
     AREATRIGGER_ENTER_UBRS          = 2046,
     AREATRIGGER_STADIUM             = 2026,
+    ACHIEVEMENT_LEROY               = 2188,
 };
 
 enum GameObjects
 {
-    GO_WHELP_SPAWNER                = 175622, // trap spawned by go id 175124
+    GO_WHELP_SPAWNER                = 176510, //<-175622 // trap spawned by go id 175124 
 
     // Doors
     GO_EMBERSEER_IN                 = 175244, // First door to Pyroguard Emberseer
