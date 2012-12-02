@@ -34,6 +34,7 @@ EndContentData */
 #include "ScriptedEscortAI.h"
 #include "SpellScript.h"
 #include "SpellAuras.h"
+#include "Player.h"
 
 /*######
 ## npc_vekjik

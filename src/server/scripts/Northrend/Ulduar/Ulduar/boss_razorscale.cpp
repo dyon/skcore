@@ -21,6 +21,7 @@
 #include "SpellScript.h"
 #include "ulduar.h"
 #include "SpellInfo.h"
+#include "Player.h"
 
 enum RazorscaleEmotes
 {
@@ -433,7 +434,7 @@ class boss_razorscale : public CreatureScript
                 }
             }
 
-            uint32 GetData(uint32 type)
+            uint32 GetData(uint32 type) const
             {
                 if (type == DATA_QUICK_SHAVE)
                     if (FlyCount <= 2)
@@ -1011,7 +1012,7 @@ class npc_darkrune_guardian : public CreatureScript
                 killedByBreath = false;
             }
 
-            uint32 GetData(uint32 type)
+            uint32 GetData(uint32 type) const
             {
                 return type == DATA_IRON_DWARF_MEDIUM_RARE ? killedByBreath : 0;
             }
