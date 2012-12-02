@@ -23,31 +23,27 @@ SDComment: Ohgan function needs improvements.
 SDCategory: Zul'Gurub
 EndScriptData */
 
-#include "ScriptPCH.h"
+#include "ScriptMgr.h"
+#include "ScriptedCreature.h"
 #include "zulgurub.h"
 
-#define SAY_AGGRO                       -1309015
-#define SAY_DING_KILL                   -1309016
-#define SAY_GRATS_JINDO                 -1309017
-#define SAY_WATCH                       -1309018
-#define SAY_WATCH_WHISPER               -1309019                    //is this text for real? easter egg?
+#define SAY_AGGRO               -1309015
+#define SAY_DING_KILL           -1309016
+#define SAY_GRATS_JINDO         -1309017
+#define SAY_WATCH               -1309018
+#define SAY_WATCH_WHISPER       -1309019                    //is this text for real? easter egg?
 
-#define SPELL_CHARGE                    24408
-#define SPELL_CLEAVE                    7160
-#define SPELL_FEAR                      29321
-#define SPELL_WHIRLWIND                 15589
-#define SPELL_MORTAL_STRIKE             16856
-#define SPELL_ENRAGE                    24318
-#define SPELL_WATCH                     24314
-#define SPELL_LEVEL_UP                  24312
-
-// Vilebranch Speaker
-#define SPELL_CLEAVE_T                  15284
-#define SPELL_DEMORALIZING_SHOUT        15284
-#define SPELL_ENRAGE_T                  8599
+#define SPELL_CHARGE            24408
+#define SPELL_CLEAVE            7160
+#define SPELL_FEAR              29321
+#define SPELL_WHIRLWIND         15589
+#define SPELL_MORTAL_STRIKE     16856
+#define SPELL_ENRAGE            24318
+#define SPELL_WATCH             24314
+#define SPELL_LEVEL_UP          24312
 
 //Ohgans Spells
-#define SPELL_SUNDERARMOR               24317
+#define SPELL_SUNDERARMOR       24317
 
 #define NPC_SPEAKER             11391
 
@@ -55,7 +51,10 @@ class boss_mandokir : public CreatureScript
 {
     public:
 
-        boss_mandokir() : CreatureScript("boss_mandokir") { }
+        boss_mandokir()
+            : CreatureScript("boss_mandokir")
+        {
+        }
 
         struct boss_mandokirAI : public ScriptedAI
         {
@@ -110,7 +109,6 @@ class boss_mandokir : public CreatureScript
                 SpeakerDead = false;
 
                 DoCast(me, 23243);
-                me->SummonCreature(11391, -12196.299f, -1948.369f, 130.36f, 0.541052f, TEMPSUMMON_MANUAL_DESPAWN);
             }
 
             void KilledUnit(Unit* victim)
@@ -201,9 +199,7 @@ class boss_mandokir : public CreatureScript
                         }
                         someWatched = false;
                         Watch_Timer = 20000;
-                    }
-					else
-						Watch_Timer -= diff;
+                    } else Watch_Timer -= diff;
 
                     if ((Watch_Timer < 8000) && !someWatched)       //8 sec(cast time + expire time) before the check for the watch effect mandokir will cast watch debuff on a random target
                     {
@@ -236,18 +232,14 @@ class boss_mandokir : public CreatureScript
                         {
                             DoCast(me->getVictim(), SPELL_CLEAVE);
                             Cleave_Timer = 7000;
-                        }
-						else
-							Cleave_Timer -= diff;
+                        } else Cleave_Timer -= diff;
 
                         //Whirlwind
                         if (Whirlwind_Timer <= diff)
                         {
                             DoCast(me, SPELL_WHIRLWIND);
                             Whirlwind_Timer = 18000;
-                        }
-						else
-							Whirlwind_Timer -= diff;
+                        } else Whirlwind_Timer -= diff;
 
                         //If more then 3 targets in melee range mandokir will cast fear
                         if (Fear_Timer <= diff)
@@ -266,9 +258,7 @@ class boss_mandokir : public CreatureScript
                                 DoCast(me->getVictim(), SPELL_FEAR);
 
                             Fear_Timer = 4000;
-                        }
-						else
-							Fear_Timer -=diff;
+                        } else Fear_Timer -=diff;
 
                         //Mortal Strike if target below 50% hp
                         if (me->getVictim() && me->getVictim()->HealthBelowPct(50))
@@ -277,9 +267,7 @@ class boss_mandokir : public CreatureScript
                             {
                                 DoCast(me->getVictim(), SPELL_MORTAL_STRIKE);
                                 MortalStrike_Timer = 15000;
-                            }
-							else
-								MortalStrike_Timer -= diff;
+                            } else MortalStrike_Timer -= diff;
                         }
                     }
                     //Checking if Ohgan is dead. If yes Mandokir will enrage.
@@ -298,9 +286,7 @@ class boss_mandokir : public CreatureScript
                         }
 
                         Check_Timer = 1000;
-                    }
-					else
-						Check_Timer -= diff;
+                    } else Check_Timer -= diff;
 
                     DoMeleeAttackIfReady();
                 }
@@ -318,7 +304,10 @@ class mob_ohgan : public CreatureScript
 {
     public:
 
-        mob_ohgan() : CreatureScript("mob_ohgan") { }
+        mob_ohgan()
+            : CreatureScript("mob_ohgan")
+        {
+        }
 
         struct mob_ohganAI : public ScriptedAI
         {
@@ -354,9 +343,7 @@ class mob_ohgan : public CreatureScript
                 {
                     DoCast(me->getVictim(), SPELL_SUNDERARMOR);
                     SunderArmor_Timer = urand(10000, 15000);
-                }
-				else
-					SunderArmor_Timer -= diff;
+                } else SunderArmor_Timer -= diff;
 
                 DoMeleeAttackIfReady();
             }
@@ -368,88 +355,8 @@ class mob_ohgan : public CreatureScript
         }
 };
 
-class mob_Vilebranch_Speaker : public CreatureScript
-{
-    public:
-
-        mob_Vilebranch_Speaker() : CreatureScript("mob_Vilebranch_Speaker") { }
-
-        struct mob_Vilebranch_SpeakerAI : public ScriptedAI
-        {
-            mob_Vilebranch_SpeakerAI(Creature* creature) : ScriptedAI(creature)
-            {
-                instance = creature->GetInstanceScript();
-            }
-
-			uint32 Cleave;
-			uint32 Enrage;
-			uint32 Grito;
-            InstanceScript* instance;
-
-            void Reset()
-            {
-                Cleave = 2000;
-				Enrage = 10000;
-				Grito = 3500;
-            }
-
-            void EnterCombat(Unit* /*who*/) {}
-
-            void JustDied(Unit* killer)
-            {
-				if (Creature* mandokir = me->FindNearestCreature(11382, 90.0f))
-				{
-					mandokir->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_IMMUNE_TO_NPC | UNIT_FLAG_NON_ATTACKABLE);
-					mandokir->CombatStart(killer);
-					mandokir->AddThreat(killer, 100.0f);
-				}
-   
-			}
-
-            void UpdateAI (const uint32 diff)
-            {
-
-                if (!UpdateVictim())
-                    return;
-
-
-                if (Cleave <= diff)
-                {
-                    DoCast(me->getVictim(), SPELL_CLEAVE_T);
-                    Cleave = urand(2000, 3000);
-                }
-				else
-					Cleave -= diff;
-
-				if (Enrage <= diff)
-                {
-                    DoCast(me, SPELL_ENRAGE_T);
-                    Enrage = urand(20000, 30000);
-                }
-				else
-					Enrage -= diff;
-
-				if (Grito <= diff)
-                {
-                    DoCast(me->getVictim(), SPELL_DEMORALIZING_SHOUT);
-                    Grito = urand(10000, 20000);
-                } 
-				else
-					Grito -= diff;
-
-                DoMeleeAttackIfReady();
-            }
-        };
-
-        CreatureAI* GetAI(Creature* creature) const
-        {
-            return new mob_Vilebranch_SpeakerAI(creature);
-        }
-};
-
 void AddSC_boss_mandokir()
 {
     new boss_mandokir();
     new mob_ohgan();
-    new mob_Vilebranch_Speaker();
 }
