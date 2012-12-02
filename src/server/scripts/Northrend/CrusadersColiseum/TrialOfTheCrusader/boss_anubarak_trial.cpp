@@ -690,16 +690,7 @@ public:
             m_uiIncreaseSpeedTimer = 1*IN_MILLISECONDS;
             me->TauntApply(who);
         }
- 
-        void MoveInLineOfSight(Unit* /*who*/)
-        {
-            if (m_uiTargetGUID == 0)
-            {
-                Unit *who = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0F, true, 0);
-                AttackStart(who);
-            }
-        }	
- 
+
         void DamageTaken(Unit* /*who*/, uint32& uiDamage)
         {
             uiDamage = 0;
