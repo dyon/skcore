@@ -20,6 +20,7 @@
 #include "CreatureAI.h"
 #include "DatabaseEnv.h"
 #include "GameObject.h"
+#include "Group.h"
 #include "InstanceScript.h"
 #include "LFGMgr.h"
 #include "Log.h"
@@ -483,9 +484,9 @@ uint32 InstanceScript::GetMajorityTeam()
             if (!group)
                 return arbitraryPlayer->GetTeam();   // Only one player -> get his team
 
-            for (GroupReference* it = group->GetFirstMember(); it != 0; it = it->next())
+            for (GroupReference* itr = group->GetFirstMember(); itr != 0; itr = itr->next())
             {
-                if (Player* member = it->getSource())
+                if (Player* member = itr->getSource())
                 {
                     if (!member->isGameMaster())
                     {

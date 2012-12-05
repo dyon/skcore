@@ -1621,7 +1621,7 @@ public:
         uint32 honored = 9000;
         uint32 revered = 21000;
         uint32 exalted = 42000;
-        uint32 value = player->GetReputationMgr().GetReputation(ASHEN_VERDICT);
+        uint32 value = player->GetReputation(ASHEN_VERDICT);
 
         if (value >= friendly && value < honored)
         {
