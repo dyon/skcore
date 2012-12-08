@@ -1,5 +1,9 @@
-CREATE TABLE IF NOT EXISTS `custom_transmogrification` (
-  `GUID` int(10) unsigned NOT NULL DEFAULT '0',
-  `FakeEntry` int(10) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`GUID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='version 3.0';
+CREATE TABLE `custom_transmogrification` (
+	`GUID` INT(10) UNSIGNED NOT NULL COMMENT 'Item guidLow',
+	`FakeEntry` INT(10) UNSIGNED NOT NULL COMMENT 'Item entry',
+	`Owner` INT(10) UNSIGNED NOT NULL COMMENT 'Player guidLow',
+	PRIMARY KEY (`GUID`)
+)
+COMMENT='version 4.0'
+COLLATE='latin1_swedish_ci'
+ENGINE=InnoDB;
