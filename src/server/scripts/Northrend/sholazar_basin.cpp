@@ -37,6 +37,143 @@ EndContentData */
 #include "Player.h"
 
 /*######
+## npc_injured_rainspeaker_oracle
+######*/
+
+#define GOSSIP_ITEM1 "I am ready to travel to your village now."
+
+enum eRainspeaker
+{
+    SAY_START_IRO                       = 0,
+    SAY_QUEST_ACCEPT_IRO                = 1,
+    SAY_END_IRO                         = 2,
+
+    QUEST_FORTUNATE_MISUNDERSTANDINGS   = 12570,
+    FACTION_ESCORTEE_A                  = 774,
+    FACTION_ESCORTEE_H                  = 775
+};
+
+class npc_injured_rainspeaker_oracle : public CreatureScript
+{
+public:
+    npc_injured_rainspeaker_oracle() : CreatureScript("npc_injured_rainspeaker_oracle") { }
+
+    struct npc_injured_rainspeaker_oracleAI : public npc_escortAI
+    {
+        npc_injured_rainspeaker_oracleAI(Creature* creature) : npc_escortAI(creature) { c_guid = creature->GetGUID(); }
+
+        uint64 c_guid;
+
+        void Reset()
+        {
+            me->RestoreFaction();
+            // if we will have other way to assign this to only one npc remove this part
+            if (GUID_LOPART(me->GetGUID()) != 101030)
+            {
+                me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
+                me->RemoveFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_GOSSIP);
+            }
+        }
+
+        void WaypointReached(uint32 waypointId)
+        {
+            Player* player = GetPlayerForEscort();
+            if (!player)
+                return;
+
+            switch (waypointId)
+            {
+                case 1:
+                    SetRun();
+                    break;
+                case 10:
+                case 11:
+                case 12:
+                case 13:
+                case 14:
+                case 15:
+                case 16:
+                case 17:
+                case 18:
+                    me->RemoveUnitMovementFlag(MOVEMENTFLAG_SWIMMING);
+                    me->RemoveUnitMovementFlag(MOVEMENTFLAG_FALLING);
+                    me->SetSpeed(MOVE_SWIM, 0.85f, true);
+                    me->AddUnitMovementFlag(MOVEMENTFLAG_SWIMMING | MOVEMENTFLAG_DISABLE_GRAVITY);
+                    break;
+                case 19:
+                    me->SetUnitMovementFlags(MOVEMENTFLAG_FALLING);
+                    break;
+                case 28:
+                    player->GroupEventHappens(QUEST_FORTUNATE_MISUNDERSTANDINGS, me);
+                    // me->RestoreFaction();
+                    Talk(SAY_END_IRO);
+                    SetRun(false);
+                    break;
+            }
+        }
+
+        void JustDied(Unit* /*killer*/)
+        {
+            if (!HasEscortState(STATE_ESCORT_ESCORTING))
+                return;
+
+            if (Player* player = GetPlayerForEscort())
+            {
+                if (player->GetQuestStatus(QUEST_FORTUNATE_MISUNDERSTANDINGS) != QUEST_STATUS_COMPLETE)
+                    player->FailQuest(QUEST_FORTUNATE_MISUNDERSTANDINGS);
+            }
+        }
+    };
+
+    bool OnGossipHello(Player* player, Creature* creature)
+    {
+        if (creature->isQuestGiver())
+            player->PrepareQuestMenu(creature->GetGUID());
+
+        if (player->GetQuestStatus(QUEST_FORTUNATE_MISUNDERSTANDINGS) == QUEST_STATUS_INCOMPLETE)
+            player->ADD_GOSSIP_ITEM(GOSSIP_ICON_CHAT, GOSSIP_ITEM1, GOSSIP_SENDER_MAIN, GOSSIP_ACTION_INFO_DEF+1);
+
+        player->SEND_GOSSIP_MENU(player->GetGossipTextId(creature), creature->GetGUID());
+
+        return true;
+    }
+
+    bool OnGossipSelect(Player* player, Creature* creature, uint32 /*sender*/, uint32 action)
+    {
+        player->PlayerTalkClass->ClearMenus();
+        if (action == GOSSIP_ACTION_INFO_DEF+1)
+        {
+            CAST_AI(npc_escortAI, (creature->AI()))->Start(true, false, player->GetGUID());
+            CAST_AI(npc_escortAI, (creature->AI()))->SetMaxPlayerDistance(35.0f);
+            creature->SetUnitMovementFlags(MOVEMENTFLAG_FALLING);
+            creature->AI()->Talk(SAY_START_IRO);
+
+            switch (player->GetTeam()){
+            case ALLIANCE:
+                creature->setFaction(FACTION_ESCORTEE_A);
+                break;
+            case HORDE:
+                creature->setFaction(FACTION_ESCORTEE_H);
+                break;
+            }
+        }
+        return true;
+    }
+
+    bool OnQuestAccept(Player* /*player*/, Creature* creature, Quest const* /*_Quest*/)
+    {
+        creature->AI()->Talk(SAY_QUEST_ACCEPT_IRO);
+        return false;
+    }
+
+    CreatureAI* GetAI(Creature* creature) const
+    {
+        return new npc_injured_rainspeaker_oracleAI(creature);
+    }
+};
+
+/*######
+>>>>>>> 1e22367ca42e05fbf89fb61324f354d36f0a9ad1
 ## npc_vekjik
 ######*/
 
@@ -48,7 +185,7 @@ enum eVekjik
     GOSSIP_TEXTID_VEKJIK1       = 13137,
     GOSSIP_TEXTID_VEKJIK2       = 13138,
 
-    SAY_TEXTID_VEKJIK1          = -1000208,
+    SAY_TEXTID_VEKJIK1          = 0,
 
     SPELL_FREANZYHEARTS_FURY    = 51469,
 
@@ -87,7 +224,7 @@ public:
                 break;
             case GOSSIP_ACTION_INFO_DEF+2:
                 player->CLOSE_GOSSIP_MENU();
-                DoScriptText(SAY_TEXTID_VEKJIK1, creature, player);
+                creature->AI()->Talk(SAY_TEXTID_VEKJIK1, player->GetGUID());
                 player->AreaExploredOrEventHappens(QUEST_MAKING_PEACE);
                 creature->CastSpell(player, SPELL_FREANZYHEARTS_FURY, false);
                 break;
@@ -206,13 +343,13 @@ enum eEnums
     SPELL_EXPLODE_CRYSTAL       = 62487,
     SPELL_FLAMES                = 64561,
 
-    SAY_WP_7                    = -1800047,
-    SAY_WP_6                    = -1800048,
-    SAY_WP_5                    = -1800049,
-    SAY_WP_4                    = -1800050,
-    SAY_WP_3                    = -1800051,
-    SAY_WP_2                    = -1800052,
-    SAY_WP_1                    = -1800053,
+    SAY_WP_1                    = 0,
+    SAY_WP_2                    = 1,
+    SAY_WP_3                    = 2,
+    SAY_WP_4                    = 3,
+    SAY_WP_5                    = 4,
+    SAY_WP_6                    = 5,
+    SAY_WP_7                    = 6,
 
     QUEST_DISASTER              = 12688
 };
@@ -235,19 +372,19 @@ public:
             switch (waypointId)
             {
                 case 0:
-                    DoScriptText(SAY_WP_2, me);
+                    Talk(SAY_WP_2);
                     break;
                 case 1:
-                    DoScriptText(SAY_WP_3, me);
+                    Talk(SAY_WP_3);
                     me->CastSpell(5918.33f, 5372.91f, -98.770f, SPELL_EXPLODE_CRYSTAL, true);
                     me->SummonGameObject(184743, 5918.33f, 5372.91f, -98.770f, 0, 0, 0, 0, 0, TEMPSUMMON_MANUAL_DESPAWN);     //approx 3 to 4 seconds
                     me->HandleEmoteCommand(EMOTE_ONESHOT_LAUGH);
                     break;
                 case 2:
-                    DoScriptText(SAY_WP_4, me);
+                    Talk(SAY_WP_4);
                     break;
                 case 7:
-                    DoScriptText(SAY_WP_5, me);
+                    Talk(SAY_WP_5);
                     break;
                 case 8:
                     me->CastSpell(5887.37f, 5379.39f, -91.289f, SPELL_EXPLODE_CRYSTAL, true);
@@ -255,13 +392,13 @@ public:
                     me->HandleEmoteCommand(EMOTE_ONESHOT_LAUGH);
                     break;
                 case 9:
-                    DoScriptText(SAY_WP_6, me);
+                    Talk(SAY_WP_6);
                     break;
                 case 13:
                     if (player)
                     {
                         player->GroupEventHappens(QUEST_DISASTER, me);
-                        DoScriptText(SAY_WP_7, me);
+                        Talk(SAY_WP_7);
                     }
                     break;
             }
@@ -312,7 +449,7 @@ public:
                 creature->setFaction(113);
 
                 pEscortAI->Start(false, false, player->GetGUID());
-                DoScriptText(SAY_WP_1, creature);
+                creature->AI()->Talk(SAY_WP_1);
             }
         }
         return true;
@@ -577,8 +714,8 @@ enum eAdventurousDwarf
 
     GOSSIP_MENU_DWARF   = 13307,
 
-    SAY_DWARF_OUCH      = -1571042,
-    SAY_DWARF_HELP      = -1571043
+    SAY_DWARF_OUCH      = 0,
+    SAY_DWARF_HELP      = 1
 };
 
 class npc_adventurous_dwarf : public CreatureScript
@@ -586,10 +723,17 @@ class npc_adventurous_dwarf : public CreatureScript
 public:
     npc_adventurous_dwarf() : CreatureScript("npc_adventurous_dwarf") { }
 
+    struct npc_adventurous_dwarfAI : public ScriptedAI
+    {
+        npc_adventurous_dwarfAI(Creature* creature) : ScriptedAI(creature)
+        {
+            Talk(SAY_DWARF_OUCH);
+        }
+    };
+
     CreatureAI* GetAI(Creature* creature) const
     {
-        DoScriptText(SAY_DWARF_OUCH, creature);
-        return NULL;
+        return new npc_adventurous_dwarfAI(creature);
     }
 
     bool OnGossipHello(Player* player, Creature* creature)
@@ -614,15 +758,24 @@ public:
     {
         player->PlayerTalkClass->ClearMenus();
         uint32 spellId = 0;
+
         switch (action)
         {
-            case GOSSIP_ACTION_INFO_DEF + 1: spellId = SPELL_ADD_ORANGE;     break;
-            case GOSSIP_ACTION_INFO_DEF + 2: spellId = SPELL_ADD_BANANAS;    break;
-            case GOSSIP_ACTION_INFO_DEF + 3: spellId = SPELL_ADD_PAPAYA;     break;
+            case GOSSIP_ACTION_INFO_DEF + 1:
+                spellId = SPELL_ADD_ORANGE;
+                break;
+            case GOSSIP_ACTION_INFO_DEF + 2:
+                spellId = SPELL_ADD_BANANAS;
+                break;
+            case GOSSIP_ACTION_INFO_DEF + 3:
+                spellId = SPELL_ADD_PAPAYA;
+                break;
         }
+
         if (spellId)
             player->CastSpell(player, spellId, true);
-        DoScriptText(SAY_DWARF_HELP, creature);
+
+        creature->AI()->Talk(SAY_DWARF_HELP);
         creature->DespawnOrUnsummon();
         return true;
     }
