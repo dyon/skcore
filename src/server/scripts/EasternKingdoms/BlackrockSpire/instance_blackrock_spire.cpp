@@ -19,18 +19,6 @@
 #include "ScriptedCreature.h"
 #include "blackrock_spire.h"
 
-const char* leroyWarnings[8] =
-{
-    "|cFFFFFC00 [""\xc2\xa1""Leeeeeeeeeeeeeroy!] |cFF00FFFF iniciado.",
-    "|cFFFFFC00 [""\xc2\xa1""Leeeeeeeeeeeeeroy!] |cFFFE6C00 progreso: 10/50.",
-    "|cFFFFFC00 [""\xc2\xa1""Leeeeeeeeeeeeeroy!] |cFFFF9000 progreso: 20/50.",
-    "|cFFFFFC00 [""\xc2\xa1""Leeeeeeeeeeeeeroy!] |cFFFDB900 progreso: 30/50.",
-    "|cFFFFFC00 [""\xc2\xa1""Leeeeeeeeeeeeeroy!] |cFFFFCC00 progreso: 40/50.",
-    "|cFFFFFC00 [""\xc2\xa1""Leeeeeeeeeeeeeroy!] |cFFFFF600 progreso: 50/50.",
-    "|cFFFFFC00 [""\xc2\xa1""Leeeeeeeeeeeeeroy!] |cFF33FF00 completado.",
-    "|cFFFFFC00 [""\xc2\xa1""Leeeeeeeeeeeeeroy!] |cFFFF0000 fallido.",
-};
-
 class instance_blackrock_spire : public InstanceMapScript
 {
 public:
@@ -67,9 +55,9 @@ public:
         uint64 go_roomrunes[MAX_DRAGONSPIRE_HALL_RUNES];
         uint8 Runemaxprotectors[MAX_DRAGONSPIRE_HALL_RUNES];
         uint8 Runeprotectorsdead[MAX_DRAGONSPIRE_HALL_RUNES];
-		uint32 _leroooy;
-		uint8 _killedDragonCount;
-		uint32 _dragonTimer;
+		bool leroooy;
+        uint8 killedDragonCount;
+		uint32 dragonTimer;
 
         void Initialize()
         {
@@ -91,9 +79,10 @@ public:
             go_emberseerin          = 0;
             go_doors                = 0;
             go_emberseerout         = 0;
-			_leroooy                = 0;
-			_killedDragonCount      = 0;
-			_dragonTimer            = 15000;
+			leroooy                 = 0;
+            killedDragonCount       = 0;
+			dragonTimer             = 15000;
+            leroooy                 = false;
         }
 
         bool IsEncounterInProgress() const
@@ -250,40 +239,17 @@ public:
 			switch (type)
 			{
 				case DATA_LEROY:
-					if (GetData(DATA_LEROY) == DONE)
+					if (GetData(DATA_LEROY))
 						break;
 
 					switch(data)
 					{
 						case SPECIAL:
-							_killedDragonCount++;
-							if(_killedDragonCount == 1)
-								SetData(DATA_LEROY, IN_PROGRESS);
-							else if(_killedDragonCount >= 50 && GetData(DATA_LEROY) == IN_PROGRESS)
-								SetData(DATA_LEROY, DONE);
-							else
-							{
-								if(_killedDragonCount%10 == 0)
-									DoSendNotifyToInstance(leroyWarnings[_killedDragonCount/10]);
-							}
-							break;
-						case IN_PROGRESS:
-							DoSendNotifyToInstance(leroyWarnings[0]);
-							_leroooy = data;
-							break;
-						case FAIL:
-							_killedDragonCount = 0;
-							_dragonTimer = 15000;
-							_leroooy = data;
-							DoSendNotifyToInstance(leroyWarnings[7]);
-							break;
-						case DONE:
-							DoSendNotifyToInstance(leroyWarnings[6]);
-							DoCompleteAchievement(ACHIEVEMENT_LEROY);
-							_leroooy = data;
+							killedDragonCount++;
+							dragonTimer = 15000;
+							leroooy = false;
 							break;
 					}
-					break;
 			}
 
 			if (data == DONE)
@@ -342,8 +308,6 @@ public:
                     return go_roomrunes[5];
                 case GO_ROOM_7_RUNE:
                     return go_roomrunes[6];
-				case DATA_LEROY:
-					return _leroooy;
             }
 
             return 0;
@@ -353,11 +317,25 @@ public:
 		{
 			if(GetData(DATA_LEROY) == IN_PROGRESS)
 			{
-				if (_dragonTimer <= diff)
-					SetData(DATA_LEROY, FAIL);
-				else _dragonTimer -= diff;
+				if (dragonTimer <= diff)
+					{
+					   dragonTimer = 0;
+					   if (killedDragonCount >= 50)
+					       SetData(DATA_LEROY, SPECIAL);
+					    leroooy = true;
+					} else dragonTimer -= diff;
 			}
 		}
+    
+        bool CheckAchievementCriteriaMeet(uint32 criteria_id, Player const* /*source*/, Unit const* /*target*/ = NULL, uint32 /*miscvalue1*/ = 0)
+        {
+            switch (criteria_id)
+            {
+                case ACHIEVEMENT_LEROY:
+                    return leroooy;
+            }
+            return false;
+        }
 
         std::string GetSaveData()
         {
