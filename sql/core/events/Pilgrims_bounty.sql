@@ -1,4 +1,4 @@
-UPDATE `game_event` SET `start_time`= '2012-01-03 01:00:00', `end_time`= '2012-01-18 01:00:00' WHERE `eventEntry`=26;
+UPDATE `game_event` SET `start_time`= '2013-01-03 01:00:00', `end_time`= '2013-01-18 01:00:00' WHERE `eventEntry`=26;
 
 DELETE FROM `achievement_criteria_data` WHERE `type`=11 AND `criteria_id`=3693;
 UPDATE `achievement_criteria_data` SET `ScriptName` = 'achievement_bg_control_all_nodes' WHERE `type` =11 AND `criteria_id` =3693;
