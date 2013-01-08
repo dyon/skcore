@@ -28,10 +28,6 @@
 #define DATA_CHESTLOOTED    7
 #define TYPE_RAND_VENDOR_1  8
 #define TYPE_RAND_VENDOR_2  9
-#define DATA_EVENT_RUN      10
-#define DATA_GO_GONG        11
-#define DATA_HARRISON       12
-#define DATA_HEXLORDGUID    13
 
 #endif
 

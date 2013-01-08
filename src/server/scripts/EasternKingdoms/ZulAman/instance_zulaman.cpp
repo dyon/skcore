@@ -71,17 +71,12 @@ class instance_zulaman : public InstanceMapScript
             uint64 AshlisBagGUID;
             uint64 KrazsPackageGUID;
 
-            uint64 StrangeGongGUID;
-            uint64 MassiveGateGUID;
             uint64 HexLordGateGUID;
             uint64 ZulJinGateGUID;
             uint64 AkilzonDoorGUID;
             uint64 ZulJinDoorGUID;
             uint64 HalazziDoorGUID;
-            uint64 HarrisonGUID;
-            uint64 HexlordGUID;
 
-            uint32 GongCount;
             uint32 QuestTimer;
             uint16 BossKilled;
             uint16 QuestMinute;
@@ -89,7 +84,6 @@ class instance_zulaman : public InstanceMapScript
 
             uint32 m_auiEncounter[MAX_ENCOUNTER];
             uint32 RandVendor[RAND_VENDOR];
-            uint32 GateEvent;
 
             void Initialize()
             {
@@ -100,22 +94,16 @@ class instance_zulaman : public InstanceMapScript
                 AshlisBagGUID = 0;
                 KrazsPackageGUID = 0;
 
-                StrangeGongGUID = 0;
-                MassiveGateGUID = 0;
                 HexLordGateGUID = 0;
                 ZulJinGateGUID = 0;
                 AkilzonDoorGUID = 0;
                 HalazziDoorGUID = 0;
                 ZulJinDoorGUID = 0;
-                HarrisonGUID = 0;
-                HexlordGUID = 0;
 
-                GongCount = 0;
                 QuestTimer = 0;
-                QuestMinute = 0;
+                QuestMinute = 21;
                 BossKilled = 0;
                 ChestLooted = 0;
-                GateEvent = 0;
 
                 for (uint8 i = 0; i < RAND_VENDOR; ++i)
                     RandVendor[i] = NOT_STARTED;
@@ -134,14 +122,9 @@ class instance_zulaman : public InstanceMapScript
             {
                 switch (creature->GetEntry())
                 {
-                case 24358:
-                    HarrisonGUID = creature->GetGUID(); 
-                    break;
                 case 23578://janalai
                 case 23863://zuljin
                 case 24239://hexlord
-                    HexlordGUID = creature->GetGUID();
-                    break;
                 case 23577://halazzi
                 case 23576://nalorakk
                 default: break;
@@ -152,8 +135,6 @@ class instance_zulaman : public InstanceMapScript
             {
                 switch (go->GetEntry())
                 {
-                case 187359: StrangeGongGUID = go->GetGUID(); break;
-                case 186728: MassiveGateGUID = go->GetGUID(); break;
                 case 186303: HalazziDoorGUID = go->GetGUID(); break;
                 case 186304: ZulJinGateGUID  = go->GetGUID(); break;
                 case 186305: HexLordGateGUID = go->GetGUID(); break;
@@ -288,22 +269,6 @@ class instance_zulaman : public InstanceMapScript
                 case TYPE_RAND_VENDOR_2:
                     RandVendor[1] = data;
                     break;
-                case DATA_EVENT_RUN:
-                  if (data == SPECIAL)
-                  {
-                      ++GongCount;
-                      if (GongCount == 5)
-                          GateEvent = data;
-                  }
-                  if (data == IN_PROGRESS)
-                  {
-                      DoUseDoorOrButton(MassiveGateGUID);
-                      QuestMinute = 21;
-                      DoUpdateWorldState(3104, 1);
-                      DoUpdateWorldState(3106, QuestMinute);
-                      GateEvent = data;
-                  }
-                  break;
                 }
 
                 if (data == DONE)
@@ -329,24 +294,11 @@ class instance_zulaman : public InstanceMapScript
                 case DATA_HALAZZIEVENT:  return m_auiEncounter[3];
                 case DATA_HEXLORDEVENT:  return m_auiEncounter[4];
                 case DATA_ZULJINEVENT:   return m_auiEncounter[5];
-                case DATA_EVENT_RUN:     return GateEvent;
                 case DATA_CHESTLOOTED:   return ChestLooted;
                 case TYPE_RAND_VENDOR_1: return RandVendor[0];
                 case TYPE_RAND_VENDOR_2: return RandVendor[1];
                 default:                 return 0;
                 }
-            }
-
-            uint64 GetData64(uint32 identifier)
-            {
-                switch (identifier)
-                {
-                    case DATA_GO_GONG:       return StrangeGongGUID;
-                    case DATA_HARRISON:      return HarrisonGUID;
-                    case DATA_HEXLORDGUID:   return HexlordGUID;
-                }
-
-                return 0;
             }
 
             void Update(uint32 diff)
