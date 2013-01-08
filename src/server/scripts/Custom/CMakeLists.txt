@@ -12,7 +12,6 @@ set(scripts_STAT_SRCS
   ${scripts_STAT_SRCS}
     Custom/Transmogrification.cpp
     Custom/Transmogrification.h
-    Custom/loggin.cpp
     Custom/npc_inicio.cpp
 )
 
