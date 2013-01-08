@@ -51,12 +51,13 @@ SET @DrakmarGUID := 199000; -- custom, cari guid kosong
 DELETE FROM `gameobject` WHERE `id` =300009;
 INSERT INTO `gameobject` (`guid`, `id`, `map`, `spawnMask`, `phaseMask`, `position_x`, `position_y`, `position_z`, `orientation`, `rotation0`, `rotation1`, `rotation2`, `rotation3`, `spawntimesecs`, `animprogress`, `state`)VALUES 
 (@DrakmarGUID,'300009','571','1','1','4601.68','-1601.91','156.659','1.0243','0','0','0.490051','0.871694','1','0','1');
-DELETE FROM `script_texts` WHERE `entry` IN (-1850000,-1850001,-1850002,-1850003);
-INSERT INTO `script_texts` (`npc_entry`, `entry`, `content_default`, `content_loc2`,`comment`) VALUES
-(0, -1850000, 'Are those winter hyacinths? For me?','OAre those winter hyacinths? For me?',''),
-(0, -1850001, 'I had not brought flowers here for so long.It\'s been so long since a traveler has come here bearing flowers.','It\'s been so long since a traveler has come here bearing flowers.',''),
-(0, -1850002, 'The lake has been too lonely these past years. The travelers stopped coming and evil came to these waters.','The lake has been too lonely these past years. The travelers stopped coming and evil came to these waters.',''),
-(0, -1850003, 'Your gift reveals a rare kindness, traveler. I beg you, take this blade as a token of my gratitude. Long ago, another passenger who had left here, but I have little use for it..','Your gift reveals a rare kindness, traveler. I beg you, take this blade as a token of my gratitude. Long ago, another passenger who had left here, but but I have little use for it.','');
+DELETE FROM `creature_text` WHERE `entry`= 33273;
+INSERT INTO `creature_text` (`entry`,`groupid`,`id`,`text`,`type`,`language`,`probability`,`emote`,`duration`,`sound`,`comment`) VALUES 
+(33273,0,0, 'Are those winter hyacinths? For me?',12,0,100,0,0,0, 'Maiden of Drak Mar 0'),
+(33273,1,0, 'I had not brought flowers here for so long.It\'s been so long since a traveler has come here bearing flowers. It\'s been so long since a traveler has come here bearing flowers.',12,0,100,0,0,0, 'Maiden of Drak Mar 1'),
+(33273,2,0, 'The lake has been too lonely these past years. The travelers stopped coming and evil came to these waters.',12,0,100,0,0,0, 'Maiden of Drak Mar 2'),
+(33273,3,0, 'Your gift reveals a rare kindness, traveler. I beg you, take this blade as a token of my gratitude. Long ago, another passenger who had left here, but I have little use for it...',12,0,100,0,0,0, 'Maiden of Drak Mar 3');
+
 DELETE FROM `event_scripts` WHERE `id`=20990;
 INSERT INTO `event_scripts` (`id`, `delay`, `command`, `datalong`, `datalong2`, `x`, `y`, `z`, `o`) VALUES (20990, 0, 10, 33273, 42000, 4602.977, -1600.141, 156.7834, 0.7504916);
 UPDATE `creature_template` SET `InhabitType`=5, `ScriptName`='npc_maiden_of_drak_mar' WHERE `entry`=33273;

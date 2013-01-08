@@ -397,7 +397,7 @@ public:
                 me->HandleEmoteCommand(EMOTE_ONESHOT_LIFTOFF);
                 me->SetUnitMovementFlags(MOVEMENTFLAG_DISABLE_GRAVITY + MOVEMENTFLAG_ONTRANSPORT);
                 me->StopMoving();
-                DoScriptText(YELL_TAKEOFF, me);
+                Talk(YELL_TAKEOFF);
                 Timer[EVENT_FLIGHT_SEQUENCE] = 2000;
                 break;
             case 1:

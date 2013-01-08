@@ -817,10 +817,14 @@ public:
 // Spawn NPC 33723
 
 // Spawn gob 194238
-#define NPC_TEXTID_MAIDEN_OF_DRAK_MAR_01 -1850000
-#define NPC_TEXTID_MAIDEN_OF_DRAK_MAR_02 -1850001
-#define NPC_TEXTID_MAIDEN_OF_DRAK_MAR_03 -1850002
-#define NPC_TEXTID_MAIDEN_OF_DRAK_MAR_04 -1850003
+enum TalkMoDM
+{
+    NPC_TEXTID_MAIDEN_OF_DRAK_MAR_01      = 0,
+    NPC_TEXTID_MAIDEN_OF_DRAK_MAR_02      = 1,
+    NPC_TEXTID_MAIDEN_OF_DRAK_MAR_03      = 2,
+    NPC_TEXTID_MAIDEN_OF_DRAK_MAR_04      = 3
+};
+
 #define MAIDEN_OF_DRAK_MAR_TIMER_00 2000
 #define MAIDEN_OF_DRAK_MAR_TIMER_01 5000
 #define MAIDEN_OF_DRAK_MAR_TIMER_02 6000
@@ -858,19 +862,19 @@ public:
                     switch(phase)
                     {
                         case 1:
-                            DoScriptText(NPC_TEXTID_MAIDEN_OF_DRAK_MAR_01, me);
+                            Talk(NPC_TEXTID_MAIDEN_OF_DRAK_MAR_01);
                             uiPhaseTimer = MAIDEN_OF_DRAK_MAR_TIMER_01;
                             break;
                         case 2:
-                            DoScriptText(NPC_TEXTID_MAIDEN_OF_DRAK_MAR_02, me);
+                            Talk(NPC_TEXTID_MAIDEN_OF_DRAK_MAR_02);
                             uiPhaseTimer = MAIDEN_OF_DRAK_MAR_TIMER_02;
                             break;
                         case 3:
-                            DoScriptText(NPC_TEXTID_MAIDEN_OF_DRAK_MAR_03, me);
+                            Talk(NPC_TEXTID_MAIDEN_OF_DRAK_MAR_03);
                             uiPhaseTimer = MAIDEN_OF_DRAK_MAR_TIMER_03;
                             break;
                         case 4:
-                            DoScriptText(NPC_TEXTID_MAIDEN_OF_DRAK_MAR_04, me);
+                            Talk(NPC_TEXTID_MAIDEN_OF_DRAK_MAR_04);
                             if(GameObject* go = me->SummonGameObject(MAIDEN_OF_DRAK_MAR_GOB_02,4603.351f,-1599.288f,156.8822f,2.234018f,0,0,0,0,0))
                                 secondGobGuid = go->GetGUID(); //Spawn Blade GO
                             uiPhaseTimer = MAIDEN_OF_DRAK_MAR_TIMER_04;
