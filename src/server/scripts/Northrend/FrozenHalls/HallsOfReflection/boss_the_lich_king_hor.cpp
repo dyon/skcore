@@ -1,26 +1,19 @@
 /*
-* Copyright (C) 2008-2011 TrinityCore <http://www.trinitycore.org/>
-*
-* This program is free software; you can redistribute it and/or modify it
-* under the terms of the GNU General Public License as published by the
-* Free Software Foundation; either version 2 of the License, or (at your
-* option) any later version.
-*
-* This program is distributed in the hope that it will be useful, but WITHOUT
-* ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-* FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
-* more details.
-*
-* You should have received a copy of the GNU General Public License along
-* with this program. If not, see <http://www.gnu.org/licenses/>.
-*/
-
-/* ScriptData
-SDName: boss_Lich_king
-SD%Complete: 0%
-SDComment: new script for tc implementation.
-SDCategory: Halls of Reflection
-EndScriptData */
+ * Copyright (C) 2008-2013 TrinityCore <http://www.trinitycore.org/>
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by the
+ * Free Software Foundation; either version 2 of the License, or (at your
+ * option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ * FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+ * more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program. If not, see <http://www.gnu.org/licenses/>.
+ */
 
 #include "ScriptPCH.h"
 #include "halls_of_reflection.h"
@@ -28,38 +21,39 @@ EndScriptData */
 
 enum
 {
-   SPELL_WINTER                 = 69780,
-   SPELL_FURY_OF_FROSTMOURNE    = 70063,
-   SPELL_SOUL_REAPER            = 73797,
-   SPELL_RAISE_DEAD             = 69818,
-   SPELL_ICE_PRISON             = 69708,
-   SPELL_DARK_ARROW             = 70194,
-   SPELL_HARVEST_SOUL           = 70070,
+   SPELL_WINTER                        = 69780,
+   SPELL_FURY_OF_FROSTMOURNE           = 70063,
+   SPELL_SOUL_REAPER                   = 73797,
+   SPELL_RAISE_DEAD                    = 69818,
+   SPELL_ICE_PRISON                    = 69708,
+   SPELL_DARK_ARROW                    = 70194,
+   SPELL_HARVEST_SOUL                  = 70070,
+   SPELL_PAIN_AND_SUFFERING            = 74115,
 
    //Raging gnoul
-   SPELL_EMERGE_VISUAL          = 50142,
-   SPELL_GNOUL_JUMP             = 70150,
+   SPELL_EMERGE_VISUAL                 = 50142,
+   SPELL_GHOUL_JUMP                    = 70150,
 
    //Witch Doctor
-   SPELL_COURSE_OF_DOOM         = 70144,
-   H_SPELL_COURSE_OF_DOOM       = 70183,
-   SPELL_SHADOW_BOLT_VOLLEY     = 70145,
-   H_SPELL_SHADOW_BOLT_VOLLEY   = 70184,
-   SPELL_SHADOW_BOLT            = 70080,
-   H_SPELL_SHADOW_BOLT          = 70182,
+   SPELL_COURSE_OF_DOOM                = 70144,
+   H_SPELL_COURSE_OF_DOOM              = 70183,
+   SPELL_SHADOW_BOLT_VOLLEY            = 70145,
+   H_SPELL_SHADOW_BOLT_VOLLEY          = 70184,
+   SPELL_SHADOW_BOLT                   = 70080,
+   H_SPELL_SHADOW_BOLT                 = 70182,
 
    //Lumbering Abomination
-   SPELL_ABON_STRIKE            = 40505,
-   SPELL_VOMIT_SPRAY            = 70176,
-   H_SPELL_VOMIT_SPRAY          = 70181,
+   SPELL_ABON_STRIKE                  = 40505,
+   SPELL_VOMIT_SPRAY                  = 70176,
+   H_SPELL_VOMIT_SPRAY                = 70181,
 
-   SAY_LICH_KING_WALL_01        = -1594486,
-   SAY_LICH_KING_WALL_02        = -1594491,
-   SAY_LICH_KING_GNOUL          = -1594482,
-   SAY_LICH_KING_ABON           = -1594483,
-   SAY_LICH_KING_WINTER         = -1594481,
-   SAY_LICH_KING_END_DUN        = -1594504,
-   SAY_LICH_KING_WIN            = -1594485,
+   SAY_LICH_KING_WALL_01              = 5,
+   SAY_LICH_KING_WALL_02              = 6,
+   SAY_LICH_KING_GNOUL                = 7,
+   SAY_LICH_KING_ABON                 = 8,
+   SAY_LICH_KING_WINTER               = 9,
+   SAY_LICH_KING_END_DUN              = 10,
+   SAY_LICH_KING_WIN                  = 11,
 };
 
 class boss_lich_king_hor : public CreatureScript
@@ -85,6 +79,7 @@ public:
        uint32 StepTimer;
        uint32 uiWall;
        bool StartEscort;
+       bool WipedGroup;
        bool NonFight;
        float walkSpeed;
 
@@ -94,11 +89,12 @@ public:
                return;
            NonFight = false;
            StartEscort = false;
-           walkSpeed = 1.0f;
+           WipedGroup = false;
+           walkSpeed = 0.8f;
            uiWall = 0;
        }
 
-       void JustDied(Unit* pKiller) { }
+       void JustDied(Unit* /*killer*/) { }
 
        void WaypointReached(uint32 i)
        {
@@ -131,7 +127,7 @@ public:
                case 66:
                    SetEscortPaused(true);
                    pInstance->SetData(DATA_LICHKING_EVENT, SPECIAL);
-                   DoScriptText(SAY_LICH_KING_END_DUN, me);
+                   Talk(SAY_LICH_KING_END_DUN);
                    if(Creature* pLider = ((Creature*)Unit::GetUnit((*me), pInstance->GetData64(DATA_ESCAPE_LIDER))))
                        me->CastSpell(pLider, SPELL_HARVEST_SOUL, false);
                    me->setActive(false);
@@ -180,19 +176,22 @@ public:
            {
                case 0:
                    pInstance->SetData(DATA_SUMMONS, 3);
-                   DoScriptText(SAY_LICH_KING_WALL_01, me);
+                   Talk(SAY_LICH_KING_WALL_01);
                    StepTimer = 2000;
                    ++Step;
                    break;
                case 1:
                    DoCast(me, SPELL_RAISE_DEAD);
-                   DoScriptText(SAY_LICH_KING_GNOUL, me);
+                   Talk(SAY_LICH_KING_GNOUL);
                    StepTimer = 7000;
                    ++Step;
                    break;
                case 2:
+                   me->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_PC | UNIT_FLAG_IMMUNE_TO_NPC);
+                   me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE );
+                   // DoCast(me, SPELL_PAIN_AND_SUFFERING); Spell is currently broken, it also does damage to people in front of you.
                    DoCast(me, SPELL_WINTER);
-                   DoScriptText(SAY_LICH_KING_WINTER, me);
+                   Talk(SAY_LICH_KING_WINTER);
                    me->SetSpeed(MOVE_WALK, walkSpeed, true);
                    StepTimer = 1000;
                    ++Step;
@@ -218,7 +217,7 @@ public:
            {
                case 0:
                    pInstance->SetData(DATA_SUMMONS, 3);
-                   DoScriptText(SAY_LICH_KING_GNOUL, me);
+                   Talk(SAY_LICH_KING_GNOUL);
                    DoCast(me, SPELL_RAISE_DEAD);
                    StepTimer = 6000;
                    ++Step;
@@ -243,12 +242,12 @@ public:
                case 0:
                    pInstance->SetData(DATA_SUMMONS, 3);
                    DoCast(me, SPELL_RAISE_DEAD);
-                   DoScriptText(SAY_LICH_KING_GNOUL, me);
+                   Talk(SAY_LICH_KING_GNOUL);
                    StepTimer = 6000;
                    ++Step;
                    break;
                case 1:
-                   DoScriptText(SAY_LICH_KING_ABON, me);
+                   Talk(SAY_LICH_KING_ABON);
                    CallGuard(NPC_RISEN_WITCH_DOCTOR);
                    CallGuard(NPC_RISEN_WITCH_DOCTOR);
                    CallGuard(NPC_RISEN_WITCH_DOCTOR);
@@ -270,7 +269,7 @@ public:
                case 0:
                    pInstance->SetData(DATA_SUMMONS, 3);
                    DoCast(me, SPELL_RAISE_DEAD);
-                   DoScriptText(SAY_LICH_KING_GNOUL, me);
+                   Talk(SAY_LICH_KING_GNOUL);
                    StepTimer = 6000;
                    ++Step;
                    break;
@@ -284,7 +283,7 @@ public:
                    ++Step;
                    break;
                case 2:
-                   DoScriptText(SAY_LICH_KING_ABON, me);
+                   Talk(SAY_LICH_KING_ABON);
                    CallGuard(NPC_RISEN_WITCH_DOCTOR);
                    CallGuard(NPC_RISEN_WITCH_DOCTOR);
                    pInstance->SetData(DATA_ICE_WALL_4, DONE);
@@ -308,11 +307,6 @@ public:
                DoMeleeAttackIfReady();
            }
 
-           if(me->isInCombat() && pInstance->GetData(DATA_LICHKING_EVENT) == IN_PROGRESS)
-           {
-               npc_escortAI::EnterEvadeMode();
-           }
-
            // Start chase for leader
            if(pInstance->GetData(DATA_LICHKING_EVENT) == IN_PROGRESS && StartEscort != true)
            {
@@ -331,14 +325,15 @@ public:
            // Leader caught, wipe
            if (Creature* pLider = ((Creature*)Unit::GetUnit((*me), pInstance->GetData64(DATA_ESCAPE_LIDER))))
            {
-               if (pLider->IsWithinDistInMap(me, 2.0f) && pInstance->GetData(DATA_LICHKING_EVENT) == IN_PROGRESS)
+               if (!WipedGroup && pLider->IsWithinDistInMap(me, 2.0f) && pInstance->GetData(DATA_LICHKING_EVENT) == IN_PROGRESS)
                {
+                    WipedGroup = true;
                    me->setActive(false);
-                   SetEscortPaused(false);
+                   SetEscortPaused(true);
                    me->StopMoving();
-                   DoScriptText(SAY_LICH_KING_WIN, me);
-                   me->CastSpell(me, SPELL_FURY_OF_FROSTMOURNE, false);
-                   me->DealDamage(pLider, pLider->GetHealth(), NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false);
+                   Talk(SAY_LICH_KING_WIN);
+                   me->CastSpell((Unit*)NULL, SPELL_FURY_OF_FROSTMOURNE, TRIGGERED_NONE);
+                   me->DealDamage(pLider, pLider->GetHealth(), NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, false); // Probably a hack
                }
            }
 
@@ -395,7 +390,7 @@ public:
        InstanceScript* pInstance;
        uint32 EmergeTimer;
        bool Emerge;
-       bool Jumped;
+       bool jumped;
        uint64 uiLiderGUID;
 
        void Reset()
@@ -403,10 +398,10 @@ public:
            DoCast(me, SPELL_EMERGE_VISUAL);
            EmergeTimer = 4000;
            Emerge = false;
-           Jumped = false;
+           jumped = false;
        }
 
-       void JustDied(Unit* pKiller)
+       void JustDied(Unit* /*killer*/)
        {
            if(!pInstance)
                return;
@@ -414,56 +409,21 @@ public:
            pInstance->SetData(DATA_SUMMONS, 0);
        }
 
-       void AttackStart(Unit* who)
-       {
-           if (!who)
-               return;
-
-           if(Emerge == false)
-               return;
-
-           ScriptedAI::AttackStart(who);
-       }
-
        void UpdateAI(const uint32 diff)
        {
-           if(!pInstance)
-               return;
+           if (!UpdateVictim())
+                return;
 
-           if(pInstance->GetData(DATA_LICHKING_EVENT) == IN_PROGRESS)
-           {
-               uiLiderGUID = pInstance->GetData64(DATA_ESCAPE_LIDER);
-               Creature* pLider = ((Creature*)Unit::GetUnit((*me), uiLiderGUID));
-
-               if(Emerge != true)
-               {
-                   if(EmergeTimer < diff)
-                   {
-                       //me->RemoveFlag(SPLINEFLAG_WALKING | MOVEMENTFLAG_WALKING, true);
-                       Emerge = true;
-                       uiLiderGUID = pInstance->GetData64(DATA_ESCAPE_LIDER);
-                       if(pLider)
-                       {
-                           DoResetThreat();
-                           me->AI()->AttackStart(pLider);
-                           me->GetMotionMaster()->Clear();
-                           me->GetMotionMaster()->MoveChase(pLider);
-                       }
-                   }
-                   else
-                       EmergeTimer -= diff;
-               }
-
-               if(Unit *target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f))
-               {
-                   if(!Jumped && me->IsWithinDistInMap(target, 30.0f) && !me->IsWithinDistInMap(target, 5.0f))
-                   {
-                       Jumped = true;
-                       DoCast(target, SPELL_GNOUL_JUMP);
-                   }
-               }
+            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 50.0f))
+            {
+                if (!jumped && me->IsWithinDistInMap(target, 30.0f) && !me->IsWithinDistInMap(target, 5.0f))
+                {
+                    jumped = true;
+                    DoCast(target, SPELL_GHOUL_JUMP);
+                }
            }
-           else if (pInstance->GetData(DATA_LICHKING_EVENT) == FAIL || pInstance->GetData(DATA_LICHKING_EVENT) == NOT_STARTED)
+           
+           if (pInstance->GetData(DATA_LICHKING_EVENT) == FAIL || pInstance->GetData(DATA_LICHKING_EVENT) == NOT_STARTED)
                me->DespawnOrUnsummon();
 
            DoMeleeAttackIfReady();
@@ -509,7 +469,7 @@ public:
            Emerge = false;
        }
 
-       void JustDied(Unit* pKiller)
+       void JustDied(Unit* /*killer*/)
        {
            if(!pInstance)
                return;
@@ -655,7 +615,7 @@ public:
            DoMeleeAttackIfReady();
        }
 
-       void JustDied(Unit* pKiller)
+       void JustDied(Unit* /*killer*/)
        {
            if(!pInstance)
                return;
