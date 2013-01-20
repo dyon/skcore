@@ -110,7 +110,6 @@ enum DataTypes
     DATA_CAPTAIN_ARNATH             = 32,
     DATA_CAPTAIN_BRANDON            = 33,
     DATA_CAPTAIN_GRONDEL            = 34,
-    DATA_CAPTAIN_GRONDEL            = 34,
     DATA_CAPTAIN_RUPERT             = 35,
     DATA_VALITHRIA_TRIGGER          = 36,
     DATA_VALITHRIA_LICH_KING        = 37,

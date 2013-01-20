@@ -37,6 +37,7 @@ enum WarriorSpells
     SPELL_WARRIOR_DEEP_WOUNDS_RANK_PERIODIC         = 12721,
     SPELL_WARRIOR_EXECUTE                           = 20647,
     SPELL_EXECUTE_PROC                              = 52437,
+    SPELL_EXECUTE_BONUS                             = 20647,
     SPELL_WARRIOR_GLYPH_OF_EXECUTION                = 58367,
     SPELL_WARRIOR_JUGGERNAUT_CRIT_BONUS_BUFF        = 65156,
     SPELL_WARRIOR_JUGGERNAUT_CRIT_BONUS_TALENT      = 64976,
