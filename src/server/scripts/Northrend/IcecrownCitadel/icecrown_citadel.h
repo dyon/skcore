@@ -323,11 +323,11 @@ enum GameObjectsIds
     GO_CAPITAN_CHEST_A_10N                  = 201872,
     GO_CAPITAN_CHEST_A_10H                  = 201874,
     GO_CAPITAN_CHEST_A_25N                  = 201873,    
-	GO_CAPITAN_CHEST_A_25H                  = 201875,
+    GO_CAPITAN_CHEST_A_25H                  = 201875,
     GO_CAPITAN_CHEST_H_10N                  = 202177,
-    GO_CAPITAN_CHEST_H_10H                  = 202180,
+    GO_CAPITAN_CHEST_H_10H                  = 202179,
     GO_CAPITAN_CHEST_H_25N                  = 202178,
-    GO_CAPITAN_CHEST_H_25H                  = 202179,
+    GO_CAPITAN_CHEST_H_25H                  = 202180,
 
     // Deathbringer Saurfang
     GO_SAURFANG_S_DOOR                      = 201825,
