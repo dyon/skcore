@@ -323,11 +323,11 @@ enum GameObjectsIds
     GO_CAPITAN_CHEST_A_10N                  = 201872,
     GO_CAPITAN_CHEST_A_10H                  = 201874,
     GO_CAPITAN_CHEST_A_25N                  = 201873,    
-    GO_CAPITAN_CHEST_A_25H                  = 201875,
+	GO_CAPITAN_CHEST_A_25H                  = 201875,
     GO_CAPITAN_CHEST_H_10N                  = 202177,
-    GO_CAPITAN_CHEST_H_10H                  = 202179,
+    GO_CAPITAN_CHEST_H_10H                  = 202180,
     GO_CAPITAN_CHEST_H_25N                  = 202178,
-    GO_CAPITAN_CHEST_H_25H                  = 202180,
+    GO_CAPITAN_CHEST_H_25H                  = 202179,
 
     // Deathbringer Saurfang
     GO_SAURFANG_S_DOOR                      = 201825,
@@ -376,7 +376,7 @@ enum GameObjectsIds
     GO_SINDRAGOSA_SHORTCUT_ENTRANCE_DOOR    = 201369,
     GO_SINDRAGOSA_SHORTCUT_EXIT_DOOR        = 201379,
     GO_ICE_WALL                             = 202396,
-    GO_ICE_BLOCK                            = 201722,
+    GO_ICE_BLOCK                            = 188142,
     GO_SIGIL_OF_THE_FROSTWING               = 202181,
 
     // The Lich King
