@@ -221,6 +221,7 @@ class boss_sindragosa : public CreatureScript
                 events.ScheduleEvent(EVENT_UNCHAINED_MAGIC, urand(9000, 14000), EVENT_GROUP_LAND_PHASE);
                 events.ScheduleEvent(EVENT_ICY_GRIP, 33500, EVENT_GROUP_LAND_PHASE);
                 events.ScheduleEvent(EVENT_AIR_PHASE, 50000);
+                _iceTombCounter = 0;
                 _mysticBuffetStack = 0;
                 _isInAirPhase = false;
                 _isThirdPhase = false;
@@ -472,8 +473,13 @@ class boss_sindragosa : public CreatureScript
                         case EVENT_ICY_GRIP:
                             DoCast(me, SPELL_ICY_GRIP);
                             events.ScheduleEvent(EVENT_BLISTERING_COLD, 1000, EVENT_GROUP_LAND_PHASE);
-                            if (_isThirdPhase) // Need to reschedule in phase three, since it cannot be done via movement any longer
-                            events.RescheduleEvent(EVENT_ICY_GRIP, 40000);
+
+                            // Reset Ice Tomb counter, and schedule Ice Tombs again in phase 3
+                            if (_isThirdPhase)
+                            {
+                                _iceTombCounter = 0;
+                                events.ScheduleEvent(EVENT_ICE_TOMB, urand(7000, 10000));
+                            }
                             break;
                         case EVENT_BLISTERING_COLD:
                             Talk(EMOTE_WARN_BLISTERING_COLD);
@@ -507,10 +513,21 @@ class boss_sindragosa : public CreatureScript
                             me->GetMotionMaster()->MovePoint(POINT_AIR_PHASE_FAR, SindragosaAirPosFar);
                             break;
                         case EVENT_ICE_TOMB:
-							Talk(EMOTE_WARN_FROZEN_ORB);
-							me->CastCustomSpell(SPELL_ICE_TOMB_TARGET, SPELLVALUE_MAX_TARGETS, RAID_MODE<int32>(1, 1, 1, 1), NULL);
-							me->SetFacingTo(float(2*M_PI));
-							events.ScheduleEvent(EVENT_ICE_TOMB, urand(16000, 23000));
+                            if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1, 0.0f, true, -SPELL_ICE_TOMB_DAMAGE))
+                            {
+							    Talk(EMOTE_WARN_FROZEN_ORB, target->GetGUID());
+								//DoCast(target, SPELL_ICE_TOMB_DUMMY, true);
+                                me->CastCustomSpell(SPELL_ICE_TOMB_TARGET, SPELLVALUE_MAX_TARGETS, RAID_MODE<int32>(1, 1, 1, 1), NULL);
+                                me->SetFacingTo(float(2*M_PI));
+							}
+                            //me->CastCustomSpell(SPELL_ICE_TOMB_TARGET, SPELLVALUE_MAX_TARGETS, RAID_MODE<int32>(1, 1, 1, 1), NULL);
+                            //me->SetFacingTo(float(2*M_PI));
+
+                            _iceTombCounter++;
+                            if (_iceTombCounter < 4) // Avoid casting ice tomb more than 4 times between icy grips
+                                events.ScheduleEvent(EVENT_ICE_TOMB, urand(16000, 23000));
+                            else // We are done with all ice tombs, start icy grip timer
+                                events.ScheduleEvent(EVENT_ICY_GRIP, 20000);
                             break;
                         case EVENT_FROST_BOMB:
                         {
@@ -541,9 +558,13 @@ class boss_sindragosa : public CreatureScript
                         {
                             if (!_isInAirPhase)
                             {
+                                events.CancelEvent(EVENT_ICY_GRIP);
+                                _isThirdPhase = true;
                                 Talk(SAY_PHASE_2);
+                                //events.ScheduleEvent(EVENT_ICE_TOMB, urand(7000, 10000));
+                                //events.RescheduleEvent(EVENT_ICY_GRIP, urand(35000, 40000));
+                                _iceTombCounter = 2; // Set to 2 here, so we get 2 casts until first icy grip
                                 events.ScheduleEvent(EVENT_ICE_TOMB, urand(7000, 10000));
-                                events.RescheduleEvent(EVENT_ICY_GRIP, urand(35000, 40000));
                                 DoCast(me, SPELL_MYSTIC_BUFFET, true);
                             }
                             else
@@ -559,6 +580,7 @@ class boss_sindragosa : public CreatureScript
             }
 
         private:
+            uint8 _iceTombCounter;
             uint8 _mysticBuffetStack;
             bool _isInAirPhase;
             bool _isThirdPhase;
@@ -1249,13 +1271,41 @@ class spell_sindragosa_ice_tomb : public SpellScriptLoader
 
             void SummonTomb()
             {
-                Position pos;
+                /*Position pos;
                 GetHitUnit()->GetPosition(&pos);
                 if (TempSummon* summon = GetCaster()->SummonCreature(NPC_ICE_TOMB, pos))
                 {
                     summon->AI()->SetGUID(GetHitUnit()->GetGUID(), DATA_TRAPPED_PLAYER);
                     if (GameObject* go = summon->SummonGameObject(GO_ICE_BLOCK, pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ(), pos.GetOrientation(), 0.0f, 0.0f, 0.0f, 0.0f, 0))
                     {
+                        go->SetSpellId(SPELL_ICE_TOMB_DAMAGE);
+                        summon->AddGameObject(go);*/
+                Unit* unit = GetHitUnit();
+                Unit* caster = GetCaster();
+
+                if (!unit || !caster)
+                    return;
+
+                Position pos;
+                unit->GetPosition(&pos);
+
+                float angle = caster->GetAngle(unit);
+                float distance = caster->GetExactDist2d(unit) - 6.0f;
+                float summonX = caster->GetPositionX() + cos(angle) * distance;
+                float summonY = caster->GetPositionY() + sin(angle) * distance;
+                float summonZ = unit->GetPositionZ() + 1.0f;
+
+                unit->UpdateGroundPositionZ(summonX, summonY, summonZ);
+
+                if (TempSummon* summon = caster->SummonCreature(NPC_ICE_TOMB, pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ(), pos.GetOrientation()))
+                {
+                    summon->AI()->SetGUID(unit->GetGUID(), DATA_TRAPPED_PLAYER);
+                    if (GameObject* go = summon->SummonGameObject(GO_ICE_BLOCK, summonX, summonY, summonZ, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0))
+                    {
+                        if (caster->ToCreature())
+                            if (caster->ToCreature()/*->AI()->GetData(DATA_IS_IN_AIRPHASE)*/)
+                                unit->CastSpell(unit, SPELL_ICE_TOMB_UNTARGETABLE, true);
+
                         go->SetSpellId(SPELL_ICE_TOMB_DAMAGE);
                         summon->AddGameObject(go);
                     }
