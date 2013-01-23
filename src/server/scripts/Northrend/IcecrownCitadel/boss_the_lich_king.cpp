@@ -1529,8 +1529,6 @@ class npc_valkyr_shadowguard : public CreatureScript
                 // schedule siphon life event (heroic only)
                 DoZoneInCombat();
                 _events.Reset();
-                me->SetCanFly(true);
-                me->SetDisableGravity(true);
                 _events.ScheduleEvent(EVENT_LIFE_SIPHON, 2000);
             }
 
@@ -1546,12 +1544,6 @@ class npc_valkyr_shadowguard : public CreatureScript
                 switch (id)
                 {
                     case POINT_DROP_PLAYER:
-                        me->GetPosition(&_current);
-                        if (_current.GetPositionX() != _dropPoint.GetPositionX() || _current.GetPositionY() != _dropPoint.GetPositionY())
-                        {
-                            _events.ScheduleEvent(EVENT_MOVE_TO_DROP_POS, 0);
-                            break;
-                        }
                         DoCastAOE(SPELL_EJECT_ALL_PASSENGERS);
                         me->DespawnOrUnsummon(1000);
                         break;
