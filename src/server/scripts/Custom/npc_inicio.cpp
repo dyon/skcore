@@ -25,7 +25,7 @@
  
 enum Info
 {
-    ITEM_LIBRO              = 34206,
+    ITEM_LIBRO              = 16321,
 };
  
 class npc_inicio : public CreatureScript
