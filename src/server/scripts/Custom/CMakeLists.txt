@@ -13,6 +13,9 @@ set(scripts_STAT_SRCS
     Custom/Transmogrification.cpp
     Custom/Transmogrification.h
     Custom/npc_inicio.cpp
+    Custom/rok_el_sensible.cpp
+    Custom/romeo.cpp
+    Custom/julieta_la_esperanza.cpp
 )
 
 message("  -> Prepared: Custom")
