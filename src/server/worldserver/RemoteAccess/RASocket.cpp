@@ -71,7 +71,7 @@ int RASocket::send(const std::string& line)
     ssize_t n = peer().send(line.c_str(), line.length());
 #endif // MSG_NOSIGNAL
 
-    return n == line.length() ? 0 : -1;
+    return n == ssize_t(line.length()) ? 0 : -1;
 }
 
 int RASocket::recv_line(ACE_Message_Block& buffer)
@@ -388,7 +388,8 @@ void RASocket::zprint(void* callbackArg, const char * szText)
     ACE_Message_Block* mb = new ACE_Message_Block(sz);
     mb->copy(szText, sz);
 
-    if (socket->putq(mb, const_cast<ACE_Time_Value*>(&ACE_Time_Value::zero)) == -1)
+    ACE_Time_Value tv = ACE_Time_Value::zero;
+    if (socket->putq(mb, &tv) == -1)
     {
         sLog->outDebug(LOG_FILTER_REMOTECOMMAND, "Failed to enqueue message, queue is full or closed. Error is %s", ACE_OS::strerror(errno));
         mb->release();

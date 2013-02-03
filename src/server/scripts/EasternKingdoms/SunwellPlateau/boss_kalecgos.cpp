@@ -483,9 +483,10 @@ public:
 
             if(AgonyCurseTimer <= diff)
             {
-                Unit *ptarget = SelectTarget(SELECT_TARGET_RANDOM, 0);
-                if(!ptarget) ptarget = me->getVictim();
-                if(TryDoCast(ptarget, SPELL_AGONY_CURSE))
+                Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 1);
+                if (!target)
+                    target = me->getVictim();
+                DoCast(target, SPELL_AGONY_CURSE);
                     AgonyCurseTimer = 20000;
             }else AgonyCurseTimer -= diff;
 

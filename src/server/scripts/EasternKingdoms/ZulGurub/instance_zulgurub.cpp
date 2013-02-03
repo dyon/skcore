@@ -29,7 +29,7 @@ EndScriptData */
 
 class instance_zulgurub : public InstanceMapScript
 {
-    public: instance_zulgurub(): InstanceMapScript("instance_zulgurub", 309) {}
+    public: instance_zulgurub(): InstanceMapScript(ZGScriptName, 309) {}
 
         struct instance_zulgurub_InstanceMapScript : public InstanceScript
         {
@@ -38,25 +38,21 @@ class instance_zulgurub : public InstanceMapScript
                 SetBossNumber(EncounterCount);
             }
 
-            //If all High Priest bosses were killed. Lorkhan, Zath and Ohgan are added too.
-            //Storing Lorkhan, Zath and Thekal because we need to cast on them later. Jindo is needed for healfunction too.
-
-            uint64 lorKhanGUID;
-            uint64 zathGUID;
-            uint64 thekalGUID;
-            uint64 jindoGUID;
-
             void Initialize()
             {
-                lorKhanGUID = 0;
-                zathGUID = 0;
-                thekalGUID = 0;
-                jindoGUID = 0;
+                _zealotLorkhanGUID = 0;
+                _zealotZathGUID = 0;
+                _highPriestTekalGUID = 0;
+                _jindoTheHexxerGUID = 0;
+                _vilebranchSpeakerGUID = 0;
+                _arlokkGUID = 0;
+                _goForcefieldGUID = 0;
+                _goGongOfBethekkGUID = 0;
             }
 
             bool IsEncounterInProgress() const
             {
-                //not active in Zul'Gurub
+                // not active in Zul'Gurub
                 return false;
             }
 
@@ -64,10 +60,43 @@ class instance_zulgurub : public InstanceMapScript
             {
                 switch (creature->GetEntry())
                 {
-                    case NPC_ZEALOT_LORKHAN:        lorKhanGUID = creature->GetGUID(); break;
-                    case NPC_ZEALOT_ZATH:           zathGUID = creature->GetGUID();    break;
-                    case NPC_HIGH_PRIEST_THEKAL:    thekalGUID = creature->GetGUID();  break;
-                    case NPC_JINDO_THE_HEXXER:      jindoGUID = creature->GetGUID();   break;
+                    case NPC_ZEALOT_LORKHAN:
+                        _zealotLorkhanGUID = creature->GetGUID();
+                        break;
+                    case NPC_ZEALOT_ZATH:
+                        _zealotZathGUID = creature->GetGUID();
+                        break;
+                    case NPC_HIGH_PRIEST_THEKAL:
+                        _highPriestTekalGUID = creature->GetGUID();
+                        break;
+                    case NPC_JINDO_THE_HEXXER:
+                        _jindoTheHexxerGUID = creature->GetGUID();
+                        break;
+                    case NPC_VILEBRANCH_SPEAKER:
+                        _vilebranchSpeakerGUID = creature->GetGUID();
+                        break;
+                    case NPC_ARLOKK:
+                        _arlokkGUID = creature->GetGUID();
+                        break;
+                }
+            }
+
+            void OnGameObjectCreate(GameObject* go)
+            {
+                switch (go->GetEntry())
+                {
+                    case GO_FORCEFIELD:
+                        _goForcefieldGUID = go->GetGUID();
+                        break;
+                    case GO_GONG_OF_BETHEKK:
+                        _goGongOfBethekkGUID = go->GetGUID();
+                        if (GetBossState(DATA_ARLOKK) == DONE)
+                            go->SetFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
+                        else
+                            go->RemoveFlag(GAMEOBJECT_FLAGS, GO_FLAG_NOT_SELECTABLE);
+                        break;
+                    default:
+                        break;
                 }
             }
 
@@ -75,10 +104,27 @@ class instance_zulgurub : public InstanceMapScript
             {
                 switch (uiData)
                 {
-                    case DATA_LORKHAN:             return lorKhanGUID;
-                    case DATA_ZATH:                return zathGUID;
-                    case DATA_THEKAL:              return thekalGUID;
-                    case DATA_JINDO:               return jindoGUID;
+                    case DATA_LORKHAN:
+                        return _zealotLorkhanGUID;
+                        break;
+                    case DATA_ZATH:
+                        return _zealotZathGUID;
+                        break;
+                    case DATA_THEKAL:
+                        return _highPriestTekalGUID;
+                        break;
+                    case DATA_JINDO:
+                        return _jindoTheHexxerGUID;
+                        break;
+                    case NPC_ARLOKK:
+                        return _arlokkGUID;
+                        break;
+                    case GO_FORCEFIELD:
+                        return _goForcefieldGUID;
+                        break;
+                    case GO_GONG_OF_BETHEKK:
+                        return _goGongOfBethekkGUID;
+                        break;
                 }
                 return 0;
             }
@@ -125,6 +171,18 @@ class instance_zulgurub : public InstanceMapScript
 
                 OUT_LOAD_INST_DATA_COMPLETE;
             }
+        private:
+            //If all High Priest bosses were killed. Lorkhan, Zath and Ohgan are added too.
+            //Storing Lorkhan, Zath and Thekal because we need to cast on them later. Jindo is needed for healfunction too.
+
+            uint64 _zealotLorkhanGUID;
+            uint64 _zealotZathGUID;
+            uint64 _highPriestTekalGUID;
+            uint64 _jindoTheHexxerGUID;
+            uint64 _vilebranchSpeakerGUID;
+            uint64 _arlokkGUID;
+            uint64 _goForcefieldGUID;
+            uint64 _goGongOfBethekkGUID;
         };
 
         InstanceScript* GetInstanceScript(InstanceMap* map) const
