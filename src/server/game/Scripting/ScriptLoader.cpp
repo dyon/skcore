@@ -1298,7 +1298,7 @@ void AddBattlegroundScripts()
 /* This is where custom scripts' loading functions should be declared. */
 void AddSC_NPC_Transmogrify();
 void AddSC_npc_inicio();
-void AddSC_romeo_el_soñador();
+void AddSC_romeo();
 void AddSC_julieta_la_esperanza();
 void AddSC_rok_el_sensible();
 #endif
@@ -1309,7 +1309,7 @@ void AddCustomScripts()
     /* This is where custom scripts should be added. */
     AddSC_NPC_Transmogrify();
     AddSC_npc_inicio();
-    AddSC_romeo_el_soñador();
+    AddSC_romeo();
     AddSC_julieta_la_esperanza();
     AddSC_rok_el_sensible();
 #endif
