@@ -392,7 +392,6 @@ class boss_sindragosa : public CreatureScript
                     if (spellId == spell->Id)
                         if (Aura const* mysticBuffet = target->GetAura(spell->Id))
                             _mysticBuffetStack = std::max<uint8>(_mysticBuffetStack, mysticBuffet->GetStackAmount());
-
             }
 
             void UpdateAI(uint32 diff)
@@ -1277,7 +1276,7 @@ class spell_sindragosa_ice_tomb : public SpellScriptLoader
 
             void SummonTomb()
             {
-                /*Position pos;
+                Position pos;
                 GetHitUnit()->GetPosition(&pos);
                 if (TempSummon* summon = GetCaster()->SummonCreature(NPC_ICE_TOMB, pos))
                 {
@@ -1285,8 +1284,8 @@ class spell_sindragosa_ice_tomb : public SpellScriptLoader
                     if (GameObject* go = summon->SummonGameObject(GO_ICE_BLOCK, pos.GetPositionX(), pos.GetPositionY(), pos.GetPositionZ(), pos.GetOrientation(), 0.0f, 0.0f, 0.0f, 0.0f, 0))
                     {
                         go->SetSpellId(SPELL_ICE_TOMB_DAMAGE);
-                        summon->AddGameObject(go);*/
-                Unit* unit = GetHitUnit();
+                        summon->AddGameObject(go);
+                /*Unit* unit = GetHitUnit();
                 Unit* caster = GetCaster();
 
                 if (!unit || !caster)
@@ -1309,11 +1308,11 @@ class spell_sindragosa_ice_tomb : public SpellScriptLoader
                     if (GameObject* go = summon->SummonGameObject(GO_ICE_BLOCK, summonX, summonY, summonZ, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0))
                     {
                         if (caster->ToCreature())
-                            if (caster->ToCreature()/*->AI()->GetData(DATA_IS_IN_AIRPHASE)*/)
+                            if (caster->ToCreature()/*->AI()->GetData(DATA_IS_IN_AIRPHASE)*//*)
                                 unit->CastSpell(unit, SPELL_ICE_TOMB_UNTARGETABLE, true);
 
                         go->SetSpellId(SPELL_ICE_TOMB_DAMAGE);
-                        summon->AddGameObject(go);
+                        summon->AddGameObject(go);*/
                     }
                 }
             }
