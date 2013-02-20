@@ -238,7 +238,7 @@ class boss_ignis : public CreatureScript
                     summons.Despawn(summon);
             }
 
-            uint32 GetData(uint32 type)
+            uint32 GetData(uint32 type) const
             {
                 if (type == DATA_SHATTERED)
                     return shatteredHelper.GotAchievFulfilled() ? 1 : 0;

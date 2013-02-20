@@ -567,7 +567,7 @@ public:
 
         }
 
-        uint32 GetData(uint32 type)
+        uint32 GetData(uint32 type) const
         {
             if (type == DATA_TYPE)
                 return GetCustomType();
@@ -584,7 +584,7 @@ public:
                 challengeeGUID = data;
         }
 
-        void DoAction(int32 const type)
+        void DoAction(int32 type)
         {
             if (type == EVENT_START)
             {
@@ -650,7 +650,7 @@ public:
 
         }
 
-        uint32 GetCustomType()
+        uint32 GetCustomType() const
         {
             switch (me->GetEntry())
             {
@@ -798,7 +798,7 @@ public:
 
         }
 
-        void UpdateAI(const uint32 uiDiff)
+        void UpdateAI(uint32 uiDiff)
         {
             if (!UpdateVictim())
                 return;

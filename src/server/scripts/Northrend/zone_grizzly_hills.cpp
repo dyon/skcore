@@ -725,7 +725,7 @@ public:
             uiFollowTimer=15000; // 15 sec
         }
 
-        void UpdateAI(const uint32 diff)
+        void UpdateAI(uint32 diff)
         {
             if(following)
             {
@@ -854,7 +854,7 @@ public:
                 firstGobGuid = go->GetGUID(); //Spawn leaf
         }
 
-        void UpdateAI(const uint32 diff)
+        void UpdateAI(uint32 diff)
         {
             if(uiPhaseTimer <= diff)
             {

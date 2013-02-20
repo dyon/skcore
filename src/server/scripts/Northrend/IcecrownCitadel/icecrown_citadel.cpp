@@ -2299,7 +2299,7 @@ class npc_sindragosas_ward : public CreatureScript
                 _waveNumber = 0;
             }
 
-            void DoAction(int32 const action)
+            void DoAction(int32 action)
             {
                 if (action == ACTION_START_GAUNTLET)
                     if (!_isEventInProgressOrDone)
@@ -2401,7 +2401,7 @@ class npc_sindragosas_ward : public CreatureScript
                 summons.Despawn(summon);
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim() || !_isEventInProgressOrDone)
                     return;
@@ -2533,7 +2533,7 @@ class npc_korkron_primalist: public CreatureScript
                 }
             }
 
-            void UpdateAI(const uint32 diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!instance)
                     return;
@@ -2656,7 +2656,7 @@ class npc_korkron_defender: public CreatureScript
                 }
             }
 
-            void UpdateAI(const uint32 diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!instance)
                     return;
@@ -2771,7 +2771,7 @@ class npc_skybreaker_vindicator: public CreatureScript
                 }
             }
 
-            void UpdateAI(const uint32 diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!instance)
                     return;
@@ -2880,7 +2880,7 @@ class npc_skybreaker_protector: public CreatureScript
                 }
             }
 
-            void UpdateAI(const uint32 diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!instance)
                     return;
@@ -3006,7 +3006,7 @@ class npc_icc_spire_frostwyrm: public CreatureScript
                 }
             }
 
-            void UpdateAI(const uint32 diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;

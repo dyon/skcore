@@ -112,7 +112,7 @@ class w_boss_julieta_la_esperanza : public CreatureScript
                 Talk(SAY_SLAY);
             }
       
-            void UpdateAI(const uint32 diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;

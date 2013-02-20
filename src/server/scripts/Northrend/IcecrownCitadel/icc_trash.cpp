@@ -210,7 +210,7 @@ public:
             events.ScheduleEvent(EVENT_WEBWRAP, 12000);
         }
 
-        void UpdateAI(const uint32 diff)
+        void UpdateAI(uint32 diff)
         {
              //Return since we have no target
             if (!UpdateVictim())
@@ -273,7 +273,7 @@ public:
             events.ScheduleEvent(EVENT_GLACIALBLAST, 13000);
         }
 
-        void UpdateAI(const uint32 diff)
+        void UpdateAI(uint32 diff)
         {
              //Return since we have no target
             if (!UpdateVictim())
@@ -325,7 +325,7 @@ public:
             events.ScheduleEvent(EVENT_SHIELDBASH, 8000);
         }
 
-        void UpdateAI(const uint32 diff)
+        void UpdateAI(uint32 diff)
         {
              //Return since we have no target
             if (!UpdateVictim())
@@ -378,7 +378,7 @@ public:
             events.ScheduleEvent(EVENT_SABERLASH, 8000);
         }
 
-        void UpdateAI(const uint32 diff)
+        void UpdateAI(uint32 diff)
         {
              //Return since we have no target
             if (!UpdateVictim())
@@ -435,7 +435,7 @@ public:
             events.ScheduleEvent(EVENT_SHADOWNOVA, 23000);
         }
 
-        void UpdateAI(const uint32 diff)
+        void UpdateAI(uint32 diff)
         {
              //Return since we have no target
             if (!UpdateVictim())
@@ -495,7 +495,7 @@ public:
             events.ScheduleEvent(EVENT_SHADOWMEND, urand(10000, 20000));
         }
 
-        void UpdateAI(const uint32 diff)
+        void UpdateAI(uint32 diff)
         {
              //Return since we have no target
             if (!UpdateVictim())
@@ -566,7 +566,7 @@ public:
             DoCast(me, SPELL_AURAOFDARKNESS);
         }
 
-        void UpdateAI(const uint32 diff)
+        void UpdateAI(uint32 diff)
         {
              //Return since we have no target
             if (!UpdateVictim())
@@ -633,7 +633,7 @@ public:
             events.ScheduleEvent(EVENT_CURSEOFAGONY, 10000);
         }
 
-        void UpdateAI(const uint32 diff)
+        void UpdateAI(uint32 diff)
         {
              //Return since we have no target
             if (!UpdateVictim())
@@ -699,7 +699,7 @@ public:
             events.ScheduleEvent(EVENT_SHADOWCLEAVE, 8000);
         }
 
-        void UpdateAI(const uint32 diff)
+        void UpdateAI(uint32 diff)
         {
              //Return since we have no target
             if (!UpdateVictim())
@@ -751,7 +751,7 @@ class npc_valkyr_herald : public CreatureScript
                 DoCast(me,SPELL_SOUL_FEAST_ALL);
             }
 
-            void UpdateAI(const uint32 uiDiff)
+            void UpdateAI(uint32 uiDiff)
             {
                 if (!UpdateVictim())
                     return;
@@ -799,7 +799,7 @@ class npc_blighted_abomination : public CreatureScript
                 m_uiHOOK_Timer = 5000;
             }
 
-            void UpdateAI(const uint32 uiDiff)
+            void UpdateAI(uint32 uiDiff)
             {
                 if (!UpdateVictim())
                     return;
@@ -864,7 +864,7 @@ class npc_vengeful_fleshreapert : public CreatureScript
                 DoCast(me,SPELL_SOUL_FEAST_ALL);
             }
 
-            void UpdateAI(const uint32 uiDiff)
+            void UpdateAI(uint32 uiDiff)
             {
                 if (!UpdateVictim())
                     return;
@@ -926,7 +926,7 @@ class npc_plague_scientist : public CreatureScript
                 DoCast(me,SPELL_SOUL_FEAST_ALL);
             }
 
-            void UpdateAI(const uint32 uiDiff)
+            void UpdateAI(uint32 uiDiff)
             {
                 if (!UpdateVictim())
                     return;
@@ -999,7 +999,7 @@ class npc_pustulating_horror : public CreatureScript
                 DoCast(me,SPELL_SOUL_FEAST_ALL);
             }
 
-            void UpdateAI(const uint32 uiDiff)
+            void UpdateAI(uint32 uiDiff)
             {
                 if (!UpdateVictim())
                     return;
@@ -1051,7 +1051,7 @@ class npc_decaying_colossus : public CreatureScript
                 DoCast(me,SPELL_SOUL_FEAST_ALL);
             }
 
-            void UpdateAI(const uint32 uiDiff)
+            void UpdateAI(uint32 uiDiff)
             {
                 if (!UpdateVictim())
                     return;
@@ -1101,7 +1101,7 @@ class npc_darkfallen_archmage : public CreatureScript
                 DoCast(me,SPELL_SOUL_FEAST_ALL);
             }
 
-            void UpdateAI(const uint32 uiDiff)
+            void UpdateAI(uint32 uiDiff)
             {
                 if (!UpdateVictim())
                     return;
@@ -1175,7 +1175,7 @@ class npc_darkfallen_blood_knight : public CreatureScript
                 DoCast(me,SPELL_SOUL_FEAST_ALL);
             }
 
-            void UpdateAI(const uint32 uiDiff)
+            void UpdateAI(uint32 uiDiff)
             {
                 if (!UpdateVictim())
                     return;
@@ -1248,7 +1248,7 @@ class npc_darkfallen_noble : public CreatureScript
                 DoCast(me,SPELL_SOUL_FEAST_ALL);
             }
 
-            void UpdateAI(const uint32 uiDiff)
+            void UpdateAI(uint32 uiDiff)
             {
                 if (!UpdateVictim())
                     return;
@@ -1316,7 +1316,7 @@ class npc_vampiric_fiend : public CreatureScript
                 DoCast(me, SPELL_DISEASE_CLOUD);
             }
 
-            void UpdateAI(const uint32 uiDiff)
+            void UpdateAI(uint32 uiDiff)
             {
                 if (!UpdateVictim())
                     return;
@@ -1363,7 +1363,7 @@ class npc_darkfallen_advisor : public CreatureScript
                 DoCast(me,SPELL_SOUL_FEAST_ALL);
             }
 
-            void UpdateAI(const uint32 uiDiff)
+            void UpdateAI(uint32 uiDiff)
             {
                 if (!UpdateVictim())
                     return;
@@ -1421,7 +1421,7 @@ class npc_darkfallen_commander : public CreatureScript
                 DoCast(me,SPELL_SOUL_FEAST_ALL);
             }
 
-            void UpdateAI(const uint32 uiDiff)
+            void UpdateAI(uint32 uiDiff)
             {
                 if (!UpdateVictim())
                     return;
@@ -1477,7 +1477,7 @@ class npc_darkfallen_lieutenant : public CreatureScript
                 DoCast(me, SPELL_SOUL_FEAST_ALL);
             }
 
-            void UpdateAI(const uint32 uiDiff)
+            void UpdateAI(uint32 uiDiff)
             {
                 if (!UpdateVictim())
                     return;
@@ -1535,7 +1535,7 @@ class npc_darkfallen_tactician : public CreatureScript
                 DoCast(me,SPELL_SOUL_FEAST_ALL);
             }
 
-            void UpdateAI(const uint32 uiDiff)
+            void UpdateAI(uint32 uiDiff)
             {
                 if (!UpdateVictim())
                     return;

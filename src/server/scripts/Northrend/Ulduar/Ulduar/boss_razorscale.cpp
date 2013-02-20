@@ -845,7 +845,7 @@ class npc_mole_machine_trigger : public CreatureScript
                 events.ScheduleEvent(EVENT_DISSAPPEAR, 10*IN_MILLISECONDS);
             }
 
-            void DoAction(int32 const /*action*/)
+            void DoAction(int32 /*action*/)
             {
                 summons.DespawnAll();
             }

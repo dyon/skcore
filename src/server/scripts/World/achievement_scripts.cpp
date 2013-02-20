@@ -331,6 +331,11 @@ class achievement_food_fight : public AchievementCriteriaScript
                     if (vehicle->GetVehicleInfo()->m_ID == 321)
                         return true;
             }
+
+            return false;
+        }
+};
+
 enum FlirtWithDisaster
 {
     AURA_PERFUME_FOREVER           = 70235,

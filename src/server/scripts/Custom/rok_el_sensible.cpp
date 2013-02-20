@@ -108,7 +108,7 @@ class w_boss_rok_el_sensible : public CreatureScript
                 Talk(SAY_SLAY);
             }
       
-            void UpdateAI(const uint32 diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;

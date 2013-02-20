@@ -1069,7 +1069,7 @@ class npc_artruis : public CreatureScript
                 events.ScheduleEvent(EVENT_ICY_VEINS, 4500);
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -1158,7 +1158,7 @@ class npc_artruis : public CreatureScript
                         jaloot->GetAI()->DoAction(ACTION_SET_QUESTGIVER);
             }
 
-            void DoAction(const int32 actionId)
+            void DoAction(int32 actionId)
             {
                 if (actionId == ACTION_UNBIND)
                 {
@@ -1235,7 +1235,7 @@ class npc_zepik_jaloot : public CreatureScript
                 me->GetMotionMaster()->MoveTargetedHome();
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -1273,7 +1273,7 @@ class npc_zepik_jaloot : public CreatureScript
             }
 
             // Spell: Bindings of Submission target Zepik&Jaloot implicitly, but don't turn up in SpellHit(), makes developer sad ;-(
-            void SpellHit(Unit* who, const SpellEntry* spell)
+            void SpellHit(Unit* who, const SpellInfo* spell)
             {
                 // Artruis chains Zepik&Jaloot, removes Tomb of Heartless, both attack player
                 if (spell->Id == SPELL_BINDINGS)
@@ -1324,7 +1324,7 @@ class npc_zepik_jaloot : public CreatureScript
                 me->AddAura(SPELL_TOMB_OF_HEARTLESS, me);
             }
 
-            void DoAction(const int32 actionId)
+            void DoAction(int32 actionId)
             {
                 if (actionId == ACTION_SET_QUESTGIVER)
                     me->SetFlag(UNIT_NPC_FLAGS, UNIT_NPC_FLAG_QUESTGIVER);
