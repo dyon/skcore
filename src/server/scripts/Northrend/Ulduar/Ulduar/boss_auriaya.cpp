@@ -163,7 +163,7 @@ class boss_auriaya : public CreatureScript
                 }
             }
 
-            uint32 GetData(uint32 type)
+            uint32 GetData(uint32 type) const
             {
                 switch (type)
                 {
@@ -221,7 +221,7 @@ class boss_auriaya : public CreatureScript
                 _JustDied();
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -313,7 +313,7 @@ class npc_auriaya_seeping_trigger : public CreatureScript
                 DoCast(me, SPELL_SEEPING_FERAL_ESSENCE);
             }
 
-            void UpdateAI(uint32 const /*diff*/)
+            void UpdateAI(uint32 /*diff*/)
             {
                 if (instance->GetBossState(BOSS_AURIAYA) != IN_PROGRESS)
                     me->DespawnOrUnsummon();
@@ -362,7 +362,7 @@ class npc_sanctum_sentry : public CreatureScript
                 }
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -432,7 +432,7 @@ class npc_feral_defender : public CreatureScript
                 events.ScheduleEvent(EVENT_RUSH, 10*IN_MILLISECONDS);
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (instance && instance->GetBossState(BOSS_AURIAYA) != IN_PROGRESS)
                     me->DespawnOrUnsummon();

@@ -328,7 +328,7 @@ class boss_algalon_the_observer : public CreatureScript
                 }
             }
 
-            void DoAction(int32 const action)
+            void DoAction(int32 action)
             {
                 switch (action)
                 {
@@ -538,7 +538,7 @@ class boss_algalon_the_observer : public CreatureScript
                 }
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if ((!(events.IsInPhase(PHASE_ROLE_PLAY) || events.IsInPhase(PHASE_BIG_BANG)) && !UpdateVictim()) || !CheckInRoom())
                     return;
@@ -731,7 +731,7 @@ class npc_living_constellation : public CreatureScript
                 return _isActive ? 1 : 0;
             }
 
-            void DoAction(int32 const action)
+            void DoAction(int32 action)
             {
                 switch (action)
                 {
@@ -768,7 +768,7 @@ class npc_living_constellation : public CreatureScript
                 caster->ToCreature()->DespawnOrUnsummon(1);
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!(_events.IsInPhase(PHASE_ROLE_PLAY) || _events.IsInPhase(PHASE_BIG_BANG)) && !UpdateVictim())
                     return;
@@ -862,7 +862,7 @@ class npc_brann_bronzebeard_algalon : public CreatureScript
             {
             }
 
-            void DoAction(int32 const action)
+            void DoAction(int32 action)
             {
                 switch (action)
                 {
@@ -916,7 +916,7 @@ class npc_brann_bronzebeard_algalon : public CreatureScript
                 _events.ScheduleEvent(EVENT_BRANN_MOVE_INTRO, delay);
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 UpdateVictim();
 
@@ -968,10 +968,11 @@ class npc_algalon_asteroid_target : public CreatureScript
     public:
         npc_algalon_asteroid_target() : CreatureScript("npc_algalon_asteroid_target") { }
 
-        struct npc_algalon_asteroid_targetAI : public Scripted_NoMovementAI
+        struct npc_algalon_asteroid_targetAI : public ScriptedAI
         {
-            npc_algalon_asteroid_targetAI(Creature* creature) : Scripted_NoMovementAI(creature)
+            npc_algalon_asteroid_targetAI(Creature* creature) : ScriptedAI(creature)
             {
+                SetCombatMovement(false);
             }
 
             void Reset()
@@ -981,7 +982,7 @@ class npc_algalon_asteroid_target : public CreatureScript
                 me->SetDisplayId(me->GetCreatureTemplate()->Modelid2);
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 events.Update(diff);
 

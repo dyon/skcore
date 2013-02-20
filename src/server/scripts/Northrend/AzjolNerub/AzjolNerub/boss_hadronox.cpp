@@ -207,7 +207,7 @@ class boss_hadronox : public CreatureScript
                 Reset();
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (me->IsVisible() && !_movementStarted)
                 {
@@ -338,7 +338,7 @@ class npc_anubar_crusher : public CreatureScript
                     _instance->SetData(DATA_HADRONOX_EVENT, IN_PROGRESS);
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -418,7 +418,7 @@ class npc_hadronox_nerubian : public CreatureScript
                 }
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (_wpReached && !me->isInCombat())
                 {

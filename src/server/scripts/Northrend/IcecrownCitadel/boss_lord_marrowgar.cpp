@@ -189,7 +189,7 @@ class boss_lord_marrowgar : public CreatureScript
                 }
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim() || !CheckInRoom())
                     return;
@@ -298,7 +298,7 @@ class boss_lord_marrowgar : public CreatureScript
                     case DATA_SPIKE_IMMUNE + 1:
                     case DATA_SPIKE_IMMUNE + 2:
                     {
-                        int32 index = type - DATA_SPIKE_IMMUNE;
+                        uint32 index = uint32(type - DATA_SPIKE_IMMUNE);
                         if (index < _boneSpikeImmune.size())
                             return _boneSpikeImmune[index];
 
@@ -322,7 +322,7 @@ class boss_lord_marrowgar : public CreatureScript
                 }
             }
 
-            void DoAction(int32 const action)
+            void DoAction(int32 action)
             {
                 if (action != ACTION_CLEAR_SPIKE_IMMUNITIES)
                     return;
@@ -395,7 +395,7 @@ class npc_coldflame : public CreatureScript
                 _events.ScheduleEvent(EVENT_COLDFLAME_TRIGGER, 500);
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 _events.Update(diff);
 
@@ -424,11 +424,13 @@ class npc_bone_spike : public CreatureScript
     public:
         npc_bone_spike() : CreatureScript("npc_bone_spike") { }
 
-        struct npc_bone_spikeAI : public Scripted_NoMovementAI
+        struct npc_bone_spikeAI : public ScriptedAI
         {
-            npc_bone_spikeAI(Creature* creature) : Scripted_NoMovementAI(creature), _hasTrappedUnit(false)
+            npc_bone_spikeAI(Creature* creature) : ScriptedAI(creature), _hasTrappedUnit(false)
             {
                 ASSERT(creature->GetVehicleKit());
+
+                SetCombatMovement(false);
             }
 
             void JustDied(Unit* /*killer*/)
@@ -472,7 +474,7 @@ class npc_bone_spike : public CreatureScript
                 passenger->ClearUnitState(UNIT_STATE_ONVEHICLE);
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!_hasTrappedUnit)
                     return;

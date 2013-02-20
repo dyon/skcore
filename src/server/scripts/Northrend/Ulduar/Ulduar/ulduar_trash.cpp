@@ -101,7 +101,7 @@ class npc_steelforged_defender : public CreatureScript
                         me->SetRespawnTime(604800); // Once the levi died, we will not spawn again
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -181,7 +181,7 @@ class npc_ironwork_cannon : public CreatureScript
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_DISABLE_MOVE);
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -247,7 +247,7 @@ class npc_molten_colossus : public CreatureScript
                 events.ScheduleEvent(EVENT_PYROBLAST, urand(6*IN_MILLISECONDS, 9*IN_MILLISECONDS));
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -332,7 +332,7 @@ class npc_runeforged_sentry : public CreatureScript
                         me->SetRespawnTime(WEEK); // Once the levi died, we will not spawn again
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -421,7 +421,7 @@ class npc_storm_tempered_keeper : public CreatureScript
                 events.ScheduleEvent(EVENT_SUMMONS_CHARGED_SPHERE, 10*IN_MILLISECONDS);
             }
 
-            void DoAction(int32 const action)
+            void DoAction(int32 action)
             {
                 switch (action)
                 {
@@ -458,7 +458,7 @@ class npc_storm_tempered_keeper : public CreatureScript
                     DoCast(SPELL_SEPARATION_ANXIETY);
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -525,7 +525,7 @@ class npc_charged_sphere : public CreatureScript
                 events.ScheduleEvent(EVENT_START_DEST_CHASE, 5*IN_MILLISECONDS);
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -604,7 +604,7 @@ class npc_corrupted_servitor : public CreatureScript
                 events.ScheduleEvent(EVENT_PETRIFY_JOINTS, 5*IN_MILLISECONDS);
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -674,7 +674,7 @@ class npc_misguided_nymph : public CreatureScript
                 events.ScheduleEvent(EVENT_WINTERS_EMBRACE, 1*IN_MILLISECONDS);
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -746,7 +746,7 @@ class npc_guardian_lasher : public CreatureScript
                 events.ScheduleEvent(EVENT_GUARDIANS_LASH, 2*IN_MILLISECONDS);
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -808,7 +808,7 @@ class npc_forest_swarmer : public CreatureScript
                 events.ScheduleEvent(EVENT_POLLINATE, 5*IN_MILLISECONDS);
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -873,7 +873,7 @@ class npc_mangrove_ent : public CreatureScript
                 events.ScheduleEvent(EVENT_TRANQUILITY, 5*IN_MILLISECONDS);
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -952,7 +952,7 @@ class npc_ironroot_lasher : public CreatureScript
                 events.ScheduleEvent(EVENT_IRONROOT_THORNS, 2*IN_MILLISECONDS);
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -1019,7 +1019,7 @@ class npc_natures_blade : public CreatureScript
                 events.ScheduleEvent(EVENT_LIVING_TSUNAMI, 3*IN_MILLISECONDS);
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -1083,7 +1083,7 @@ class npc_guardian_of_life : public CreatureScript
                 events.ScheduleEvent(EVENT_POISON_BREATH, 3*IN_MILLISECONDS);
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -1163,7 +1163,7 @@ class npc_faceless_horror : public CreatureScript
                 DoCast(me, SPELL_VOID_WAVE);
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -1266,7 +1266,7 @@ class npc_twilight_adherent : public CreatureScript
                 events.ScheduleEvent(EVENT_RENEW, urand(6*IN_MILLISECONDS, 12*IN_MILLISECONDS));
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -1358,7 +1358,7 @@ class npc_twilight_frost_mage : public CreatureScript
                 events.ScheduleEvent(EVENT_FROSTBOLT_VOLLEY, urand(5*IN_MILLISECONDS, 10*IN_MILLISECONDS));
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -1462,7 +1462,7 @@ class npc_twilight_pyromancer : public CreatureScript
                     events.ScheduleEvent(EVENT_SUMMON_FIRE_ELE, 1*IN_MILLISECONDS);
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -1544,7 +1544,7 @@ class npc_enslaved_fire_elemental : public CreatureScript
                 events.ScheduleEvent(EVENT_BLAST_WAVE, 6*IN_MILLISECONDS);
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -1616,7 +1616,7 @@ class npc_twilight_guardian : public CreatureScript
                 events.ScheduleEvent(EVENT_THUNDERCLAP, urand (5*IN_MILLISECONDS, 10*IN_MILLISECONDS));
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -1691,7 +1691,7 @@ class npc_twilight_slayer : public CreatureScript
                 events.ScheduleEvent(EVENT_MORTAL_STRIKE, urand(3*IN_MILLISECONDS, 6*IN_MILLISECONDS));
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -1775,7 +1775,7 @@ class npc_twilight_shadowblade : public CreatureScript
                         events.ScheduleEvent(EVENT_SHADOWSTEP, 0.5*IN_MILLISECONDS);
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -1881,7 +1881,7 @@ class npc_boomer_xp : public CreatureScript
                 DoCast(me, SPELL_BOOM_BOT, true);
             }
 
-            void UpdateAI(const uint32 /*diff*/)
+            void UpdateAI(uint32 /*diff*/)
             {
                 if (!UpdateVictim())
                     return;

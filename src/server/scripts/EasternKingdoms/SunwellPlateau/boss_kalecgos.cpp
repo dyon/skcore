@@ -280,7 +280,7 @@ public:
             return true;
         }
 
-        void UpdateAI(const uint32 diff);
+        void UpdateAI(uint32 diff);
     };
 };
 
@@ -416,7 +416,7 @@ public:
             return true;
         }
 
-        void UpdateAI(const uint32 diff)
+        void UpdateAI(uint32 diff)
         {
             if (!UpdateVictim())
                 return;
@@ -704,7 +704,7 @@ public:
                 damage *= 3;
         }
 
-        void UpdateAI(const uint32 diff)
+        void UpdateAI(uint32 diff)
         {
             if (!UpdateVictim())
                 return;

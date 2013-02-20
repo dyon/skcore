@@ -150,7 +150,7 @@ class AchievShatterHelper
         }
 
         // Updated by boss script
-        void Update(const uint32 diff)
+        void Update(uint32 diff)
         {
             if (achievFulfilled || !gotInformed)    // Nothing to be done if achievement got already fulfilled, or tracking was not started yet.
                 return;
@@ -252,7 +252,7 @@ class boss_ignis : public CreatureScript
                     Talk(SAY_SLAY);
             }
 
-            void DoAction(const int32 action)
+            void DoAction(int32 action)
             {
                 switch (action)
                 {
@@ -266,7 +266,7 @@ class boss_ignis : public CreatureScript
                 }
             }
 
-            void UpdateAI(const uint32 diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -417,7 +417,7 @@ class npc_iron_construct : public CreatureScript
                 }
             }
 
-            void UpdateAI(const uint32 /*uiDiff*/)
+            void UpdateAI(uint32 /*uiDiff*/)
             {
                 if (!UpdateVictim())
                     return;
@@ -490,7 +490,7 @@ class npc_scorch_ground : public CreatureScript
                 heatTimer = 0;
             }
 
-            void UpdateAI(const uint32 uiDiff)
+            void UpdateAI(uint32 uiDiff)
             {
                 if (heat)
                 {

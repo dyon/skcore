@@ -336,7 +336,7 @@ class boss_steelbreaker : public CreatureScript
                 DoAction(ACTION_UPDATEPHASE);
             }
 
-            uint32 GetData(uint32 type)
+            uint32 GetData(uint32 type) const
             {
                 if (type == DATA_I_CHOOSE_YOU_PHASE_CHECK)
                     return (phase >= 3) ? 1 : 0;
@@ -344,7 +344,7 @@ class boss_steelbreaker : public CreatureScript
                 return 0;
             }
 
-            void DoAction(int32 const action)
+            void DoAction(int32 action)
             {
                 switch (action)
                 {
@@ -473,7 +473,7 @@ class boss_steelbreaker : public CreatureScript
                     return 0;
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -637,14 +637,14 @@ class boss_runemaster_molgeim : public CreatureScript
                 DoAction(ACTION_UPDATEPHASE);
             }
 
-            uint32 GetData(uint32 type)
+            uint32 GetData(uint32 type) const
             {
                 if (type == DATA_I_CHOOSE_YOU_PHASE_CHECK)
                     return (phase >= 3) ? 1 : 0;
                 return 0;
             }
 
-            void DoAction(int32 const action)
+            void DoAction(int32 action)
             {
                 switch (action)
                 {
@@ -708,7 +708,7 @@ class boss_runemaster_molgeim : public CreatureScript
                 }
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -773,11 +773,12 @@ class mob_rune_of_power : public CreatureScript
     public:
         mob_rune_of_power() : CreatureScript("mob_rune_of_power") {}
 
-        struct mob_rune_of_powerAI : public Scripted_NoMovementAI
+        struct mob_rune_of_powerAI : public ScriptedAI
         {
-            mob_rune_of_powerAI(Creature* creature) : Scripted_NoMovementAI(creature)
+            mob_rune_of_powerAI(Creature* creature) : ScriptedAI(creature)
             {
                 me->SetInCombatWithZone();
+                SetCombatMovement(false);
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_NON_ATTACKABLE);
                 me->setFaction(16); // Same faction as bosses
                 DoCast(SPELL_RUNE_OF_POWER);
@@ -815,7 +816,7 @@ class mob_lightning_elemental : public CreatureScript
                 }
             }
 
-            void UpdateAI(uint32 const /*diff*/)
+            void UpdateAI(uint32 /*diff*/)
             {
                 if (!UpdateVictim())
                     return;
@@ -863,7 +864,7 @@ class mob_rune_of_summoning : public CreatureScript
                     Molgeim->AI()->JustSummoned(summon);    // Move ownership, take care that the spawned summon does not know about this
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (summonTimer <= diff)
                     SummonLightningElemental();
@@ -937,7 +938,7 @@ class boss_stormcaller_brundir : public CreatureScript
                 DoAction(ACTION_UPDATEPHASE);
             }
 
-            uint32 GetData(uint32 type)
+            uint32 GetData(uint32 type) const
             {
                 switch (type)
                 {
@@ -969,7 +970,7 @@ class boss_stormcaller_brundir : public CreatureScript
                         }
             }
 
-            void DoAction(int32 const action)
+            void DoAction(int32 action)
             {
                 switch (action)
                 {
@@ -1036,7 +1037,7 @@ class boss_stormcaller_brundir : public CreatureScript
                 }
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;

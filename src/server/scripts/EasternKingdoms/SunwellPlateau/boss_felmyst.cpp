@@ -552,7 +552,7 @@ public:
             FlightCount++;
         }
 
-        void UpdateAI(const uint32 diff)
+        void UpdateAI(uint32 diff)
         {
             if(!me->IsVisible())
             {
@@ -705,7 +705,7 @@ public:
             DoZoneInCombat();
             //me->CastSpell(me, SPELL_VAPOR_FORCE, true); core bug
         }
-        void UpdateAI(const uint32 diff)
+        void UpdateAI(uint32 diff)
         {
             if(!me->getVictim())
                 AttackStart(SelectTarget(SELECT_TARGET_RANDOM, 0));
@@ -760,7 +760,7 @@ public:
         void EnterCombat(Unit* who) {}
         void AttackStart(Unit* who) {}
         void MoveInLineOfSight(Unit* who) {}
-        void UpdateAI(const uint32 diff)
+        void UpdateAI(uint32 diff)
         {
             if(me->HasAuraEffect(SPELL_TRAIL_TRIGGER,0))
                 return;

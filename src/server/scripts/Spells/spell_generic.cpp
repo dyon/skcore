@@ -3889,6 +3889,63 @@ class spell_pilgrims_bounty_buff_food : public SpellScriptLoader
         }
 };
 
+enum ServiceUniform
+{
+    SPELL_SERVICE_UNIFORM       = 71450,
+
+    MODEL_GOBLIN_MALE           = 31002,
+    MODEL_GOBLIN_FEMALE         = 31003,
+};
+
+class spell_gen_aura_service_uniform : public SpellScriptLoader
+{
+    public:
+        spell_gen_aura_service_uniform() : SpellScriptLoader("spell_gen_aura_service_uniform") { }
+
+        class spell_gen_aura_service_uniform_AuraScript : public AuraScript
+        {
+            PrepareAuraScript(spell_gen_aura_service_uniform_AuraScript);
+
+            bool Validate(SpellInfo const* /*spell*/)
+            {
+                if (!sSpellMgr->GetSpellInfo(SPELL_SERVICE_UNIFORM))
+                    return false;
+                return true;
+            }
+
+            void OnApply(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
+            {
+                // Apply model goblin
+                Unit* target = GetTarget();
+                if (target->GetTypeId() == TYPEID_PLAYER)
+                {
+                    if (target->getGender() == GENDER_MALE)
+                        target->SetDisplayId(MODEL_GOBLIN_MALE);
+                    else
+                        target->SetDisplayId(MODEL_GOBLIN_FEMALE);
+                }
+            }
+
+            void OnRemove(AuraEffect const* /*aurEff*/, AuraEffectHandleModes /*mode*/)
+            {
+                Unit* target = GetTarget();
+                if (target->GetTypeId() == TYPEID_PLAYER)
+                    target->RestoreDisplayId();
+            }
+
+            void Register()
+            {
+                AfterEffectApply += AuraEffectRemoveFn(spell_gen_aura_service_uniform_AuraScript::OnApply, EFFECT_0, SPELL_AURA_TRANSFORM, AURA_EFFECT_HANDLE_REAL);
+                AfterEffectRemove += AuraEffectRemoveFn(spell_gen_aura_service_uniform_AuraScript::OnRemove, EFFECT_0, SPELL_AURA_TRANSFORM, AURA_EFFECT_HANDLE_REAL);
+            }
+        };
+
+        AuraScript* GetAuraScript() const
+        {
+            return new spell_gen_aura_service_uniform_AuraScript();
+        }
+};
+
 void AddSC_generic_spell_scripts()
 {
     new spell_gen_absorb0_hitlimit1();
@@ -3986,4 +4043,5 @@ void AddSC_generic_spell_scripts()
     new spell_pilgrims_bounty_buff_food("spell_gen_pumpkin_pie", SPELL_WELL_FED_SPIRIT_TRIGGER);
     new spell_pilgrims_bounty_buff_food("spell_gen_candied_sweet_potato", SPELL_WELL_FED_HASTE_TRIGGER);
     new spell_gen_replenishment();
+    new spell_gen_aura_service_uniform();
 }

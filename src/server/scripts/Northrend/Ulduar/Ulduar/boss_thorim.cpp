@@ -310,7 +310,7 @@ class npc_thorim_controller : public CreatureScript
                 }
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (instance && instance->GetBossState(BOSS_THORIM) == DONE)
                     return;
@@ -553,7 +553,7 @@ class boss_thorim : public CreatureScript
                 Reset();
             }
 
-            void UpdateAI(const uint32 diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -666,7 +666,7 @@ class boss_thorim : public CreatureScript
                 // EnterEvadeIfOutOfCombatArea(diff);
             }
 
-            void DoAction(int32 const action)
+            void DoAction(int32 action)
             {
                 switch (action)
                 {
@@ -936,7 +936,7 @@ class npc_thorim_pre_phase_add : public CreatureScript
                     ScriptedAI::AttackStart(target);
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -1170,7 +1170,7 @@ class npc_thorim_arena_phase_add : public CreatureScript
                 Reset();
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -1324,7 +1324,7 @@ class npc_runic_colossus : public CreatureScript
                     instance->SetData(DATA_RUNIC_DOOR, GO_STATE_ACTIVE);
             }
 
-            void DoAction(int32 const action)
+            void DoAction(int32 action)
             {
                 switch (action)
                 {
@@ -1358,7 +1358,7 @@ class npc_runic_colossus : public CreatureScript
                 me->InterruptNonMeleeSpells(true);
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (phase == PHASE_IDLE || (!UpdateVictim() && phase != PHASE_RUNIC_SMASH))
                     return;
@@ -1435,11 +1435,12 @@ class npc_runic_smash : public CreatureScript
     public:
         npc_runic_smash() : CreatureScript("npc_runic_smash") {}
 
-        struct npc_runic_smashAI : public Scripted_NoMovementAI
+        struct npc_runic_smashAI : public ScriptedAI
         {
-            npc_runic_smashAI(Creature* creature) : Scripted_NoMovementAI(creature)
+            npc_runic_smashAI(Creature* creature) : ScriptedAI(creature)
             {
                 me->SetReactState(REACT_PASSIVE);
+                SetCombatMovement(false);
                 me->SetDisplayId(me->GetCreatureTemplate()->Modelid2);
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE);
             }
@@ -1454,7 +1455,7 @@ class npc_runic_smash : public CreatureScript
                 ExplodeTimer = data;
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (ExplodeTimer <= diff)
                 {
@@ -1548,7 +1549,7 @@ class npc_ancient_rune_giant : public CreatureScript
                     instance->SetData(DATA_STONE_DOOR, GO_STATE_ACTIVE);
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -1631,7 +1632,7 @@ class npc_sif : public CreatureScript
                 events.ScheduleEvent(EVENT_FROSTNOVA, urand(20*IN_MILLISECONDS, 25*IN_MILLISECONDS));
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -1701,7 +1702,7 @@ class npc_lightning_orb : public CreatureScript
                 me->GetMotionMaster()->MovePath(NPC_LIGHTNING_ORB, false);
             }
 
-            void UpdateAI(uint32 const /*diff*/) {}
+            void UpdateAI(uint32 /*diff*/) {}
         };
 
         CreatureAI* GetAI(Creature* creature) const

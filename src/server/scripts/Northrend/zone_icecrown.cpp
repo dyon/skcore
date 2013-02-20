@@ -314,7 +314,7 @@ public:
             }
         }
 
-        void UpdateAI(const uint32 uiDiff)
+        void UpdateAI(uint32 uiDiff)
         {
             if (!UpdateVictim())
                 return;
@@ -870,9 +870,12 @@ class npc_guardian_pavilion : public CreatureScript
 public:
     npc_guardian_pavilion() : CreatureScript("npc_guardian_pavilion") { }
 
-    struct npc_guardian_pavilionAI : public Scripted_NoMovementAI
+    struct npc_guardian_pavilionAI : public ScriptedAI
     {
-        npc_guardian_pavilionAI(Creature* creature) : Scripted_NoMovementAI(creature) {}
+        npc_guardian_pavilionAI(Creature* creature) : ScriptedAI(creature)
+        {
+            SetCombatMovement(false);
+        }
 
         void MoveInLineOfSight(Unit* who)
         {
@@ -976,9 +979,12 @@ class npc_tournament_training_dummy : public CreatureScript
     public:
         npc_tournament_training_dummy(): CreatureScript("npc_tournament_training_dummy"){}
 
-        struct npc_tournament_training_dummyAI : Scripted_NoMovementAI
+        struct npc_tournament_training_dummyAI : ScriptedAI
         {
-            npc_tournament_training_dummyAI(Creature* creature) : Scripted_NoMovementAI(creature) {}
+            npc_tournament_training_dummyAI(Creature* creature) : ScriptedAI(creature)
+            {
+                SetCombatMovement(false);
+            }
 
             EventMap events;
             bool isVulnerable;
@@ -1048,7 +1054,7 @@ class npc_tournament_training_dummy : public CreatureScript
                         isVulnerable = true;
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 events.Update(diff);
 
@@ -1591,13 +1597,15 @@ class npc_blessed_banner : public CreatureScript
 public:
     npc_blessed_banner() : CreatureScript("npc_blessed_banner") { }
 
-    struct npc_blessed_bannerAI : public Scripted_NoMovementAI
+    struct npc_blessed_bannerAI : public ScriptedAI
     {
-        npc_blessed_bannerAI(Creature* creature) : Scripted_NoMovementAI(creature), Summons(me)
+        npc_blessed_bannerAI(Creature* creature) : ScriptedAI(creature), Summons(me)
         {
             HalofSpawned = false;
             PhaseCount = 0;
             Summons.DespawnAll();
+
+            SetCombatMovement(false);
         }
 
         EventMap events;
@@ -1636,7 +1644,7 @@ public:
             me->DespawnOrUnsummon();
         }
 
-        void UpdateAI(uint32 const diff)
+        void UpdateAI(uint32 diff)
         {
             events.Update(diff);
 

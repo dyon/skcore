@@ -161,10 +161,11 @@ class npc_flash_freeze : public CreatureScript
     public:
         npc_flash_freeze() : CreatureScript("npc_flash_freeze") {}
 
-        struct npc_flash_freezeAI : public Scripted_NoMovementAI
+        struct npc_flash_freezeAI : public ScriptedAI
         {
-            npc_flash_freezeAI(Creature* creature) : Scripted_NoMovementAI(creature), instance(me->GetInstanceScript())
+            npc_flash_freezeAI(Creature* creature) : ScriptedAI(creature), instance(me->GetInstanceScript())
             {
+                SetCombatMovement(false);
                 me->SetDisplayId(me->GetCreatureTemplate()->Modelid2);
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED | UNIT_FLAG_PACIFIED);
             }            
@@ -175,7 +176,7 @@ class npc_flash_freeze : public CreatureScript
                 checkDespawnTimer = 1*IN_MILLISECONDS;
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if ((me->getVictim() && me->getVictim()->GetGUID() != targetGUID) || (instance && instance->GetBossState(BOSS_HODIR) != IN_PROGRESS))
                     me->DespawnOrUnsummon();
@@ -245,11 +246,12 @@ class npc_ice_block : public CreatureScript
     public:
         npc_ice_block() : CreatureScript("npc_ice_block") {}
 
-        struct npc_ice_blockAI : public Scripted_NoMovementAI
+        struct npc_ice_blockAI : public ScriptedAI
         {
-            npc_ice_blockAI(Creature* creature) : Scripted_NoMovementAI(creature)
+            npc_ice_blockAI(Creature* creature) : ScriptedAI(creature)
             {
                 instance = me->GetInstanceScript();
+                SetCombatMovement(false);
                 me->SetDisplayId(me->GetCreatureTemplate()->Modelid2);
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED | UNIT_FLAG_PACIFIED);
                 targetGUID = 0;
@@ -290,7 +292,7 @@ class npc_ice_block : public CreatureScript
                 }
             }
 
-            void UpdateAI(uint32 const /*diff*/)
+            void UpdateAI(uint32 /*diff*/)
             {
                 if (instance && instance->GetBossState(BOSS_HODIR) == DONE)
                     me->DespawnOrUnsummon();
@@ -395,7 +397,7 @@ class boss_hodir : public CreatureScript
                 }
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim())
                     return;
@@ -479,7 +481,7 @@ class boss_hodir : public CreatureScript
                 DoMeleeAttackIfReady();
             }
 
-            void DoAction(int32 const action)
+            void DoAction(int32 action)
             {
                 switch (action)
                 {
@@ -536,10 +538,11 @@ class npc_icicle : public CreatureScript
     public:
         npc_icicle() : CreatureScript("npc_icicle") {}
 
-        struct npc_icicleAI : public Scripted_NoMovementAI
+        struct npc_icicleAI : public ScriptedAI
         {
-            npc_icicleAI(Creature* creature) : Scripted_NoMovementAI(creature)
+            npc_icicleAI(Creature* creature) : ScriptedAI(creature)
             {
+                SetCombatMovement(false);
                 me->SetDisplayId(me->GetCreatureTemplate()->Modelid1);
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_PACIFIED | UNIT_FLAG_NOT_SELECTABLE);
                 me->SetReactState(REACT_PASSIVE);
@@ -550,7 +553,7 @@ class npc_icicle : public CreatureScript
                 icicleTimer = 2.5*IN_MILLISECONDS;
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (icicleTimer <= diff)
                 {
@@ -585,10 +588,11 @@ class npc_snowpacked_icicle : public CreatureScript
     public:
         npc_snowpacked_icicle() : CreatureScript("npc_snowpacked_icicle") {}
 
-        struct npc_snowpacked_icicleAI : public Scripted_NoMovementAI
+        struct npc_snowpacked_icicleAI : public ScriptedAI
         {
-            npc_snowpacked_icicleAI(Creature* creature) : Scripted_NoMovementAI(creature)
+            npc_snowpacked_icicleAI(Creature* creature) : ScriptedAI(creature)
             {
+                SetCombatMovement(false);
                 me->SetDisplayId(me->GetCreatureTemplate()->Modelid2);
                 me->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_NON_ATTACKABLE | UNIT_FLAG_NOT_SELECTABLE | UNIT_FLAG_PACIFIED);
                 me->SetReactState(REACT_PASSIVE);
@@ -599,7 +603,7 @@ class npc_snowpacked_icicle : public CreatureScript
                 despawnTimer = 12*IN_MILLISECONDS;
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (despawnTimer <= diff)
                 {
@@ -649,7 +653,7 @@ class npc_hodir_priest : public CreatureScript
                 AttackStartCaster(who, 20.0f);
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim() || me->HasUnitState(UNIT_STATE_STUNNED) || me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED))
                     return;
@@ -734,7 +738,7 @@ class npc_hodir_shaman : public CreatureScript
                 AttackStartCaster(who, 20.0f);
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim() || me->HasUnitState(UNIT_STATE_STUNNED) || me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED))
                     return;
@@ -821,7 +825,7 @@ class npc_hodir_druid : public CreatureScript
                 AttackStartCaster(who, 20.0f);
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim() || me->HasUnitState(UNIT_STATE_STUNNED) || me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED))
                     return;
@@ -912,7 +916,7 @@ class npc_hodir_mage : public CreatureScript
                     summons.Despawn(summoned);
             }
 
-            void UpdateAI(uint32 const diff)
+            void UpdateAI(uint32 diff)
             {
                 if (!UpdateVictim() || me->HasUnitState(UNIT_STATE_STUNNED) || me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_STUNNED))
                     return;
