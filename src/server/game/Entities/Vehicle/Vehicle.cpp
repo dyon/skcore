@@ -259,7 +259,7 @@ void Vehicle::RemoveAllPassengers()
 
     /// Setting to_Abort to true will cause @VehicleJoinEvent::Abort to be executed on next @Unit::UpdateEvents call
     /// This will properly "reset" the pending join process for the passenger.
-    while (_pendingJoinEvents.size())
+    while (!_pendingJoinEvents.empty())
     {
         VehicleJoinEvent* e = _pendingJoinEvents.front();
         e->to_Abort = true;
@@ -425,12 +425,12 @@ bool Vehicle::AddPassenger(Unit* unit, int8 seatId)
     /// @Prevent adding passengers when vehicle is uninstalling. (Bad script in OnUninstall/OnRemovePassenger/PassengerBoarded hook.)
     if (_status == STATUS_UNINSTALLING)
     {
-        sLog->outError(LOG_FILTER_VEHICLES, "Passenger GuidLow: %u, Entry: %u, attempting to board vehicle GuidLow: %u, Entry: %u during uninstall! SeatId: %i",
+        sLog->outError(LOG_FILTER_VEHICLES, "Passenger GuidLow: %u, Entry: %u, attempting to board vehicle GuidLow: %u, Entry: %u during uninstall! SeatId: %d",
             unit->GetGUIDLow(), unit->GetEntry(), _me->GetGUIDLow(), _me->GetEntry(), (int32)seatId);
         return false;
     }
 
-    sLog->outDebug(LOG_FILTER_VEHICLES, "Unit %s scheduling enter vehicle (entry: %u, vehicleId: %u, guid: %u (dbguid: %s) on seat %d",
+    sLog->outDebug(LOG_FILTER_VEHICLES, "Unit %s scheduling enter vehicle (entry: %u, vehicleId: %u, guid: %u (dbguid: %u) on seat %d",
         unit->GetName().c_str(), _me->GetEntry(), _vehicleInfo->m_ID, _me->GetGUIDLow(),
         (_me->GetTypeId() == TYPEID_UNIT ? _me->ToCreature()->GetDBTableGUIDLow() : 0), (int32)seatId);
 
@@ -709,6 +709,31 @@ void Vehicle::CancelJoinEvent(VehicleJoinEvent* e)
 }
 
 /**
+ * @fn void Vehicle::RemovePendingEvent(VehicleJoinEvent* e)
+ *
+ * @brief Removes @VehicleJoinEvent objects from pending join event store.
+ *        This method only removes it after it's executed or aborted to prevent leaving
+ *        pointers to deleted events.
+ *
+ * @author Shauren
+ * @date 22-2-2013
+ *
+ * @param [in] e The VehicleJoinEvent* to remove from pending event store.
+ */
+
+void Vehicle::RemovePendingEvent(VehicleJoinEvent* e)
+{
+    for (std::deque<VehicleJoinEvent*>::iterator itr = _pendingJoinEvents.begin(); itr != _pendingJoinEvents.end(); ++itr)
+    {
+        if (*itr == e)
+        {
+            _pendingJoinEvents.erase(itr);
+            break;
+        }
+    }
+}
+
+/**
  * @fn bool VehicleJoinEvent::Execute(uint64, uint32)
  *
  * @brief Actually adds the passenger @Passenger to vehicle @Target.
@@ -744,6 +769,7 @@ bool VehicleJoinEvent::Execute(uint64, uint32)
     }
 
     Passenger->InterruptNonMeleeSpells(false);
+    Passenger->RemoveAurasByType(SPELL_AURA_MOUNTED);
 
     Player* player = Passenger->ToPlayer();
     if (player)
