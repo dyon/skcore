@@ -16,13 +16,11 @@ SET flags=4
 WHERE entry=185562;
 
 /*Insertando las Condiciones en la que aparece el Grimorio, solamente si el pj tiene la quest*/
-DELETE FROM Conditions WHERE sourceentry=22911 AND SourceTypeOrReferenceId=22;
-INSERT INTO Conditions VALUES 
-(22,1,@ENTRY,0,0,9,0,10998,0,0,0,0,'','Execute Summon Object Only If Player has Quest taken');
+DELETE FROM conditions WHERE sourceentry=22911 AND SourceTypeOrReferenceId=22;
+INSERT INTO conditions VALUES 
+(22,1,@ENTRY,0,0,9,0,10998,0,0,0,0,0,'','Execute Summon Object Only If Player has Quest taken');
 
 -- Quest: El foco de la playa
-SELECT * FROM item_template WHERE entry=36751;
-
 UPDATE item_template
 SET spellid_2=50546
 WHERE entry=36751;
@@ -49,13 +47,12 @@ UPDATE item_template
 SET spellid_2=50548
 WHERE entry=36815;
 
-SELECT * FROM spell_scripts WHERE id=50548
 DELETE FROM spell_scripts WHERE id=50548;
 
 INSERT INTO spell_scripts VALUES
 (50548,0,3,8,26887,0,0,0,0,0,0);
 
-UPDATE creature_Template 
+UPDATE creature_template 
 SET AIName='', ScriptName=''
 WHERE entry=26889;
 
