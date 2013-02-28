@@ -439,6 +439,9 @@ bool Vehicle::AddPassenger(Unit* unit, int8 seatId)
     // exits the vehicle will dismiss. That's why the actual adding the passenger to the vehicle is scheduled
     // asynchronously, so it can be cancelled easily in case the vehicle is uninstalled meanwhile.
     SeatMap::iterator seat;
+    VehicleJoinEvent* e = new VehicleJoinEvent(this, unit);
+    unit->m_Events.AddEvent(e, unit->m_Events.CalculateTime(0));
+
     if (seatId < 0) // no specific seat requirement
     {
         for (seat = Seats.begin(); seat != Seats.end(); ++seat)
@@ -446,22 +449,25 @@ bool Vehicle::AddPassenger(Unit* unit, int8 seatId)
                 break;
 
         if (seat == Seats.end()) // no available seat
+        {
+            e->to_Abort = true;
             return false;
+        }
 
-        VehicleJoinEvent* e = new VehicleJoinEvent(this, unit, seat);
+        e->Seat = seat;
         _pendingJoinEvents.push_back(e);
-        unit->m_Events.AddEvent(e, unit->m_Events.CalculateTime(0));
     }
     else
     {
         seat = Seats.find(seatId);
         if (seat == Seats.end())
+        {
+            e->to_Abort = true;
             return false;
+        }
 
-        VehicleJoinEvent* e = new VehicleJoinEvent(this, unit, seat);
+        e->Seat = seat;
         _pendingJoinEvents.push_back(e);
-        unit->m_Events.AddEvent(e, unit->m_Events.CalculateTime(0));
-
         if (seat->second.Passenger)
         {
             Unit* passenger = ObjectAccessor::GetUnit(*GetBase(), seat->second.Passenger);
@@ -483,7 +489,7 @@ bool Vehicle::AddPassenger(Unit* unit, int8 seatId)
  * @author Machiavelli
  * @date 17-2-2013
  *
- * @param [in,out] unit The passenger to remove..
+ * @param [in,out] unit The passenger to remove.
  */
 
 void Vehicle::RemovePassenger(Unit* unit)
@@ -573,6 +579,26 @@ void Vehicle::Dismiss()
 }
 
 /**
+ * @fn bool Vehicle::IsVehicleInUse() const
+ *
+ * @brief Returns information whether the vehicle is currently used by any unit
+ *
+ * @author Shauren
+ * @date 26-2-2013
+ *
+ * @return true if any passenger is boarded on vehicle, false otherwise.
+ */
+
+bool Vehicle::IsVehicleInUse() const
+{
+    for (SeatMap::const_iterator itr = Seats.begin(); itr != Seats.end(); ++itr)
+        if (itr->second.Passenger)
+            return true;
+
+    return false;
+}
+
+/**
  * @fn void Vehicle::InitMovementInfoForBase()
  *
  * @brief Sets correct MovementFlags2 based on VehicleFlags from DBC.
@@ -610,7 +636,7 @@ void Vehicle::InitMovementInfoForBase()
  * @return null if passenger not found on vehicle, else the DBC record for the seat.
  */
 
-VehicleSeatEntry const* Vehicle::GetSeatForPassenger(Unit* passenger)
+VehicleSeatEntry const* Vehicle::GetSeatForPassenger(Unit const* passenger)
 {
     SeatMap::iterator itr;
     for (itr = Seats.begin(); itr != Seats.end(); ++itr)
