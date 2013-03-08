@@ -2250,7 +2250,8 @@ void Creature::SetInCombatWithZone()
         }
     }
 }
-uint32 Creature:: GetShieldBlockValuePctMod() const
+
+float Creature:: GetShieldBlockValuePctMod() const
 {
     return 1.0f;
 }

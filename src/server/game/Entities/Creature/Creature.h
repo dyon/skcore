@@ -501,7 +501,7 @@ class Creature : public Unit, public GridObject<Creature>, public MapCreature
         bool SetDisableGravity(bool disable, bool packetOnly = false);
         bool SetHover(bool enable);
 
-        uint32 GetShieldBlockValuePctMod() const;
+        float GetShieldBlockValuePctMod() const;
 
         uint32 GetShieldBlockValue() const;
 

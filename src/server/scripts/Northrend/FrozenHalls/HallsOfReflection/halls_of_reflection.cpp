@@ -572,7 +572,7 @@ public:
                     if (Creature* pUther = me->GetCreature(*me, uiUther))
                     {
                         if (Creature* pLichKing = me->GetCreature(*me, uiLichKing))
-                            pUther->SetOrientation(0.851610);
+                            pUther->SetOrientation(0.851610f);
                         pUther->SetUInt32Value(UNIT_NPC_EMOTESTATE, EMOTE_STATE_COWER);
                         if (instance->GetData(DATA_TEAM_IN_INSTANCE) == ALLIANCE)
                             pUther->AI()->Talk(SAY_UTHER_INTRO_A2_9);

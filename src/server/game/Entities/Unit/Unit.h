@@ -1460,7 +1460,7 @@ class Unit : public WorldObject
         bool CanUseAttackType(uint8 attacktype) const;
         
         virtual float GetShieldBlockValuePctMod() const =0;
-        virtual uint32 GetShieldBlockValue() const =0;
+         virtual uint32 GetShieldBlockValue() const =0;
         /*uint32 GetShieldBlockValue(uint32 soft_cap, uint32 hard_cap) const
         {
             uint32 value = GetShieldBlockValue();
@@ -1850,9 +1850,9 @@ class Unit : public WorldObject
         ShapeshiftForm GetShapeshiftForm() const { return ShapeshiftForm(GetByteValue(UNIT_FIELD_BYTES_2, 3)); }
         void SetShapeshiftForm(ShapeshiftForm form);
 
-        inline bool IsInFeralForm() const;
+         bool IsInFeralForm() const;
 
-        inline bool IsInDisallowedMountForm() const;
+         bool IsInDisallowedMountForm() const;
 
         float m_modMeleeHitChance;
         float m_modRangedHitChance;
