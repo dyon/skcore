@@ -162,7 +162,7 @@ enum Vehicles
     VEHICLE_DEMOLISHER    = 33109
 };
 
-#define _DATA_SHUTOUT      29112912 // 2911, 2912 are achievement IDs   // TODO: Maybe get rid of those two defines
+#define _DATA_SHUTOUT      29112912 // 2911, 2912 are achievement IDs   /// @todo Maybe get rid of those two defines
 #define _DATA_ORBIT_ACHIEVEMENTS    1
 
 enum Yells
@@ -443,7 +443,7 @@ class boss_flame_leviathan : public CreatureScript
                 // Set DynFlags 12
                 // Set NPCFlags 0
                 Talk(SAY_DEATH);
-                // TODO: These chests should be somewhere around...
+                /// @todo These chests should be somewhere around...
                 // Check if changing the loot-mode as shown below works as considered
                 if (GameObject* go = me->FindNearestGameObject(RAID_MODE(GO_LEVIATHAN_CHEST_10, GO_LEVIATHAN_CHEST_25), 250.0f))
                     if (HaveActiveTowers())
@@ -578,7 +578,7 @@ class boss_flame_leviathan : public CreatureScript
                             Talk(SAY_TOWER_FLAME);
                             return;
                         case EVENT_HODIRS_FURY:      // Tower of Frost
-                            for (uint8 i = 0; i < 7; i++)   // TODO: Check where this "7" comes from
+                            for (uint8 i = 0; i < 7; i++)   /// @todo Check where this "7" comes from
                             {
                                 if (Creature* hodir = DoSummon(NPC_HODIR_BEACON, me, 50.0f, 0))
                                     hodir->GetMotionMaster()->MoveRandom(100);
@@ -587,7 +587,7 @@ class boss_flame_leviathan : public CreatureScript
                             return;
                         case EVENT_FREYAS_WARD:    // Tower of Nature
                             Talk(SAY_TOWER_NATURE);
-                            for (int32 i = 0; i < 4; i++)   // TODO: Check where this "4" comes from
+                            for (int32 i = 0; i < 4; i++)   /// @todo Check where this "4" comes from
                                 me->SummonCreature(NPC_FREYA_BEACON, FreyaBeacons[i]);
 
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM))
@@ -751,7 +751,7 @@ class npc_flame_leviathan_defense_cannon : public CreatureScript
 
             void UpdateAI(uint32 diff)
             {
-                // TODO: accessory is being spawned even if the parent vehicle is dead, needs core fix
+                /// @todo accessory is being spawned even if the parent vehicle is dead, needs core fix
                 if (instance->GetBossState(BOSS_LEVIATHAN) == DONE)
                     me->DespawnOrUnsummon();
 
@@ -823,7 +823,7 @@ class npc_flame_leviathan_seat : public CreatureScript
 
             void UpdateAI(uint32 /*diff*/)
             {
-                // TODO: accessory is being spawned even if the parent vehicle is dead, needs core fix
+                /// @todo accessory is being spawned even if the parent vehicle is dead, needs core fix
                 if (instance->GetBossState(BOSS_LEVIATHAN) == DONE)
                     me->DespawnOrUnsummon();
             }
@@ -1301,7 +1301,7 @@ class npc_thorims_hammer : public CreatureScript
                         case EVENT_SUMMON_THORIMS_BEACON:
                             if (Creature* trigger = DoSummonFlyer(NPC_THORIM_TARGET_BEACON, me, 50.0f, 0, 3*IN_MILLISECONDS, TEMPSUMMON_TIMED_DESPAWN))
                             {
-                                // TODO: Check if this kind of target selection is correct. The spell does nothing by cast on self or on others, only
+                                /// @todo Check if this kind of target selection is correct. The spell does nothing by cast on self or on others, only
                                 // the spell that it trigger (69112) does.
                                 if (Unit* unit = ObjectAccessor::GetUnit(*me, dedicatedTarget))
                                 {
@@ -1369,7 +1369,7 @@ class npc_mimirons_inferno : public CreatureScript
                     {
                         if (Creature* trigger = DoSummonFlyer(NPC_MIMIRON_TARGET_BEACON, me, 30.0f, 0, 2*IN_MILLISECONDS, TEMPSUMMON_TIMED_DESPAWN))
                         {
-                            // TODO: Check if this works properly, the spell's target selection is somehow curious o�
+                            /// @todo Check if this works properly, the spell's target selection is somehow curious o�
                             if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f))
                                 trigger->CastSpell(target, SPELL_MIMIRONS_INFERNO, true);
                             infernoTimer = 2*IN_MILLISECONDS;
@@ -1466,7 +1466,7 @@ class npc_hodirs_fury : public CreatureScript
                         case EVENT_SUMMON_HODIRS_BEACON:
                             if (Unit* target = ObjectAccessor::GetUnit(*me, dedicatedTarget))
                             {
-                                // TODO: Once again, crazy target selection check that again.
+                                /// @todo Once again, crazy target selection check that again.
                                 if (Creature* trigger = DoSummonFlyer(NPC_HODIR_TARGET_BEACON, me, 30.0f, 0, 1*IN_MILLISECONDS, TEMPSUMMON_TIMED_DESPAWN))
                                 {
                                     trigger->CastSpell(target, SPELL_HODIRS_FURY, true);
@@ -1533,7 +1533,7 @@ class npc_freyas_ward : public CreatureScript
                 {
                     if (Creature* trigger = DoSummonFlyer(NPC_FREYA_BEACON, me, 50.0f, 0, 10*IN_MILLISECONDS, TEMPSUMMON_TIMED_DESPAWN))
                     {
-                        // TODO: Check if this is the correct spell, only the triggered one does something :o
+                        /// @todo Check if this is the correct spell, only the triggered one does something :o
                         if (Unit* target = SelectTarget(SELECT_TARGET_RANDOM, 0, 100.0f))
                             trigger->CastSpell(target, SPELL_FREYAS_WARD, true);
                         trigger->SetDisplayId(trigger->GetCreatureTemplate()->Modelid2);
@@ -1609,7 +1609,7 @@ class npc_freya_ward_of_life : public CreatureScript
 };
 
 
-// TODO: Add script to database - not sure where exactly, seems to be a dummy that is used as a seat handler
+/// @todo Add script to database - not sure where exactly, seems to be a dummy that is used as a seat handler
 class npc_leviathan_player_vehicle : public CreatureScript
 {
     public:
@@ -1619,7 +1619,7 @@ class npc_leviathan_player_vehicle : public CreatureScript
         {
             npc_leviathan_player_vehicleAI(Creature* creature) : NullCreatureAI(creature)
             {
-                // TODO: Check where this id comes from.
+                /// @todo Check where this id comes from.
                 if (VehicleSeatEntry* vehSeat = const_cast<VehicleSeatEntry*>(sVehicleSeatStore.LookupEntry(3013)))
                     vehSeat->m_flags &= ~VEHICLE_SEAT_FLAG_ALLOW_TURNING;
             }
@@ -1721,7 +1721,7 @@ class npc_lorekeeper : public CreatureScript
                             if (Creature* Brann = creature->FindNearestCreature(NPC_BRANN_BRONZBEARD, 1000.0f, true))
                             {
                                 Delorah->GetMotionMaster()->MovePoint(0, Brann->GetPositionX()-4, Brann->GetPositionY(), Brann->GetPositionZ());
-                                //TODO Talk(xxxx, Delorah, Branz); when reached at Brann
+                                /// @todo Talk(xxxx, Delorah, Branz); when reached at Brann
                             }
                         }
                     }
@@ -2477,7 +2477,7 @@ class spell_systems_shutdown : public SpellScriptLoader
         }
 };
 
-// TODO: This spell has to be tested before it can be decided whether it will be taken or not
+/// @todo This spell has to be tested before it can be decided whether it will be taken or not
 class spell_vehicle_throw_passenger : public SpellScriptLoader
 {
     public:
@@ -2747,7 +2747,7 @@ void AddSC_boss_flame_leviathan()
     new at_RX_214_repair_o_matic_station();         // Area-Trigger 5369/5423
     new go_ulduar_tower();                          // 194375: Tower of Life; 194371: Tower of Flames; 194370: Tower of Frost; 194377: Tower of Storms
 
-    // TODO: Those have to be copied for 10/25 man handling, since ScriptNames are selected distinct...
+    /// @todo Those have to be copied for 10/25 man handling, since ScriptNames are selected distinct...
     // @see ObjectMgr.cpp @ 8602
     new achievement_three_car_garage_demolisher("achievement_three_car_garage_demolisher");     // 10048
     new achievement_three_car_garage_demolisher("achievement_three_car_garage_demolisher_25");  // 10051

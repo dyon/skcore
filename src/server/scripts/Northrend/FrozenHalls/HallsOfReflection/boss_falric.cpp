@@ -35,7 +35,7 @@ enum Spells
     SPELL_DEFILING_HORROR               = 72435,
     H_SPELL_DEFILING_HORROR             = 72452,
     SPELL_HOPELESSNESS                  = 72395,
-    H_SPELL_HOPELESSNESS                = 72390, // TODO: not in dbc. Add in DB.
+    H_SPELL_HOPELESSNESS                = 72390, /// @todo not in dbc. Add in DB.
 };
 
 enum Events

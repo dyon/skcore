@@ -226,7 +226,7 @@ class ArenaAreaCheck
         bool __shouldBeIn;
         bool __IsInArena(const WorldObject* who)
         {
-            return (who->GetPositionX() < POS_X_ARENA && who->GetPositionY() > POS_Y_ARENA);    // TODO: Check if this is ok, end positions ? 
+            return (who->GetPositionX() < POS_X_ARENA && who->GetPositionY() > POS_Y_ARENA);    /// @todo Check if this is ok, end positions ? 
         }
 };
 
@@ -456,7 +456,7 @@ class boss_thorim : public CreatureScript
                     ctrl->AI()->Reset();
 
                 // Respawn Mini Bosses
-                for (uint8 i = DATA_RUNIC_COLOSSUS; i <= DATA_RUNE_GIANT; i++)  // TODO: Check if we can move this, it's a little bit crazy.
+                for (uint8 i = DATA_RUNIC_COLOSSUS; i <= DATA_RUNE_GIANT; i++)  /// @todo Check if we can move this, it's a little bit crazy.
                     if (Creature* MiniBoss = ObjectAccessor::GetCreature(*me, instance->GetData64(i)))
                         MiniBoss->Respawn(true);
                 

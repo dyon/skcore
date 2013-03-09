@@ -810,7 +810,7 @@ public:
         }
         void EnterCombat(Unit* /*who*/)
         {
-            events.ScheduleEvent(EVENT_SHADOW_WORD_PAIN, 8000, 0, PHASE_ONE); // TODO: adjust timers
+            events.ScheduleEvent(EVENT_SHADOW_WORD_PAIN, 8000, 0, PHASE_ONE); /// @todo adjust timers
             events.ScheduleEvent(EVENT_CIRCLE_OF_DESTRUCTION, 12000, 0, PHASE_ONE);
             events.ScheduleEvent(EVENT_COWER_IN_FEAR, 20000, 0, PHASE_ONE);
             events.ScheduleEvent(EVENT_DARK_MENDING, 20000, 0, PHASE_ONE);
@@ -943,7 +943,7 @@ public:
 
         void EnterCombat(Unit* /*who*/)
         {
-            events.ScheduleEvent(EVENT_FIREBALL, 3000, 0, PHASE_ONE); // TODO: adjust timers
+            events.ScheduleEvent(EVENT_FIREBALL, 3000, 0, PHASE_ONE); /// @todo adjust timers
             events.ScheduleEvent(EVENT_FLAMESTRIKE, 15000, 0, PHASE_ONE);
             events.ScheduleEvent(EVENT_FROSTBOLT, 9000, 0, PHASE_ONE);
             events.ScheduleEvent(EVENT_CHAINS_OF_ICE, 12000, 0, PHASE_ONE);
@@ -1078,7 +1078,7 @@ public:
 
         void EnterCombat(Unit* /*who*/)
         {
-            events.ScheduleEvent(EVENT_SHADOW_STEP, 8000, 0, PHASE_ONE); // TODO: adjust timers
+            events.ScheduleEvent(EVENT_SHADOW_STEP, 8000, 0, PHASE_ONE); /// @todo adjust timers
             events.ScheduleEvent(EVENT_DEADLY_POISON, 5000, 0, PHASE_ONE);
             events.ScheduleEvent(EVENT_ENVENOMED_DAGGER_THROW, 15000, 0, PHASE_ONE);
             events.ScheduleEvent(EVENT_KIDNEY_SHOT, 24000, 0, PHASE_ONE);
@@ -1185,7 +1185,7 @@ public:
 
         void EnterCombat(Unit* /*who*/)
         {
-            events.ScheduleEvent(EVENT_SPECTRAL_STRIKE, 5000, 0, PHASE_ONE); // TODO: adjust timers
+            events.ScheduleEvent(EVENT_SPECTRAL_STRIKE, 5000, 0, PHASE_ONE); /// @todo adjust timers
             events.ScheduleEvent(EVENT_SHIELD_BASH, 10000, 0, PHASE_ONE);
             events.ScheduleEvent(EVENT_TORTURED_ENRAGE, 15000, 0, PHASE_ONE);
         }
@@ -1284,7 +1284,7 @@ public:
 
         void EnterCombat(Unit* /*who*/)
         {
-            events.ScheduleEvent(EVENT_SHOOT, 2000, 0, PHASE_ONE); // TODO: adjust timers
+            events.ScheduleEvent(EVENT_SHOOT, 2000, 0, PHASE_ONE); /// @todo adjust timers
             events.ScheduleEvent(EVENT_CURSED_ARROW, 10000, 0, PHASE_ONE);
             events.ScheduleEvent(EVENT_FROST_TRAP, 1000, 0, PHASE_ONE);
             events.ScheduleEvent(EVENT_ICE_SHOT, 15000, 0, PHASE_ONE);
