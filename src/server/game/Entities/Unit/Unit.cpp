@@ -5142,6 +5142,13 @@ bool Unit::HandleDummyAuraProc(Unit* victim, uint32 damage, AuraEffect* triggere
                     triggered_spell_id = 33494;
                     break;
                 }
+				case 71875: // Item - Black Bruise: Necrotic Touch Proc
+                case 71877:
+                {
+                    basepoints0 = CalculatePct(int32(damage), triggerAmount);
+                    triggered_spell_id = 71879;
+                    break;
+                }
                 // Twisted Reflection (boss spell)
                 case 21063:
                     triggered_spell_id = 21064;
