@@ -3536,6 +3536,21 @@ void Spell::EffectInterruptCast(SpellEffIndex effIndex)
                 if (m_originalCaster)
                 {
                     int32 duration = m_spellInfo->GetDuration();
+					if(unitTarget->HasAura(14522)){
+                    duration=duration-duration*(0.06f);
+                    }
+                    if(unitTarget->HasAura(14788)){
+                    duration=duration-duration*(0.12f);
+                    }
+                    if(unitTarget->HasAura(14789)){
+                    duration=duration-duration*(0.18f);
+                    }
+                    if(unitTarget->HasAura(14790)){
+                    duration=duration-duration*(0.24f);
+                    }
+                    if(unitTarget->HasAura(14791)){
+                    duration=duration-duration*(0.30f);
+                    }
                     unitTarget->ProhibitSpellSchool(curSpellInfo->GetSchoolMask(), unitTarget->ModSpellDuration(m_spellInfo, unitTarget, duration, false, 1 << effIndex));
                 }
                 ExecuteLogEffectInterruptCast(effIndex, unitTarget, curSpellInfo->Id);
