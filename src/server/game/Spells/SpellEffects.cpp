@@ -567,7 +567,7 @@ void Spell::EffectSchoolDMG(SpellEffIndex effIndex)
                         if (uint32 combo = ((Player*)m_caster)->GetComboPoints())
                         {
                             float ap = m_caster->GetTotalAttackPowerValue(BASE_ATTACK);
-                            damage += irand(int32(ap * combo * 0.03f), int32(ap * combo * 0.07f));
+                            damage += irand(int32(ap * combo * 0.091f), int32(ap * combo * 0.086f));
 
                             // Eviscerate and Envenom Bonus Damage (item set effect)
                             if (m_caster->HasAura(37169))
@@ -3536,6 +3536,21 @@ void Spell::EffectInterruptCast(SpellEffIndex effIndex)
                 if (m_originalCaster)
                 {
                     int32 duration = m_spellInfo->GetDuration();
+					if(unitTarget->HasAura(14522)){
+                    duration=duration-duration*(0.06f);
+                    }
+                    if(unitTarget->HasAura(14788)){
+                    duration=duration-duration*(0.12f);
+                    }
+                    if(unitTarget->HasAura(14789)){
+                    duration=duration-duration*(0.18f);
+                    }
+                    if(unitTarget->HasAura(14790)){
+                    duration=duration-duration*(0.24f);
+                    }
+                    if(unitTarget->HasAura(14791)){
+                    duration=duration-duration*(0.30f);
+                    }
                     unitTarget->ProhibitSpellSchool(curSpellInfo->GetSchoolMask(), unitTarget->ModSpellDuration(m_spellInfo, unitTarget, duration, false, 1 << effIndex));
                 }
                 ExecuteLogEffectInterruptCast(effIndex, unitTarget, curSpellInfo->Id);
