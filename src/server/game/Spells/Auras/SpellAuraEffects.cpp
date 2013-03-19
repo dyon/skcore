@@ -3270,7 +3270,7 @@ void AuraEffect::HandleModStateImmunityMask(AuraApplication const* aurApp, uint8
                 aura_immunity_list.push_back(SPELL_AURA_MOD_CONFUSE);
             if (miscVal & (1<<9))
                 aura_immunity_list.push_back(SPELL_AURA_MOD_FEAR);
-            if (miscVal & (1<<7))
+            if (miscVal & (1<<7)&& !(apply && GetId() == 46924))
                 aura_immunity_list.push_back(SPELL_AURA_MOD_DISARM);
     }
 
