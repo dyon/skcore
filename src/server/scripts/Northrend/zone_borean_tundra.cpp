@@ -867,7 +867,7 @@ public:
             }
         }
 
-        void UpdateAI(uint32 /*diff*/)
+        void UpdateAI(const uint32 /*diff*/)
         {
             if (WithRedDragonBlood && HarpoonerGUID && !me->HasAura(SPELL_RED_DRAGONBLOOD))
             {
@@ -883,6 +883,21 @@ public:
                     WithRedDragonBlood = false;
                 }
             }
+            
+            if (me->HasAura(SPELL_SUBDUED))
+    		{
+				if (Creature* pRaelorasz = me->FindNearestCreature(NPC_RAELORASZ, 10.0f))
+				{
+					if (Player *pHarpooner = GetLeaderForFollower())
+					{
+						pHarpooner->KilledMonsterCredit(26175, 0);
+						pHarpooner->RemoveAura(SPELL_DRAKE_HATCHLING_SUBDUED);
+						SetFollowComplete();
+						HarpoonerGUID = 0;
+						me->DisappearAndDie();
+					}
+				}
+			}
 
             if (!UpdateVictim())
                 return;
