@@ -51,9 +51,6 @@ enum WarriorSpells
     SPELL_WARRIOR_UNRELENTING_ASSAULT_TRIGGER_2     = 64850,
     SPELL_WARRIOR_VIGILANCE_PROC                    = 50725,
     SPELL_WARRIOR_VIGILANCE_REDIRECT_THREAT         = 59665,
-    SPELL_SLAM_PROC                                 = 46916,
-    SPELL_EXECUTE_BONUS                             = 20647,
-    SPELL_EXECUTE_PROC                              = 52437,
 
     SPELL_PALADIN_BLESSING_OF_SANCTUARY             = 20911,
     SPELL_PALADIN_GREATER_BLESSING_OF_SANCTUARY     = 25899,
@@ -296,60 +293,6 @@ class spell_warr_deep_wounds : public SpellScriptLoader
         }
 };
 
-class spell_warr_execute_bonus : public SpellScriptLoader
-{
-    public:
-        spell_warr_execute_bonus() : SpellScriptLoader("spell_warr_execute_bonus") { }
-
-        class spell_warr_execute_bonus_SpellScript : public SpellScript
-        {
-            PrepareSpellScript(spell_warr_execute_bonus_SpellScript);
-
-            bool Validate(SpellInfo const* /*SpellEntry*/)
-            {
-                if (!sSpellMgr->GetSpellInfo(SPELL_EXECUTE_BONUS))
-                    return false;
-                return true;
-            }
-            void HandleDummy(SpellEffIndex /* effIndex */)
-            {
-                int32 bp0 = GetEffectValue();
-                if (GetHitUnit())
-                    GetCaster()->CastCustomSpell(GetHitUnit(), SPELL_EXECUTE_BONUS, &bp0, NULL, NULL, true, 0);
-            }
-
-            void Register()
-            {
-                OnEffectHitTarget += SpellEffectFn(spell_warr_execute_bonus_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
-            }
-        };
-
-		class spell_warr_execute_bonus_AuraScript : public AuraScript
-        {
-            PrepareAuraScript(spell_warr_execute_bonus_AuraScript);
-
-            void HandleEffectCalcSpellMod(AuraEffect const* aurEff, SpellModifier*& spellMod)
-            {
-                if (spellMod && spellMod->spellId == SPELL_EXECUTE_PROC)
-                    spellMod->charges++;
-            }
-
-            void Register()
-            {
-                DoEffectCalcSpellMod += AuraEffectCalcSpellModFn(spell_warr_execute_bonus_AuraScript::HandleEffectCalcSpellMod, EFFECT_0, SPELL_AURA_ADD_PCT_MODIFIER);
-            }
-        };
-
-        SpellScript* GetSpellScript() const
-        {
-            return new spell_warr_execute_bonus_SpellScript();
-        }
-
-        AuraScript* GetAuraScript() const
-        {
-            return new spell_warr_execute_bonus_AuraScript();
-        }
-};
 
 // -5308 - Execute
 class spell_warr_execute : public SpellScriptLoader
@@ -645,31 +588,10 @@ class spell_warr_slam : public SpellScriptLoader
                 OnEffectHitTarget += SpellEffectFn(spell_warr_slam_SpellScript::HandleDummy, EFFECT_0, SPELL_EFFECT_DUMMY);
             }
         };
-		
-        class spell_warr_slam_AuraScript : public AuraScript
-        {
-            PrepareAuraScript(spell_warr_slam_AuraScript);
-
-            void HandleEffectCalcSpellMod(AuraEffect const* aurEff, SpellModifier*& spellMod)
-            {
-                if (spellMod && spellMod->spellId == SPELL_SLAM_PROC)
-                    spellMod->charges++;
-            }
-
-            void Register()
-            {
-                DoEffectCalcSpellMod += AuraEffectCalcSpellModFn(spell_warr_slam_AuraScript::HandleEffectCalcSpellMod, EFFECT_0, SPELL_AURA_ADD_PCT_MODIFIER);
-            }
-        };
 
         SpellScript* GetSpellScript() const
         {
             return new spell_warr_slam_SpellScript();
-        }
-
-        AuraScript* GetAuraScript() const
-        {
-            return new spell_warr_slam_AuraScript();
         }
 };
 
@@ -857,7 +779,6 @@ void AddSC_warrior_spell_scripts()
     new spell_warr_concussion_blow();
     new spell_warr_damage_shield();
     new spell_warr_deep_wounds();
-    new spell_warr_execute_bonus();
     new spell_warr_execute();
     new spell_warr_improved_spell_reflection();
     new spell_warr_intimidating_shout();
