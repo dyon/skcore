@@ -177,7 +177,11 @@ void TempSummon::InitStats(uint32 duration)
         m_type = (duration == 0) ? TEMPSUMMON_DEAD_DESPAWN : TEMPSUMMON_TIMED_DESPAWN;
 
     Unit* owner = GetSummoner();
-
+		if (owner && GetEntry() == 30230) // Risen ally
+       {
+          owner->RemoveAurasDueToSpell(62218);
+          owner->RemoveAurasDueToSpell(46619);
+       }
     if (owner && isTrigger() && m_spells[0])
     {
         setFaction(owner->getFaction());
